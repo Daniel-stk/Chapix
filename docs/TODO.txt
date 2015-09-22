@@ -1,0 +1,52 @@
+Chapix TODO File.
+
+
+Architecture.
+* Hocks definition.
+* Define base template structures.
+
+
+Backend
+* General
+    * Validate password complexity.
+    * Time zones catalog.
+
+* Pages Admin.
+    * Choose the appropiate WYSIWYG Editor.
+    * Create a drag and drop interfase.
+    * Create a module interfase for the drag and drop widgets.
+* Modules Admin.
+
+
+
+Front End
+* Template Architecture.
+
+
+
+Install script
+* Create a install script
+
+
+
+Modules
+* Menus
+* Blog
+* Gallery
+* Polls
+* Dashboard
+* Facebook
+* Twitter
+
+
+
+Documentation
+* Module HowTo
+* Architecture
+
+
+
+Functions
+* Lists order and page memory.
+* RSS.
+* Sitemap generator.

@@ -1,0 +1,6 @@
+.komodotools
+Chapix.komodoproject
+Chapix/Conf.pm
+admin/vendor/*
+vendor/*
+cpan/*

@@ -1,0 +1,68 @@
+/* Base CSS */
+.space-sm {
+	height: 10px;
+}
+
+.space-md {
+	height: 25px;
+}
+
+.space-lg {
+	height: 50px;
+}
+
+.space-xl {
+	height: 100px;
+}
+
+.label-danger {
+	color: #F44336;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.msg {
+	
+}
+
+.msg-danger {
+	background-color: #e53935 !important;
+	color: #FFF;
+}
+
+.msg-success {
+	background-color: #7cb342 !important;
+	color: #FFF;
+}
+
+.msg-warning {
+	background-color: #ffb300 !important;
+	color: #fff;
+}
+
+.req {
+	color: #d32f2f;
+}
+
+.text-small {
+	font-size: 70%;
+}
+
+.card-title {
+    border-bottom: 1px solid rgba(160,160,160,.2);	
+}
+
+.card-content p {
+	padding: 15px 0px;
+}
+
+.copyright {
+	text-align: center;
+	color: #EEE;
+	font-size: 60%;
+}
+
+.my-account-dropdown-content {
+	width: 200px !important;
+}

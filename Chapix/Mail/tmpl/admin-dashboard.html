@@ -1,0 +1,16 @@
+<h1>Configuración de Correo</h1>
+[% msg %]
+<dl>
+  <dt>Mode</dt>
+  <dd>[% Mail.Mode %]</dd>
+  <dt>Server</dt>
+  <dd>[% Mail.Server %]</dd>
+  <dt>Port</dt>
+  <dd>[% Mail.Port %]</dd>
+  <dt>Secure Connection</dt>
+  <dd>[% IF Mail.Secure %]Secure connection[% ELSE %]Plan text[% END %]</dd>
+  <dt>User</dt>
+  <dd>[% Mail.User %]</dd>
+  <dt>Password</dt>
+  <dd>****</dd>
+</dl>
