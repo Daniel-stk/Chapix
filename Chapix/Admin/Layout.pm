@@ -16,6 +16,12 @@ sub print {
     my $content = shift || "";
     my $vars    = shift || {};
     my $template_file = shift || 'layout.html';
+    my $account_menus = $dbh->selectall_arrayref(
+                        "SELECT SQL_CACHE * FROM menus WHERE menu_group='AdminAccount' AND parent_id=0 AND publish=1 ORDER BY sort_order",
+                        {Slice=>{}});
+    my $settings_menus = $dbh->selectall_arrayref(
+                        "SELECT SQL_CACHE * FROM menus WHERE menu_group='AdminSettings' AND parent_id=0 AND publish=1 ORDER BY sort_order",
+                        {Slice=>{}});
     my $menus      = $dbh->selectall_arrayref(
                         "SELECT SQL_CACHE * FROM menus WHERE menu_group='Admin' AND parent_id=0 AND publish=1 ORDER BY sort_order",
                         {Slice=>{}});
@@ -36,6 +42,8 @@ sub print {
     	sess    => \%sess,
     	conf    => $conf,
     	menus   => $menus,
+    	account_menus => $account_menus,
+    	settings_menus => $settings_menus,
         controller => $controller,
     	msg => msg_print()
     };

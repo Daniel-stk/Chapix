@@ -14,10 +14,22 @@
 </head>
 <body class="">
     <ul id="my-account-dropdown" class="my-account-dropdown-content dropdown-content">
-        <li><a href="index.pl?view=MyAccount">Account details</a></li>
-        <li><a href="index.pl?view=ChangePassword">Change password</a></li>
+        [% FOREACH item = account_menus %]
+        [% IF item.menu_label == 'HR' %]
         <li class="divider"></li>
-        <li><a href="?_submitted_logout=1">Logout</a></li>
+        [% ELSE %]
+        <li>[% IF item.url %]<a href="[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
+        [% END %]
+        [% END %]
+    </ul>
+    <ul id="settings-dropdown" class="my-account-dropdown-content dropdown-content">
+        [% FOREACH item = settings_menus %]
+        [% IF item.menu_label == 'HR' %]
+        <li class="divider"></li>
+        [% ELSE %]
+        <li>[% IF item.url %]<a href="[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
+        [% END %]
+        [% END %]
     </ul>
     <nav>
     <div class="nav-wrapper">
@@ -27,18 +39,15 @@
         [% FOREACH menu=menus %]
         <li[% IF menu.active  %] class="active"[% END %]><a href="[% menu.url %]">[% menu.menu_label %]</a></li>
         [% END %]
-        <li><a class="dropdown-button" href="#!" data-activates="my-account-dropdown"><i class="material-icons ">account_circle</i></a></li>
+        <li><a class="dropdown-button" alt="Settings" title="Settings" href="#!" data-activates="settings-dropdown"><i class="material-icons ">settings</i></a></li>
+        <li><a class="dropdown-button" alt="Your account" title="Your account" href="#!" data-activates="my-account-dropdown"><i class="material-icons ">account_circle</i></a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         [% FOREACH menu=menus %]
         <li[% IF menu.active  %] class="active"[% END %]><a href="[% menu.url %]">[% menu.menu_label %]</a></li>
         [% END %]
-        <li><a href="#"><i class="material-icons">account_circle</i>Your account</a></li>
-        <li><a href="index.pl?view=MyAccount">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Account details</a></li>
-        <li><a href="index.pl?view=ChangePassword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Change password</a></li>
-        <li class="divider"></li>
-        <li><a href="?_submitted_logout=1">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Logout</a></li>
-        </li>
+        <li><a href="?view=Settings">Settings</a></li>
+        <li><a href="?view=MyAccount">Your account</a></li>
       </ul>
     </div>
   </nav>

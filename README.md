@@ -8,6 +8,6 @@ We just need a competent perl CMS, this software needs to be created on this fou
 * KISS.
 * Not to many CPAN dependences.
 * Nice, modern and clean look and feel.
-    * No support for internet explorer 8.
-    * Bootstrap, responsive, mobile.
+    * No support for old browsers.
+    * Materialize design, responsive.
 

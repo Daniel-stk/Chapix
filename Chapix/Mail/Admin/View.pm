@@ -18,7 +18,7 @@ sub default {
 }
 
 sub display_dashboard {
-    $conf->{Page}->{Title} = 'Mail';
+    $conf->{Page}->{Title} = 'Email Settings';
     set_path_route();
     set_toolbar(['?controller=Mail&view=edit-settings','Cambiar Configuración'],
                 ['?']);
@@ -26,14 +26,15 @@ sub display_dashboard {
     my $HTML = "";
     my $vars = {
         Mail => $conf->{Mail},
-    	msg     => msg_print(),
+        conf => $conf,
+    	msg  => msg_print(),
     };
     $Template->process("../Chapix/Mail/tmpl/admin-dashboard.html", $vars,\$HTML) or $HTML = $Template->error();
     return $HTML;
 }
 
 sub display_settings_form {
-    $conf->{Page}->{Title} = 'Configuración de Correo';
+    $conf->{Page}->{Title} = 'Email Settings';
     set_path_route(['Mail','?controller=Mail']);
     set_toolbar(['?controller=Mail']);
 
