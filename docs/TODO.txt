@@ -13,10 +13,17 @@ Backend
 * General
     * Validate password complexity.
     * Time zones catalog.
+    
+
+* User accounts
+    * Create the Your account page.
+
+
+* Email
+    * While configuring Email Settings send a test message.
 
 
 * Pages Admin.
-    * Choose the appropiate WYSIWYG Editor.
     * Create a drag and drop interfase.
     * Create a module interfase for the drag and drop widgets.
 

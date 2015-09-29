@@ -21,6 +21,7 @@
         <li>[% IF item.url %]<a href="[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
         [% END %]
         [% END %]
+        <li><a href="?_submitted_logout=1">Logout</a></li>
     </ul>
     <ul id="settings-dropdown" class="my-account-dropdown-content dropdown-content">
         [% FOREACH item = settings_menus %]
@@ -48,13 +49,13 @@
         [% END %]
         <li><a href="?view=Settings">Settings</a></li>
         <li><a href="?view=MyAccount">Your account</a></li>
+        <li><a href="?_submitted_logout=1">Logout</a></li>
       </ul>
     </div>
   </nav>
     <div class="container">
         <div class="login-container">
-                        [% IF msg %]<p>[% msg %]</p>[% END %]
-
+            [% IF msg %]<p>[% msg %]</p>[% END %]
             [% content %]
         </div>
     </div>

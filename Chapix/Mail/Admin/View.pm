@@ -17,22 +17,6 @@ sub default {
     return Chapix::Admin::Layout::print(msg_print());
 }
 
-sub display_dashboard {
-    $conf->{Page}->{Title} = 'Email Settings';
-    set_path_route();
-    set_toolbar(['?controller=Mail&view=edit-settings','Cambiar Configuración'],
-                ['?']);
-    
-    my $HTML = "";
-    my $vars = {
-        Mail => $conf->{Mail},
-        conf => $conf,
-    	msg  => msg_print(),
-    };
-    $Template->process("../Chapix/Mail/tmpl/admin-dashboard.html", $vars,\$HTML) or $HTML = $Template->error();
-    return $HTML;
-}
-
 sub display_settings_form {
     $conf->{Page}->{Title} = 'Email Settings';
     set_path_route(['Mail','?controller=Mail']);
@@ -45,7 +29,7 @@ sub display_settings_form {
     my $form = CGI::FormBuilder->new(
         name     => 'settings',
         method   => 'post',
-        fields   => [qw/controller view Mode Server Port Secure User Password/],
+        fields   => [qw/controller view Server Port SecureConnection User Password/],
         submit   => \@submit,
         submit_class => ['primary'],
         values   => $params,
@@ -60,8 +44,12 @@ sub display_settings_form {
 
     $form->field(name => 'controller', type=>'hidden');
     $form->field(name => 'view', type=>'hidden');
-    $form->field(name => 'Mode', type=>'select', options => [qw/LOCAL SMTP/], labels=>{LOCAL=>'Local SMTP server', SMTP=>'Remote SMTP server'});
-    $form->field(name => 'Secure', type=>'select', options => [0, 1], labels=>{0=>'Plain text', 1=>'Secure connection'});
+    $form->field(name => 'Server', label => 'Server', required=>1);
+    $form->field(name => 'Port', label => 'Port number');
+    $form->field(name => 'SecureConnection', type=>'select', options => [0, 1], labels=>{0=>'Plain text', 1=>'Secure connection'}, label=>'Use a secure connection?');
+    $form->field(name => 'User', label => 'User name');
+    $form->field(name => 'Password', label => 'Password');
+
 
     return $form->render(
         template => {
@@ -70,6 +58,8 @@ sub display_settings_form {
             template => '../Chapix/Admin/tmpl/form.html',
             variable => 'form',
             data => {
+                conf => $conf,
+                msg  => msg_print(),
             },
         },
     );

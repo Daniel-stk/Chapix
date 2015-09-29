@@ -24,11 +24,7 @@ sub display {
     my $self = shift;
     Chapix::Admin::Com::conf_load('Mail');
     print Chapix::Admin::Com::header_out();
-    if($Q->param('view') eq 'edit-settings'){
-        print Chapix::Admin::Layout::print( Chapix::Mail::Admin::View::display_settings_form() );
-    }else{
-        print Chapix::Admin::Layout::print( Chapix::Mail::Admin::View::display_dashboard() );
-    }
+    print Chapix::Admin::Layout::print( Chapix::Mail::Admin::View::display_settings_form() );
 }
 
 # Admin actions.
@@ -42,16 +38,14 @@ sub actions {
 
 sub save_settings {
     my $self = shift;
-    if($Q->param('view') eq 'edit-settings'){
+    # if($Q->param('view') eq 'settings'){
         eval {
-            $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='Mode'",{},
-                     $Q->param('Mode'));
             $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='Server'",{},
                      $Q->param('Server'));
             $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='Port'",{},
                      $Q->param('Port'));
-            $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='Secure'",{},
-                     $Q->param('Secure'));
+            $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='SecureConnection'",{},
+                     $Q->param('SecureConnection'));
             $dbh->do("UPDATE conf c SET c.value=? WHERE c.module='Mail' AND c.name='User'",{},
                      $Q->param('User'));
             if($Q->param('Password') !~ /^\*+$/){
@@ -65,7 +59,7 @@ sub save_settings {
             msg_add('success','The record were successfully updated.');
             http_redirect('?controller=Mail');
         }
-    }
+    # }
 }
 
 1;
