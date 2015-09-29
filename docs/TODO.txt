@@ -3,7 +3,7 @@ Chapix TODO File.
 
 Architecture.
 * Hocks definition.
-* Define base template structure.
+* Define base template architecture.
 * Define custom modules architecture.
 
 
@@ -16,7 +16,7 @@ Backend
     
 
 * User accounts
-    * Create the Your account page.
+    ** Create the Your account page.
 
 
 * Email

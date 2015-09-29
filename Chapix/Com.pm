@@ -20,7 +20,7 @@ BEGIN {
 		  &msg_add
 		  &msg_print
 		  &http_redirect
-		  $Q
+		  $_REQUEST
 		  $Template
         );
 }
@@ -32,7 +32,14 @@ use vars @EXPORT;
 #################################################################################
 
 # CGI params
-$Q = CGI->new;
+my $Q = CGI->new;
+foreach my $key (keys %{$Q->Vars()}){
+    $_REQUEST->{$key} = $Q->param($key);
+}
+my $URL = $ENV{SCRIPT_URL};
+my $BaseURL = $conf->{ENV}->{BaseURL};
+$URL =~ s/^$BaseURL//g;
+($_REQUEST->{controller}, $_REQUEST->{view}) = split(/\//, $URL);
 
 # DataBase
 $dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},
@@ -108,7 +115,8 @@ sub msg_print {
     my $HTML = "";
     my $msgs = $dbh->selectall_arrayref("SELECT m.type, m.msg FROM sessions_msg m WHERE m.session_id=?",{},$sess{_session_id});
     foreach my $msg (@$msgs){
-        $HTML .= '<div class="alert alert-'.$msg->[0].'"><a class="close" data-dismiss="alert" href="#">×</a>' . $msg->[1]   . '</div>';
+		my $class = '';
+		$HTML .= '<div class="card-panel msg msg-'.$msg->[0].'">' . $msg->[1] . '</div>';
     }
     $dbh->do("DELETE FROM sessions_msg WHERE session_id=?",{},$sess{_session_id}) if($msgs->[0]);
     return $HTML;

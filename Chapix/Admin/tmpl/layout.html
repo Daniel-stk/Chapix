@@ -37,6 +37,7 @@
       <a href="?" class="brand-logo">[% conf.App.Name %]</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
+        <li><a alt="Dashboard" title="Dashboard" href="?"><i class="material-icons ">dashboard</i></a></li>
         [% FOREACH menu=menus %]
         <li[% IF menu.active  %] class="active"[% END %]><a href="[% menu.url %]">[% menu.menu_label %]</a></li>
         [% END %]
