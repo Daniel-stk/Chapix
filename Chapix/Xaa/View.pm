@@ -29,7 +29,7 @@ sub display_login {
         name     => 'login',
         method   => 'post',
         fields   => [qw/controller email password/],
-	action   => $conf->{ENV}->{BaseURL} . 'Xaa',
+	action   => '/Xaa/Xaa',
         submit   => \@submit,
         bootstrap => '1',
     );

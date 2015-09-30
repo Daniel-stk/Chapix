@@ -14,9 +14,7 @@ sub print {
     my $content = shift || "";
     my $vars    = shift || {};
     my $template_file = shift || 'layout.html';
-    my $controller = $_REQUEST->{controller} || '';
-    my $view       = $_REQUEST->{view} || 'Default';
-    my $user_menus = $dbh->selectall_arrayref(
+    my $user_menus  = $dbh->selectall_arrayref(
 	"SELECT SQL_CACHE * FROM menus WHERE menu_group='UserAccount' AND parent_id=0 AND publish=1 ORDER BY sort_order",{Slice=>{}});
         
     my $l_vars = {
@@ -24,7 +22,9 @@ sub print {
     	vars    => $vars,
     	sess    => \%sess,
     	conf    => $conf,
-        controller => $controller,
+        Domain     => ($_REQUEST->{Domain} || ''),
+        Controller => ($_REQUEST->{Controller} || ''),
+        View       => ($_REQUEST->{View} || 'Default'),
 	user_menus => $user_menus,
     	msg => msg_print()
     };

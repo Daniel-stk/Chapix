@@ -18,37 +18,37 @@
         [% IF item.menu_label == 'HR' %]
         <li class="divider"></li>
         [% ELSE %]
-        <li>[% IF item.url %]<a href="[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
+        <li>[% IF item.url %]<a href="/[% Domain %]/[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
         [% END %]
         [% END %]
-        <li><a href="[% conf.ENV.BaseURL %]Xaa/Logout">Logout</a></li>
+        <li><a href="/[% Domain %]/Xaa/Logout">Logout</a></li>
     </ul>
     <ul id="settings-dropdown" class="my-account-dropdown-content dropdown-content">
         [% FOREACH item = settings_menus %]
         [% IF item.menu_label == 'HR' %]
         <li class="divider"></li>
         [% ELSE %]
-        <li>[% IF item.url %]<a href="[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
+        <li>[% IF item.url %]<a href="/[% Domain %]/[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
         [% END %]
         [% END %]
     </ul>
     <nav>
     <div class="nav-wrapper">
-      <a href="[% conf.ENV.BaseURL %]" class="brand-logo">[% conf.App.Name %]</a>
+      <a href="/[% Domain %]" class="brand-logo">[% conf.App.Name %]</a>
       <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>
       <ul class="right hide-on-med-and-down">
-        <li><a alt="Dashboard" title="Dashboard" href="[% conf.ENV.BaseURL %]"><i class="material-icons ">dashboard</i></a></li>
+        <li><a alt="Dashboard" title="Dashboard" href="/[% Domain %]"><i class="material-icons ">dashboard</i></a></li>
         [% FOREACH menu=menus %]
-        <li[% IF menu.active  %] class="active"[% END %]><a href="[% menu.url %]">[% menu.menu_label %]</a></li>
+        <li[% IF menu.active  %] class="active"[% END %]><a href="/[% Domain %]/[% menu.url %]">[% menu.menu_label %]</a></li>
         [% END %]
         <li><a class="dropdown-button" alt="Your account" title="Your account" href="#!" data-activates="my-account-dropdown"><i class="material-icons ">account_circle</i></a></li>
       </ul>
       <ul class="side-nav" id="mobile-demo">
         [% FOREACH menu=menus %]
-        <li[% IF menu.active  %] class="active"[% END %]><a href="[% menu.url %]">[% menu.menu_label %]</a></li>
+        <li[% IF menu.active  %] class="active"[% END %]><a href="/[% Domain %]/[% menu.url %]">[% menu.menu_label %]</a></li>
         [% END %]
-        <li><a href="[% conf.ENV.BaseURL %]Xaa/YourAccount">Your account</a></li>
-        <li><a href="[% conf.ENV.BaseURL %]Xaa/Logout">Logout</a></li>
+        <li><a href="/[% Domain %]/Xaa/YourAccount">Your account</a></li>
+        <li><a href="/[% Domain %]/Xaa/Logout">Logout</a></li>
       </ul>
     </div>
   </nav>
