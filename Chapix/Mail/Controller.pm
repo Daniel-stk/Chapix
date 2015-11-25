@@ -10,11 +10,10 @@ use MIME::Base64;
 use LEOCHARRE::HTML::Text qw/html2txt/;
 
 use Chapix::Conf;
-use Chapix::Admin::Com;
+use Chapix::Com;
 #use Chapix::Mail::Admin::View;
 
 sub new {
-    Chapix::Admin::Com::conf_load('Mail');
     my $class = shift;
     my $self = {
         version  => '0.1',
@@ -28,9 +27,10 @@ sub sender {
     $Mail::Sender::NO_X_MAILER = 1;
     $self->{sender} = new Mail::Sender {
         smtp        => $conf->{Mail}->{Server},
-        from        => $conf->{Mail}->{From} ." <$conf->{Mail}->{From}>",
-        fake_from   => $conf->{Mail}->{From} ." <$conf->{Mail}->{From}>",
-        TLS_allowed => $conf->{Mail}->{Secure},
+            from        => $conf->{Mail}->{From},
+                fake_from   => $conf->{Mail}->{From},
+                    TLS_allowed => $conf->{Mail}->{Secure},
+                        on_errors => 'die',
     };
 }
 
@@ -45,7 +45,7 @@ sub template {
     my $layout = shift;
     my $vars = shift;
     my $HTML = "";
-    my $template = Template->new(RELATIVE=>1);
+    my $template = Template->new();
     $template->process($layout, $vars,\$HTML) or $HTML = $template->error();
     return $HTML;
 }
@@ -56,7 +56,7 @@ sub html_message {
     $self->{from} = $data->{from} if($data->{from});
     $self->sender();
 
-    my $msg = $self->template('../Chapix/Mail/tmpl/html-message.html',{
+    my $msg = $self->template('Chapix/Mail/tmpl/html-message.html',{
         conf=>$conf,
         msg => $data->{msg}});
 
@@ -76,14 +76,14 @@ sub html_message {
     }
 }
 
-#sub html_template {
-#    my $self = shift;
-#    my $data = shift;
-#    $self->{from} = $data->{from} if($data->{from});
-#    $data->{template}->{vars}->{conf} = $conf;
-#    $data->{msg} = $self->template('tmpl/' . $data->{template}->{file},$data->{template}->{vars});
-#
-#    return $self->html_message($data);
-#}
+sub html_template {
+    my $self = shift;
+    my $data = shift;
+    $self->{from} = $data->{from} if($data->{from});
+    $data->{template}->{vars}->{conf} = $conf;
+    $data->{msg} = $self->template($data->{template}->{file},$data->{template}->{vars});
+
+    return $self->html_message($data);
+}
 
 1;

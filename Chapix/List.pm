@@ -57,7 +57,7 @@ sub new {
 
     $self->{table} = {
 		      width       => "100%",
-		      class       => "table table-striped table-bordered table-condensed",
+		      class       => "bordered striped",
 		      align       => "center",
 		      cellspacing => "0",
 		     };
@@ -95,7 +95,7 @@ sub new {
         previous_page => '&laquo;',
         number_of_rows => "_NUMBER_ registros",
     };
-    $self->{display_rows_total} = 1;
+    $self->{display_rows_total} = 0;
 
     $self->{Number_Format}={THOUSANDS_SEP=>",",DECIMAL_POINT=>".",MON_THOUSANDS_SEP=>",","MON_DECIMAL_POINT"=>".","INT_CURR_SYMBOL"=>''};
 
@@ -142,7 +142,7 @@ sub print {
 
     $self->{table}{id} = 'cg_table_' . $self->{name};
     if($self->{opener} or $self->{link}{location}){
-        $self->{table}->{class} .= ' table-hover';
+        $self->{table}->{class} .= ' highlight';
     }
     $grid .= start_table($self->{table}) . "\n";
     $grid .= "<caption>$self->{caption}</caption>" if($self->{caption});

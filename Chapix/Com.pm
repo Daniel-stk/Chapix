@@ -43,7 +43,7 @@ $URL =~ s/^$BaseURL//g;
 $_REQUEST->{Domain}     =~ s/\W//g;
 $_REQUEST->{Controller} =~ s/\W//g;
 $_REQUEST->{View}       =~ s/\W//g;
-$_REQUEST->{Domain} = 'xaa' if (! ($_REQUEST->{Domain}) );
+$_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
 # DataBase
 $dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database.";
@@ -52,13 +52,18 @@ $dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
 #$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
 
 # Change to domain database
-if($_REQUEST->{Domain} and $_REQUEST->{Domain} ne 'Xaa'){
-    eval {
-	$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
-    };
-    if($@){
-	msg_add('danger','Data not found.');
-	http_redirect('/');
+if($_REQUEST->{Domain}){
+    if($_REQUEST->{Domain} eq 'Xaa'){
+        $_REQUEST->{View} = $_REQUEST->{Controller};
+        $_REQUEST->{Controller} = $_REQUEST->{Domain};
+    }else{
+        eval {
+            $dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+        };
+        if($@){
+            msg_add('danger','Data not found.');
+            http_redirect('/');
+        }
     }
 }
 
@@ -106,7 +111,7 @@ conf_load('Template');
 
 # Default template
 $Template = Template->new(
-  INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
+    INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
 );
 
 #################################################################################
@@ -170,6 +175,31 @@ sub conf_load {
     	$conf->{$var->{module}}->{$var->{name}} = $var->{value};
     }
 }
+
+sub selectbox_data{
+    my %data = (
+        values => [],
+        labels => {},
+    );
+    my $select = shift || "";
+    my $params = shift;
+    my $sth = $dbh->prepare($select);
+    if($params){
+        if(ref($params) eq 'ARRAY'){
+            $sth->execute(@$params);
+        }else{
+            $sth->execute($params);
+        }
+    }else{
+        $sth->execute();
+    }
+    while ( my $rec = $sth->fetchrow_arrayref() ) {
+        push(@{$data{values}},$rec->[0]);
+        $data{labels}{$rec->[0]} = $rec->[1];
+    }
+    return %data;
+}
+
 
 # sub conf_set {
 #     my $group = shift;

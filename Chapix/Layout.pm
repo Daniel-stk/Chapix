@@ -29,6 +29,13 @@ sub print {
     	msg => msg_print()
     };
     $Template->process($template_file, $l_vars,\$HTML) or $HTML = $Template->error();
+
+    # Request Vars
+#    $HTML .= "<hr /><h4>Debug</h4>";
+#    foreach my $key (keys %{$_REQUEST}){
+#        $HTML .= " $key = $_REQUEST->{$key} <br>";
+#    }
+    
     return $HTML;
 }
 
