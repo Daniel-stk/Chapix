@@ -5,6 +5,7 @@ use warnings;
 use strict;
 use Carp;
 
+use Chapix::Conf;
 use Chapix::Com;
 use Chapix::View;
 
@@ -39,22 +40,37 @@ sub handler {
         $Module->display();
     }else{
         Chapix::Controller::actions();
-        Chapix::Controller::display();        
+        Chapix::Controller::display();
     }
 }
 
 # Main display function, this function prints the required view.
 sub display {
+    if($conf->{Xaa}->{MainModule}){
+        my $module = $conf->{Xaa}->{MainModule};
+        $_REQUEST->{Controller} = $module;
+        my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
+        
+        if($is_installed){
+            # Load module
+             my $Module;
+             eval {
+                 require "Chapix/" . $module ."/Controller.pm";
+                 my $module_name ='Chapix::'.$module.'::Controller';
+                 $Module = $module_name->new();
+             };
+             if($@){
+                 msg_add('danger', $@);
+             }else{
+                 $Module->display();
+                 return;
+             }
+        }else{
+            msg_add('danger',loc('The main module is not installed'));
+        }
+    }
     print Chapix::Com::header_out();
-    #if($_REQUEST->{_view} eq 'Credits'){
-    #    print Chapix::Admin::Layout::print( Chapix::Admin::View::display_credits() );
-    #}elsif($_REQUEST->{_view} eq 'Settings'){
-    #    print Chapix::Admin::Layout::print( Chapix::Admin::View::display_settings_form() );
-    #}elsif($_REQUEST->{_view} eq 'Modules'){
-    #    print Chapix::Admin::Layout::print( Chapix::Admin::View::display_modules_list() );
-    #}else{
-        print Chapix::View::default();
-    #}
+    print Chapix::View::default();
 }
 
 

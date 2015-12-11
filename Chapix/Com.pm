@@ -106,7 +106,8 @@ $cookie = cookie(-name    => $conf->{SESSION}->{name},
 #Session END
 
 # Load basic config
-conf_load('WebSite');
+conf_load('Website');
+conf_load('Domain');
 conf_load('Template');
 
 # Default template

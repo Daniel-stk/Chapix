@@ -3,8 +3,8 @@ package Chapix::Xaa::Controller;
 use lib('cpan/');
 use warnings;
 use strict;
-use Digest::SHA qw(sha384_hex);
 use Carp;
+use Digest::SHA qw(sha384_hex);
 
 use Chapix::Conf;
 use Chapix::Com;
@@ -34,7 +34,9 @@ sub new {
 sub _init {
     my $self = shift;
     $self->{main_db} = $conf->{Xaa}->{DB};
-    $conf->{Domain} = $dbh->selectrow_hashref("SELECT d.domain_id, d.name, d.folder, d.database, d.country_id FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},$_REQUEST->{Domain});
+    $conf->{Domain} = $dbh->selectrow_hashref(
+        "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.time_zone, d.language " .
+            "FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},$_REQUEST->{Domain});
 }
 
 # Main display function, this function prints the required view.
@@ -43,13 +45,13 @@ sub display {
     
     # Validate if the user is logge in
     if($_REQUEST->{View} eq 'Login'){
-	print Chapix::Com::header_out();
-	print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
-	return;
+        print Chapix::Com::header_out();
+        print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
+        return;
     }
     if(!$sess{user_id}){
-	msg_add('warning',loc('To continue, log into your account..'));
-	Chapix::Com::http_redirect('/Xaa/Login');
+        msg_add('warning',loc('To continue, log into your account..'));
+        Chapix::Com::http_redirect('/Xaa/Login');
     }
 
     print Chapix::Com::header_out();
@@ -61,14 +63,16 @@ sub display {
         print Chapix::Layout::print( Chapix::Xaa::View::display_edit_account_form() );
     }elsif($_REQUEST->{View} eq 'Settings'){
         print Chapix::Layout::print( Chapix::Xaa::View::display_settings() );
-    }elsif($_REQUEST->{View} eq 'Users'){
-        if($_REQUEST->{user_id}){
-            print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
-        }else{
-            print Chapix::Layout::print( Chapix::Xaa::View::display_users_list() );
-        }
-    }elsif($_REQUEST->{View} eq 'User'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
+    }elsif($_REQUEST->{View} eq 'DomainSettings'){
+        print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
+    # }elsif($_REQUEST->{View} eq 'Users'){
+    #     if($_REQUEST->{user_id}){
+    #         print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
+    #     }else{
+    #         print Chapix::Layout::print( Chapix::Xaa::View::display_users_list() );
+    #     }
+    # }elsif($_REQUEST->{View} eq 'User'){
+    #     print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
     }else{
         print Chapix::Xaa::View::default();
     }
@@ -83,6 +87,9 @@ sub actions {
         $self->login();
     }elsif($_REQUEST->{View} eq 'Logout'){
 	$self->logout();
+    }elsif(defined $_REQUEST->{_submitted_domain_settings}){
+        # Change domain settings
+        $self->save_domain_settings();
     }elsif(defined $_REQUEST->{_submitted_change_password}){
         # Change password
         $self->save_new_password();
@@ -108,10 +115,10 @@ sub login {
     my $user = $dbh->selectrow_hashref(
         "SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
 	    "FROM $self->{main_db}.xaa_users u " .
-		#"WHERE u.email=?",{},
-        #$_REQUEST->{email});
-                "WHERE u.email=? AND u.password=?",{},
-        $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
+		"WHERE u.email=?",{},
+        $_REQUEST->{email});
+        #        "WHERE u.email=? AND u.password=?",{},
+       # $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
     
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
@@ -189,6 +196,21 @@ sub save_new_password {
     }
 }
 
+sub save_domain_settings {
+    my $self = shift;
+    eval {
+        $dbh->do("UPDATE $self->{main_db}.xaa_domains d SET d.name=?, d.time_zone=?, d.language=? WHERE d.domain_id=?",{},
+                 $_REQUEST->{name}, $_REQUEST->{time_zone}, $_REQUEST->{language}, $conf->{Domain}->{domain_id});
+    };
+    if($@){
+        msg_add('danger',$@);
+    }else{
+        msg_add('success',loc('Business account updated'));
+        http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Settings');
+    }
+}
+
+
 sub save_account_settings {
     my $self = shift;
     eval {
@@ -206,162 +228,4 @@ sub save_account_settings {
     }
 }
  
-sub save_user {
-    my $self = shift;
-    my $user_id = $_REQUEST->{user_id} || '';
-    if($user_id){
-        # Update
-
-        # The user are from this domain?
-        $user_id = $dbh->selectrow_array("SELECT user_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND domain_id=?",{},$user_id, $conf->{Domain}->{domain_id}) || 0;
-        if(!$user_id){
-            msg_add('danger',loc('User does not exist'));
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-
-        eval {
-            $dbh->do("UPDATE $self->{main_db}.xaa_users SET name=?, time_zone=?, language=? WHERE user_id=?",{},
-                     $_REQUEST->{name}, $_REQUEST->{time_zone}, $_REQUEST->{language}, $user_id);
-            $dbh->do("UPDATE $self->{main_db}.xaa_users_domains SET active=? WHERE user_id=? AND domain_id=?",{},
-                 ($_REQUEST->{active} || 0), $user_id, $conf->{Domain}->{domain_id});
-        };
-        if($@){
-            msg_add('warning',"Error: ".$@);
-        }else{
-            msg_add('success', loc('User successfully updated'));
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-       
-    }else{
-        # Add
-        my $password = substr(sha384_hex(time.$conf->{Site}->{Name}.'- Te deseamos el mayor éxito en todo lo que hagas -'),3,7);
-        eval {
-            # The email is in the database?
-            $user_id = $dbh->selectrow_array("SELECT user_id FROM $self->{main_db}.xaa_users WHERE email=?",{},$_REQUEST->{email});
-            
-            if($user_id){
-                # Add user to the domain
-                $dbh->do("INSERT INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_on, added_by, active, default_domain) VALUES(?,?,NOW(), ?,1,1)",{},
-                             $user_id, $conf->{Domain}->{domain_id}, $sess{user_id});
-                $_REQUEST->{user_id} = $user_id;
-                
-                $dbh->do("UPDATE $self->{main_db}.xaa_users SET password=? WHERE user_id=?",{},
-                         sha384_hex($conf->{Security}->{key} . $password), $user_id);
-            }else{
-                # Add user
-                $dbh->do("INSERT INTO $self->{main_db}.xaa_users (name, email, time_zone, language, password) VALUES(?,?,?,?,?)",{},
-                         $_REQUEST->{name}, $_REQUEST->{email}, $_REQUEST->{time_zone}, $_REQUEST->{language}, sha384_hex($conf->{Security}->{key} . $password) );
-                $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');
-                
-                # Add user to the domain
-                $dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_on, added_by, active, default_domain) VALUES(?,?,NOW(), ?,1,1)",{},
-                         $user_id, $conf->{Domain}->{domain_id}, $sess{user_id});
-            }
-
-            # Send welcome email to the user
-        };
-        if($@){
-            msg_add('warning',"The email address $_REQUEST->{email} is already in use.".$@);
-        }else{
-            msg_add('success', loc('User successfully added, the user have been notified by email'));
-
-            # Send the new password by email
-            my $Mail = Chapix::Mail::Controller->new();
-            my $enviado = $Mail->html_template({
-                to       => $_REQUEST->{'email'},
-                subject  => $conf->{App}->{Name} . ': '. loc('Your new account is ready'),
-                template => {
-                    file => 'Chapix/Xaa/tmpl/user-creation-letter.html',
-                    vars => {
-                        name     => $_REQUEST->{'name'},
-                        email    => $_REQUEST->{email},
-                        password => $password,
-                        loc => \&loc,
-                    }
-                }
-            });
-
-            
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-    }
-}
-
-sub reset_user_password {
-    my $self = shift;
-    my $user_id = $_REQUEST->{user_id} || '';
-    my $user;
-    if($user_id){
-        # Update
-
-        # The user are from this domain?
-        $user = $dbh->selectrow_hashref(
-            "SELECT ud.user_id, u.email, u.name FROM $self->{main_db}.xaa_users_domains ud INNER JOIN $self->{main_db}.xaa_users u ON ud.user_id=u.user_id " .
-                "WHERE ud.user_id=? AND ud.domain_id=?",{},
-            $user_id, $conf->{Domain}->{domain_id}) || 0;
-        if(!$user->{user_id}){
-            msg_add('danger','User does not exist.');
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-
-        my $password = substr(sha384_hex(time.$conf->{Site}->{Name}.'- Te deseamos el mayor exito en todo loq ue hagas -'),3,7);
-        eval {
-            $dbh->do("UPDATE $self->{main_db}.xaa_users SET password=? WHERE user_id=?",{},
-                     sha384_hex($conf->{Security}->{key} . $password), $user->{user_id});
-        };
-        if($@){
-            msg_add('warning',"Error: ".$@);
-        }else{
-            msg_add('success','User successfully updated.');
-
-            # Send the new password by email
-            my $Mail = Chapix::Mail::Controller->new();
-            my $enviado = $Mail->html_template({
-                to       => $user->{'email'},
-                subject  => $conf->{App}->{Name} . ': Your password has been reset',
-                template => {
-                    file => 'Chapix/Xaa/tmpl/user-password-reset.html',
-                    vars => {
-                        name  => $_REQUEST->{'name'},
-                        email => $user->{'email'},
-                        new_password      => $password,
-                    }
-                }
-            });
-                        
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-    }
-}
-
-sub delete_user {
-    my $self = shift;
-    my $user_id = $_REQUEST->{user_id} || '';
-    my $user;
-    if($user_id){
-        # Update
-
-        # The user are from this domain?
-        $user = $dbh->selectrow_hashref(
-            "SELECT ud.user_id, u.email, u.name FROM $self->{main_db}.xaa_users_domains ud INNER JOIN $self->{main_db}.xaa_users u ON ud.user_id=u.user_id " .
-                "WHERE ud.user_id=? AND ud.domain_id=?",{},
-            $user_id, $conf->{Domain}->{domain_id}) || 0;
-        if(!$user->{user_id}){
-            msg_add('danger','User does not exist.');
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-
-        eval {
-            $dbh->do("DELETE FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND domain_id=?",{},
-                     $user->{user_id}, $conf->{Domain}->{domain_id});
-        };
-        if($@){
-            msg_add('warning',"Error: ".$@);
-        }else{
-            msg_add('success','User successfully deleted.');
-            http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Users');
-        }
-    }
-}
-
 1;

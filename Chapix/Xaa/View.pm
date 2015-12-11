@@ -177,7 +177,6 @@ sub display_settings {
     return $HTML;
 }
 
-
 sub display_users_list {
     $conf->{Page}->{Title} = loc('Users');
     set_back_btn('Xaa/Settings',loc('Settings'));
@@ -259,6 +258,45 @@ sub display_password_form {
         },
     );
 }
+
+sub display_domain_settings {
+    $conf->{Page}->{Title} = loc('Business Settigs');
+    set_back_btn('Xaa/Settings',loc('Settings'));
+    
+    my @submit = (loc('Save'));
+    my $params = $conf->{Domain};
+    my $form = CGI::FormBuilder->new(
+        name     => 'domain_settings',
+        action   => '/'.$_REQUEST->{Domain} . '/Xaa/DomainSettings',
+        method   => 'post',
+        fields   => [qw/name time_zone language/],
+        submit   => \@submit,
+        values   => $params,
+        bootstrap => 1,
+    );
+
+    $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
+    my %time_zones = Chapix::Com::selectbox_data(
+        "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
+    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    
+    $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
+                 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
+
+    return $form->render(
+        template => {
+            type => 'TT2',
+            engine => {},
+            template => 'Chapix/Xaa/tmpl/form.html',
+            variable => 'form',
+            data => {
+                conf => $conf,
+                msg => msg_print()
+            },
+        },
+    );
+}
+
 
 sub display_edit_account_form {
     $conf->{Page}->{Title} = loc('Edit your settings');

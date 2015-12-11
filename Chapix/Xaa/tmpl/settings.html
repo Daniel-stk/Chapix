@@ -1,34 +1,27 @@
 <div class="row">
-  <div class="col s12 offset-m2 m8 ">
+  <div class="col s12 m6 col-center">
     <div class="card">
       <div class="card-title"><i class="medium material-icons">settings</i> [% loc('Settings') %]</div>
       <div class="card-content">
 	<p>
-          [% msg %]
-          <ul class="collection">
-            <li class="collection-item avatar">
-              <a href="/[% REQUEST.Domain %]/Xaa/EditDomain">
-                <i class="material-icons circle red">location_city</i>
-                <span class="title">Business</span>
-              </a>
-              <p>Update your organizatión data. Name, adrress, etc.</p>
-            </li>
-            <li class="collection-item avatar">
-              <a href="/[% REQUEST.Domain %]/Xaa/EditPayment">
-                <i class="material-icons circle green">credit_card</i>
-                <span class="title">Payment</span>
-              </a>
-              <p>Update your payment settings</p>
-            </li>
-            <li class="collection-item avatar">
-              <a href="/[% REQUEST.Domain %]/Xaa/Users">
-                <i class="material-icons circle green">people</i>
-                <span class="title">[% loc('User management') %]</span>
-              </a>
-              <p>[% loc('Add, modify or delete your users') %]</p>
-            </li>
-          </ul>
-        </p>
+	  [% msg %]
+	  <ul class="collection">
+	    <li class="collection-item avatar">
+	      <a href="/[% REQUEST.Domain %]/Xaa/DomainSettings">
+		<i class="material-icons circle red">location_city</i>
+		<span class="title">Business</span>
+	      </a>
+	      <p>Update your organizatión data. Name, adrress, etc.</p>
+	    </li>
+	    <li class="collection-item avatar">
+	      <a href="/[% REQUEST.Domain %]/Xaa/EditPayment">
+		<i class="material-icons circle green">credit_card</i>
+		<span class="title">Payment</span>
+	      </a>
+	      <p>Update your payment settings</p>
+	    </li>
+	  </ul>
+	</p>
       </div>
     </div>
   </div>

@@ -7,6 +7,25 @@ $(function() {
     $('form.fb').find('input:text').first().keypress(function () {
         $(this).siblings('label').addClass('active');
     });
+
+    $('.msg').each(function() {
+        $(this).hide();
+        if($(this).hasClass('msg-success')){
+            Materialize.toast($(this).html(), 3000, 'msg-success');
+        } else if ($(this).hasClass('msg-danger')){
+            Materialize.toast($(this).html(), 180000, 'msg-danger');
+            var snd = new Audio("/media/beep.wav");
+            snd.play();
+        } else if ($(this).hasClass('msg-warning')){
+            Materialize.toast($(this).html(), 180000, 'msg-warning');
+            var snd = new Audio("/media/beep.wav");
+            snd.play();
+        } else {
+            Materialize.toast($(this).html(), 3000);
+        }
+        
+    });
+    
     
 });
 

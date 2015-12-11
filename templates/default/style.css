@@ -10,7 +10,7 @@ space-xl {
 }
 
 .msg {
-	
+     display: none;	
 }
 
 .msg-danger {
@@ -128,4 +128,9 @@ ul.path li {
 
 .xaa-search input {
     background: #fff;
+}
+
+.col-center {
+    float: none !important;
+    margin: auto !important;
 }
