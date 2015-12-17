@@ -1,0 +1,45 @@
+<section class="blue register-form">
+  <div class="container">
+    <div class="row no-margin">
+      <div class="col s12 m6 l6 push-m3">
+	<div class="center white-text">
+	  <h4>Registro</h4>
+	  <p>Crea tu cuenta en segundos. No se requiere tarjeta de crédito</p>
+	</div>
+	<div class="card">
+	  <div class="card-content center">
+	    <h5>Comienza a usar la versión gratuita.</h5>
+	    <p>Hola, llena el siguiente formulario para que puedas empezar</p>	    	
+	    <div class="row">
+	      [% msg %]
+	      [% form.jshead %]
+	      [% form.start %]	      
+	      [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]	      	     
+	      [% FOREACH field = form.fields %][% IF field-type != 'hidden' %]	      
+	      <div class="row">
+		<div class="input-field col s12 m8 l8 push-m2">
+		  [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+		  <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
+		</div>
+	      </div>
+	      [% END %][% END %]	      
+	      </div>
+	    </div>
+	  <div class="card-action">
+	    [% form.submit %][% buttons %]
+	  </div>
+	  [% form.end %]
+	</div>
+	</div>
+      </div>
+    </div>
+</section>
+
+[% bottom_data %]
+
+[% IF js %]
+[% jsFile = 'tmpl/' _ js %]
+<script type="text/javascript">
+  [% INCLUDE $jsFile %]
+</script>
+[% END %]

@@ -27,12 +27,12 @@ sub display_login {
     my $form = CGI::FormBuilder->new(
         name     => 'login',
         method   => 'post',
-        fields   => [qw/controller email password/],
+        fields   => [qw/Controller email password/],
         submit   => \@submit,
         bootstrap => '1',
     );
 
-    $form->field(name => 'controller', type=>'hidden', value=>'Admin', override=>1);
+    $form->field(name => 'Controller', type=>'hidden', value=>'Admin', override=>1);
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>',
 		maxlength=>"100", required=>"1", class=> "span12", jsmessage => loc('Please enter your email'));
     $form->field(name => 'password', label=> loc('Password'), class=>"span12",maxlength=>"100", required=>"1",value=>"",
@@ -82,8 +82,8 @@ sub display_settings_form {
         values   => $params,
         bootstrap => 1,
     );
-    $form->field(name => 'controller', type=>'hidden');
-    $form->field(name => 'view', type=>'hidden');
+    $form->field(name => 'Controller', type=>'hidden');
+    $form->field(name => 'View', type=>'hidden');
     $form->field(name => 'Name',label=>"Name", maxlength=>"45", required=>1);
     $form->field(name => 'Keywords',label=>"Keywords", maxlength=>"245", required=>1, type=>'textarea', class=>'materialize-textarea');
     $form->field(name => 'Description',label=>"Description", maxlength=>"245", required=>1, type=>'textarea', class=>'materialize-textarea');
@@ -105,7 +105,6 @@ sub display_settings_form {
 
 # Your account form
 sub display_account_form {
-    
     $conf->{Page}->{Title} = 'Your Account';
     set_toolbar(['?']);
 
@@ -119,8 +118,8 @@ sub display_account_form {
         values   => $params,
         bootstrap => 1,
     );
-    $form->field(name => 'controller', type=>'hidden');
-    $form->field(name => 'view', type=>'hidden');
+    $form->field(name => 'Controller', type=>'hidden');
+    $form->field(name => 'View', type=>'hidden');
     $form->field(name => 'name',label=>"Name", maxlength=>"45", required=>1);
     $form->field(name => 'email',label=>"Email", maxlength=>"45", required=>1, validate=>'EMAIL');
     $form->field(name => 'language',label=>"Language", required=>1, type=>'select', options=>['en_US','es_MX'], labels=>{EN=>'English', ES=>'Spanish'});
@@ -156,8 +155,8 @@ sub display_password_form {
         values   => $params,
         bootstrap => 1,
     );
-    $form->field(name => 'controller', type=>'hidden');
-    $form->field(name => 'view', type=>'hidden');
+    $form->field(name => 'Controller', type=>'hidden');
+    $form->field(name => 'View', type=>'hidden');
     $form->field(name => 'current_password', label=>"Current password", maxlength=>"45", required=>1, type=>'password', group=>'Current');
     $form->field(name => 'new_password', label=>"New password", maxlength=>"45", required=>1, type=>'password', group=>'New');
     $form->field(name => 'new_password_repeat', label=>"Repeat new password", maxlength=>"45", required=>1, type=>'password');
@@ -179,13 +178,13 @@ sub display_password_form {
 sub display_modules_list {
      $conf->{Page}->{Title} = 'Modules';
      #set_path_route();
-     set_toolbar(['?view=AddModule','Add new module','left','plus'],['?view=Settings']);
+     set_toolbar(['?View=AddModule','Add new module','left','plus'],['?View=Settings']);
 
     my $where = "";
     my @params;
-    if($Q->param('q')){
+    if($_REQUEST->param('q')){
      	$where .=' AND (m.name LIKE ? OR m.description LIKE ?) ';
-     	push(@params,'%'.$Q->param('q').'%','%'.$Q->param('q').'%');
+     	push(@params,'%'.$_REQUEST->param('q').'%','%'.$_REQUEST->param('q').'%');
     }
     my $list = Chapix::List->new(
         dbh => $dbh,
@@ -201,7 +200,7 @@ sub display_modules_list {
             key => "module",
             hidde_key_col => 1,
             location => "index.pl",
-            transit_params => {'controller'=>'Admin','view'=>'ModuleSettings','q' => $Q->param('q')},
+            transit_params => {'Controller'=>'Admin','View'=>'ModuleSettings','q' => $_REQUEST->param('q')},
         },
     );
 

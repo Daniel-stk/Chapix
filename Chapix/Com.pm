@@ -33,16 +33,20 @@ use vars @EXPORT;
 
 # CGI params
 my $Q = CGI->new;
+
 foreach my $key (keys %{$Q->Vars()}){
     $_REQUEST->{$key} = $Q->param($key);
 }
+
 my $URL = $ENV{SCRIPT_URL};
 my $BaseURL = $conf->{ENV}->{BaseURL};
+
 $URL =~ s/^$BaseURL//g;
 ($_REQUEST->{Domain}, $_REQUEST->{Controller}, $_REQUEST->{View}) = split(/\//, $URL);
 $_REQUEST->{Domain}     =~ s/\W//g;
 $_REQUEST->{Controller} =~ s/\W//g;
 $_REQUEST->{View}       =~ s/\W//g;
+$_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
 # DataBase

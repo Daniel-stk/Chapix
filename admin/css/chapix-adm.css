@@ -1,4 +1,8 @@
-/* Base CSS */
+.col-center {
+    float: none !important;
+    margin: auto !important;
+}
+
 .space-sm {
 	height: 10px;
 }
@@ -23,7 +27,7 @@
 }
 
 .msg {
-	
+     display: none;	
 }
 
 .msg-danger {
@@ -44,6 +48,8 @@
 .req {
 	color: #d32f2f;
 }
+/* Base CSS
+
 
 .text-small {
 	font-size: 70%;
@@ -65,4 +71,4 @@
 
 .my-account-dropdown-content {
 	width: 200px !important;
-}
+}*/

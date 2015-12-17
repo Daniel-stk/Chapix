@@ -13,7 +13,17 @@ sub print {
     my $HTML = "";
     my $content = shift || "";
     my $vars    = shift || {};
-    my $template_file = shift || 'layout.html';
+    my $template_file = shift || '';
+    
+    if (!$template_file) {
+        if($sess{user_id}){
+            $template_file = 'layout-app.html'
+        }else{
+            $template_file = 'layout.html'
+        }
+    }
+    
+
     my $user_menus  = $dbh->selectall_arrayref(
 	"SELECT SQL_CACHE * FROM menus WHERE menu_group='UserAccount' AND parent_id=0 AND publish=1 ORDER BY sort_order",{Slice=>{}});
         

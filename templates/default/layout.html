@@ -1,87 +1,91 @@
 <!DOCTYPE html>
 <html lang="[% conf.App.Language %]">
-<head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>[% conf.App.Name %][% IF conf.Page.Title %] &rsaquo; [% conf.Page.Title %][% END %]</title>
-    [% IF conf.Page.Description %]<meta name="description" content="[% conf.Page.Description %]">[% END %]
-    [% IF conf.Page.Keywords %]<meta name="keywords" content="[% conf.Page.Keywords %]">[% END %]
-    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link rel="stylesheet" href="/vendor/materialize/css/materialize.css">
-    <link href="/templates/default/style.css" rel="stylesheet" />
-    [% vars.js %]
-</head>
-<body>
-    <ul id="your-account-dropdown" class="your-account-dropdown-content dropdown-content">
-        [% FOREACH item = user_menus %]
-        [% IF item.menu_label == 'HR' %]
-        <li class="divider"></li>
-        [% ELSE %]
-        <li>[% IF item.url %]<a href="/[% Domain %]/[% item.url %]">[% item.menu_label %]</a>[% END %]</li>
-        [% END %]
-        [% END %]
-        <li><a href="/Xaa/Logout">Logout</a></li>
-    </ul>
-    <nav>
-    <div class="nav-wrapper">
-      [% IF conf.Page.BackBtn %][% conf.Page.BackBtn %][% ELSE %]
-      <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a>[% END %]
-      <div class="brand-logo center">[% IF conf.Page.Title %][% conf.Page.Title %][% ELSE %]<i class="material-icons inline">done_all</i> [% conf.App.Name %][% END %]</div>
+  <head>
 
-      <ul class="right hide-on-med-and-down">
-        <li><a alt="Dashboard" title="Dashboard" href="/[% Domain %]"><i class="material-icons ">dashboard</i></a></li>
-        [% FOREACH menu=menus %]
-        <li[% IF menu.active  %] class="active"[% END %]><a href="/[% Domain %]/[% menu.url %]">[% menu.menu_label %]</a></li>
-        [% END %]
-        <li><a alt="Settings" title="Settings" href="/[% Domain %]/Xaa/Settings"><i class="material-icons">settings</i></a></li>
-        <li><a class="dropdown-button" alt="Your account" title="Your account" href="#!" data-activates="your-account-dropdown"><i class="material-icons ">account_circle</i></a></li>
-      </ul>
-      <ul class="side-nav" id="mobile-demo">
-        <li><a href="/[% Domain %]" class="waves-effect waves-light center"><i class="material-icons inline">done_all</i> [% conf.App.Name %]</a></li>
-        [% FOREACH menu=menus %]<li[% IF menu.active  %] class="active"[% END %]><a href="/[% Domain %]/[% menu.url %]">[% menu.menu_label %]</a></li>[% END %]
-        <li><a href="/[% Domain %]/Xaa/Settings">Settings</a></li>
-        <li><a href="/[% Domain %]/Xaa/YourAccount">Your account</a></li>
-        <li><a href="/Xaa/Logout">Logout</a></li>
-      </ul>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0 user-scalable=no"/>
+    <title>[% conf.App.Name %] [% IF conf.Page.Title %] &rsaquo; [% conf.Page.Title %][% END %]</title>
+    [% IF conf.Page.Description %]<meta name="description" content="[% conf.Page.Description %]">[% END %]
+    [% IF conf.Page.Keywords %]<meta name="keywords" content="[% conf.Page.Keywords %]">[% END %]  
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link type="text/css" rel="stylesheet" href="/vendor/materialize/css/materialize-blue.css"  media="screen,projection"/>
+
+    <!-- CUSTOM STYLES -->
+    <link rel="stylesheet" href="/Chapix/Xaa/css/index-mkt.css">
+    <link rel="stylesheet" href="/Chapix/Xaa/css/index-mkt-responsive.css">
+
+    <!-- Owl carousel -->
+    <link rel="stylesheet" href="/vendor/owl-carousel/css/owl.carousel.css">
+    <link rel="stylesheet" href="/vendor/owl-carousel/css/owl.theme.css">
+    [% vars.js %]
+  </head>
+  <body>
+
+    <div class="navbar-fixed">
+      <nav class="white blue-text uppercase">
+	<div class="nav-wrapper container">
+	  <a href="/#inicio" class="brand-logo"> 
+	    <img src="/Chapix/Xaa/img/logo.png" alt="Marketero.com.mx" class="responsive-img">
+	  </a>
+	  <a href="#" data-activates="mobile-demo" class="button-collapse black-text"><i class="material-icons">menu</i></a>
+
+	  <ul class="right hide-on-med-and-down ">
+	    <li><a href="/#inicio">Inicio</a></li>
+	    <li><a href="/#mkt">¿Qué es Marketero?</a></li>
+	    <li style="margin-right:30px;"><a href="/#prices">Precios</a></li>
+	    <li> <a href="/Xaa/Login" class="waves-effect waves-light btn white-text">Inicia sesión</a> </li>
+	    <!-- <li> <a href="#log-in" class="waves-effect waves-light btn white-text modal-trigger">Inicia sesión</a> </li> -->
+	  </ul>
+	  <ul class="side-nav" id="mobile-demo">
+	    <li><a href="/#inicio">Inicio</a></li>
+	    <li><a href="/#mkt">¿Qué es Marketero?</a></li>
+	    <li><a href="/#prices">Precios</a></li>
+	    <li>
+	      <a href="/Xaa/Login" class="waves-effect waves-light btn white-text">Inicia sesión</a>
+	      <!-- <a href="#log-in" class="waves-effect waves-light btn white-text modal-trigger">Inicia sesión</a> -->
+	    </li>
+	  </ul>
+	</div>
+      </nav>
     </div>
-    </nav>
-    <div class="container-fluid">
-      <div class="row blue-grey lighten-5 xaa-toolbar">
-        <div class="col s12 m12 right-align">
-          [% conf.Page.Toolbar %]
-        </div>
-      </div>
-      [% conf.Page.AddBtn %]
-      
-      <div id="xaa-search" class="row xaa-search"[% IF !(conf.Page.Search.Show) %] style="display:none;"[% END %]>
-        <div class="col s12 m12">
-          <h6>[% conf.Page.Search.Label %]</h6>
-          <form method="get" action="" id="xaa-search-form">
-            <div class="row">
-              <div class="col s9 ">
-                [% conf.Page.Search.Field %]
-              </div>
-              <div class="col s3">
-                <button type="submit" class="btn grey darken-2"><i class="tiny material-icons">search</i></button>
-                <button type="submit" class="btn grey darken-2" onclick="this.form.q.value='';"><i class="tiny material-icons">close</i></a>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
+    
+    <main>
       [% content %]
-      [% IF msg %]<p>[% msg %]</p>[% END %]
-    </div>
-    <div class="container">
-      <div class="row">
-        <div class="col s12 copyright">
-          [% conf.App.Name %] [% conf.App.Version %]
-        </div>
-      </div>  
-    </div>
-    <script src="[% conf.ENV.BaseURL %]vendor/jquery.min.js"></script>
-    <script src="[% conf.ENV.BaseURL %]vendor/materialize/js/materialize.min.js"></script>
-    <script src="[% conf.ENV.BaseURL %]Chapix/Xaa/js/app.js"></script>
-</body>
+    </main>
+
+    <footer class="section black white-text">
+      <div class="container">
+	<div class="row center center-align">
+	  <div class="col s12 m4 l4">
+	    Copyright ® 2015 Xaandia Tecnologías Digitales S.A. de C.V.
+	    </div>
+	  <div class="col s12 m4 l4">
+	    <a target="_blank" href="https://marketero.com.mx/_pages/Terminos-y-condiciones-generales-">Términos y condiciones de uso</a> &nbsp;|&nbsp; 
+	    <a target="_blank" href="https://marketero.com.mx/_pages/Politica-de-Privacidad-">Política de Privacidad</a>
+	    </div>
+	  <div class="col s12 m4 l4">
+	    <a target="_blank" href="http://twitter.com/xaandia">Twitter</a> &nbsp;|
+	    <a target="_blank" href="https://www.facebook.com/xaandia">Facebook</a> &nbsp;|
+	    <a target="_blank" href="https://marketero.com.mx/_blog">Blog</a>
+	  </div>
+	  </div>
+	</div>
+      </footer>
+
+
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    <!-- Materialize -->
+    <script type="text/javascript" src="/vendor/materialize/js/materialize.min.js"></script>
+
+    <!-- Custom SCRIPTS -->
+    <script type="text/javascript" src="/Chapix/Xaa/js/index-mkt.js"></script>
+    
+    <!-- Owl carousel -->
+    <script type="text/javascript" src="/vendor/owl-carousel/js/owl.carousel.js"></script>
+
+  </body>
 </html>

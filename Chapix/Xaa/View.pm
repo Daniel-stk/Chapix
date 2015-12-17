@@ -22,17 +22,31 @@ sub default {
     return Chapix::Layout::print(msg_print());
 }
 
- sub set_path_route {
-     my @items = @_;
-     my $route = '';
-     foreach my $item(@items){
-         my $name = $item->[0];
-         $name = CGI::a({-href=>$item->[1]},$name) if($item->[1]);
-         $route .= ' <li>&raquo; '.$name.'</li> ';
-     }
-     $conf->{Page}->{Path} = '<ul class="path"><li><a href="/'.$_REQUEST->{Domain}.'">Home</a><span class="divider"><i class="glyphicon glyphicon-menu-right"></i></span></li>' .
-         $route.'</ul>';
- }
+sub set_path_route {
+    my @items = @_;
+    my $route = '';
+    foreach my $item(@items){
+	my $name = $item->[0];
+	$name = CGI::a({-href=>$item->[1]},$name) if($item->[1]);
+	$route .= ' <li>&raquo; '.$name.'</li> ';
+    }
+    $conf->{Page}->{Path} = '<ul class="path"><li><a href="/'.$_REQUEST->{Domain}.'">Home</a><span class="divider"><i class="glyphicon glyphicon-menu-right"></i></span></li>' .
+	$route.'</ul>';
+}
+
+sub display_home {
+    my $HTML = "";
+    my $template = Template->new();
+    my $vars = {
+        REQUEST => $_REQUEST,
+        conf => $conf,
+        sess => \%sess,
+     	msg  => msg_print(),
+        loc => \&loc,
+    };
+    $template->process("Chapix/Xaa/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
+    return $HTML;
+}
 
 sub set_toolbar {
     my @actions = @_;
@@ -128,8 +142,9 @@ sub display_login {
     );
 
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
-		 maxlength=>"100", required=>"1", class=> "span12", jsmessage => loc('Please enter your email'));
-    $form->field(name => 'password', label=> loc('Password'), class=>"span12",maxlength=>"100", required=>"1",value=>"",
+		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'));
+    
+    $form->field(name => 'password', label=> loc('Password'), class=>"",maxlength=>"100", required=>"1",value=>"",
 		 override=>1,jsmessage => loc('Please enter your password'), type=>"password", comment=>'<i class="icon-lock"></i>');
     
     $form->stylesheet('1');
@@ -386,6 +401,46 @@ sub display_user_form {
     my $HTML = $form->render(
 	template => {
 	    template => 'Chapix/Xaa/tmpl/form.html',
+	    type => 'TT2',
+	    variable => 'form',
+	    data => {
+    		conf  => $conf,
+		loc => \&loc,
+    		msg   => msg_print(),
+	    },
+	},
+    );
+    return $HTML;
+}
+
+sub display_register {
+    my @submit = (loc("Register"));
+    
+    my $form = CGI::FormBuilder->new(
+        name     => 'register',
+        method   => 'post',
+        fields   => [qw/controller name email phone/],
+	action   => '/Xaa/Xaa',
+        submit   => \@submit,
+        bootstrap => '1',
+    );
+
+    $form->field(name => 'controller', type=>'hidden', label=>'');
+
+    $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
+		 override=>1,jsmessage => loc('Please enter your password'), type=>"password", comment=>'<i class="icon-lock"></i>');
+
+    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
+    
+    $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
+    
+    $form->stylesheet('1');
+
+    my $HTML = $form->render(
+	template => {
+	    template => 'Chapix/Xaa/tmpl/register-form.html',
 	    type => 'TT2',
 	    variable => 'form',
 	    data => {

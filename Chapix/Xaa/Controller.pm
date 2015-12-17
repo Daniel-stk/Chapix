@@ -42,16 +42,21 @@ sub _init {
 # Main display function, this function prints the required view.
 sub display {
     my $self = shift;
-    
-    # Validate if the user is logge in
+    msg_add('danger'," -- $_REQUEST->{View}  ");
+    # Validate if the user is logged in
     if($_REQUEST->{View} eq 'Login'){
         print Chapix::Com::header_out();
         print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
         return;
+    }elsif($_REQUEST->{View} eq 'Register'){
+        print Chapix::Com::header_out();
+        print Chapix::Layout::print( Chapix::Xaa::View::display_register() );
+        return;
     }
+
     if(!$sess{user_id}){
-        msg_add('warning',loc('To continue, log into your account..'));
-        Chapix::Com::http_redirect('/Xaa/Login');
+        msg_add('warning',loc('To continue, log into your account.' . $_REQUEST->{Controller} . $_REQUEST->{View} . $_REQUEST->{Domain}));
+#        Chapix::Com::http_redirect('/Xaa/Login');
     }
 
     print Chapix::Com::header_out();
@@ -74,7 +79,11 @@ sub display {
     # }elsif($_REQUEST->{View} eq 'User'){
     #     print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
     }else{
-        print Chapix::Xaa::View::default();
+        if($_REQUEST->{View}){
+	    print Chapix::Xaa::View::default();
+	}else{
+	    print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
+	}
     }
 }
 
@@ -107,6 +116,8 @@ sub actions {
             # Save user data
             $self->save_user();
         }
+    }elsif(defined $_REQUEST->{_submit_register}){
+	$self->create_account();
     }
 }
 
@@ -118,7 +129,7 @@ sub login {
 		"WHERE u.email=?",{},
         $_REQUEST->{email});
         #        "WHERE u.email=? AND u.password=?",{},
-       # $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
+    # $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
     
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index

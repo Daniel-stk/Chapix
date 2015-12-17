@@ -30,7 +30,7 @@ BEGIN {
           &set_path_route
 		  &toolbar
 		  &set_toolbar
-		  $Q
+		  $_REQUEST
 		  $Template
         );
 }
@@ -51,7 +51,11 @@ use vars @EXPORT;
 #################################################################################
 
 # CGI params
-$Q = CGI->new;
+my $Q = CGI->new;
+
+foreach my $key (keys %{$Q->Vars()}){
+    $_REQUEST->{$key} = $Q->param($key);
+}
 
 # Default template
 $Template = Template->new(RELATIVE=>1);

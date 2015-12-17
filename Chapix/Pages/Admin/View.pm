@@ -23,9 +23,9 @@ sub display_list {
 
     my $where = "";
     my @params;
-    if($Q->param('q')){
+    if($_REQUEST->{'q'}){
      	$where .=' AND (b.name LIKE ? OR b.content LIKE ?) ';
-     	push(@params,'%'.$Q->param('q').'%','%'.$Q->param('q').'%');
+     	push(@params,'%'.$_REQUEST->{'q'}.'%','%'.$_REQUEST->{'q'}.'%');
     }
     my $list = Chapix::List->new(
         dbh => $dbh,
@@ -41,7 +41,7 @@ sub display_list {
             key => "page_id",
             hidde_key_col => 1,
             location => "index.pl",
-            transit_params => {'controller'=>'Pages','view'=>'edit','q' => $Q->param('q')},
+            transit_params => {'controller'=>'Pages','view'=>'edit','q' => $_REQUEST->{'q'}},
         },
     );
 
@@ -56,55 +56,55 @@ sub display_list {
 }
 
 sub display_form {
-    $conf->{Page}->{Title} = 'Page';
-    set_path_route(['Pages','?controller=Pages']);
-    set_toolbar(['?controller=Pages&view=add','Add new page','left','plus'],['?controller=Pages']);
-    set_toolbar(['?controller=Pages'])  if($Q->param('view') eq 'add');
-
-    my @submit = ('Save','Delete');
-    my $params;
-    if($Q->param("page_id")){
-    	$params = $dbh->selectrow_hashref(
-	    "SELECT * FROM pages WHERE page_id=?",{},$Q->param("page_id"));
-    }
-    my $form = CGI::FormBuilder->new(
-        name     => 'pages',
-        method   => 'post',
-        fields   => [qw/controller view page_id title publish description keywords content/],
-        submit   => \@submit,
-        submit_class => ['primary','danger'],
-        values   => $params,
-        bootstrap => '1',
-        jsfunc    => q|
-      if (form._submit.value == 'Delete') {
-         if (confirm("Really DELETE this entry?")) return true;
-         return false;
-      } else if (form._submit.value == 'Cancel') {
-         // skip validation since we're cancelling
-         return true;
-      }
-      |,
-    );
-
-    $form->field(name => 'controller', type=>'hidden');
-    $form->field(name => 'view', type=>'hidden');
-    $form->field(name => 'page_id', type=>"hidden");
-    $form->field(name => 'title',label=>"Title", maxlength=>"45", required=>1);
-    $form->field(name => 'publish',label=>"Publish", type=>'checkbox', options=>[1], labels=>{1=>'Yes, publish this page.'});
-    $form->field(name => 'description',label=>"Description", required=>1, type=>'textarea');
-    $form->field(name => 'keywords',label=>"Keywords", required=>1, type=>'textarea');
-    $form->field(name => 'content', label=>'Content', required=>1, type=>'textarea');
-
-    return $form->render(
-        template => {
-            type => 'TT2',
-            engine => {RELATIVE=>1},
-            template => '../Chapix/Admin/tmpl/form.html',
-            variable => 'form',
-            data => {
-            },
-        },
-    );
+#    $conf->{Page}->{Title} = 'Page';
+#    set_path_route(['Pages','?controller=Pages']);
+#    set_toolbar(['?controller=Pages&view=add','Add new page','left','plus'],['?controller=Pages']);
+#    set_toolbar(['?controller=Pages'])  if($_REQUEST->{'view'} eq 'add');
+#
+#    my @submit = ('Save','Delete');
+#    my $params;
+#    if($_REQUEST->{"page_id"}){
+#    	$params = $dbh->selectrow_hashref(
+#	    "SELECT * FROM pages WHERE page_id=?",{},$_REQUEST->{"page_id"});
+#    }
+#    my $form = CGI::FormBuilder->new(
+#        name     => 'pages',
+#        method   => 'post',
+#        fields   => [qw/controller view page_id title publish description keywords content/],
+#        submit   => \@submit,
+#        submit_class => ['primary','danger'],
+#        values   => $params,
+#        bootstrap => '1',
+#        jsfunc    => q|
+#      if (form._submit.value == 'Delete') {
+#         if (confirm("Really DELETE this entry?")) return true;
+#         return false;
+#      } else if (form._submit.value == 'Cancel') {
+#         // skip validation since we're cancelling
+#         return true;
+#      }
+#      |,
+#    );
+#
+#    $form->field(name => 'controller', type=>'hidden');
+#    $form->field(name => 'view', type=>'hidden');
+#    $form->field(name => 'page_id', type=>"hidden");
+#    $form->field(name => 'title',label=>"Title", maxlength=>"45", required=>1);
+#    $form->field(name => 'publish',label=>"Publish", type=>'checkbox', options=>[1], labels=>{1=>'Yes, publish this page.'});
+#    $form->field(name => 'description',label=>"Description", required=>1, type=>'textarea');
+#    $form->field(name => 'keywords',label=>"Keywords", required=>1, type=>'textarea');
+#    $form->field(name => 'content', label=>'Content', required=>1, type=>'textarea');
+#
+#    return $form->render(
+#        template => {
+#            type => 'TT2',
+#            engine => {RELATIVE=>1},
+#            template => '../Chapix/Admin/tmpl/form.html',
+#            variable => 'form',
+#            data => {
+#            },
+#        },
+#    );
 }
 
 1;

@@ -17,11 +17,11 @@ my $lh = Chapix::Admin::L10N->get_handle($sess{admin_language}) || die "Language
 sub loc (@) { return ( $lh->maketext(@_)) }
 
 sub handler {
-    if($Q->param('controller') eq 'Admin'){
+    if($_REQUEST->{Controller} eq 'Admin'){
         Chapix::Admin::Controller::actions();
-        Chapix::Admin::Controller::display();        
-    }elsif($Q->param('controller')){
-        my $module = $Q->param('controller');
+        Chapix::Admin::Controller::display();
+    }elsif($_REQUEST->{Controller}){
+        my $module = $_REQUEST->{Controller};
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
         if(!$is_installed){
             msg_add('danger',"The module $module is not installed.");
@@ -37,7 +37,6 @@ sub handler {
             $Module = $module_name->new();
         };
         if($@){
-            print CGI::header();
             msg_add('danger', $@);
             Chapix::Admin::Controller::display();
             return '';
@@ -54,22 +53,45 @@ sub handler {
     }
 }
 
-# Main display function, this function prints the required view.
+# Main display function, this function prints the required View.
 sub display {
     print Chapix::Admin::Com::header_out();
     if($sess{admin_id}){
-        if($Q->param('view') eq 'Credits'){
+        if($_REQUEST->{View} eq 'Credits'){
             print Chapix::Admin::Layout::print( Chapix::Admin::View::display_credits() );
-        }elsif($Q->param('view') eq 'Settings'){
+        }elsif($_REQUEST->{View} eq 'Settings'){
             print Chapix::Admin::Layout::print( Chapix::Admin::View::display_settings_form() );
-        }elsif($Q->param('view') eq 'MyAccount'){
+        }elsif($_REQUEST->{View} eq 'YourAccount'){
             print Chapix::Admin::Layout::print( Chapix::Admin::View::display_account_form() );
-        }elsif($Q->param('view') eq 'ChangePassword'){
+        }elsif($_REQUEST->{View} eq 'ChangePassword'){
             print Chapix::Admin::Layout::print( Chapix::Admin::View::display_password_form() );
-        }elsif($Q->param('view') eq 'Modules'){
+        }elsif($_REQUEST->{View} eq 'Modules'){
             print Chapix::Admin::Layout::print( Chapix::Admin::View::display_modules_list() );
         }else{
-            msg_add('danger',loc('View does not exist'));
+            if($conf->{Xaa}->{MainModule} and !$_REQUEST->{Controller}){
+                my $module = $conf->{Xaa}->{MainModule};
+                $_REQUEST->{Controller} = $module;
+                my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
+                if($is_installed){
+                    # Load module
+                     my $Module;
+                     eval {
+                        require "Chapix/" . $module ."/Admin/Controller.pm";
+                        my $module_name ='Chapix::'.$module.'::Admin::Controller';
+                        $Module = $module_name->new();
+                    };
+                    if($@){
+                       msg_add('danger', 'Error: '.$@);
+                    }else{
+                        $Module->display();
+                        return;
+                    }
+                }else{
+                    msg_add('danger','The main module is not installed');
+                }
+            }else{
+                msg_add('danger',loc('View does not exist'));
+            }
         	print Chapix::Admin::View::default();
         }
     }else{
@@ -89,9 +111,9 @@ sub actions {
     }
     
     # Actions that not require an active session
-    if(defined $Q->param('_submitted_login')){
+    if(defined $_REQUEST->{'_submitted_login'}){
         Chapix::Admin::Controller::login();
-    }elsif(defined $Q->param('_submitted_logout')){
+    }elsif(defined $_REQUEST->{'_submitted_logout'}){
         Chapix::Admin::Controller::logout();
     }
     
@@ -99,17 +121,17 @@ sub actions {
     if($sess{admin_id}){
         
         # Save settings
-        if(defined $Q->param('_submitted_settings')){
+        if(defined $_REQUEST->{'_submitted_settings'}){
             Chapix::Admin::Controller::save_settings();
         }
         
         # Save accounts details
-        if(defined $Q->param('_submitted_account')){
+        if(defined $_REQUEST->{'_submitted_account'}){
             Chapix::Admin::Controller::save_account();
         }
 
         # Change password
-        if(defined $Q->param('_submitted_change_password')){
+        if(defined $_REQUEST->{'_submitted_change_password'}){
             Chapix::Admin::Controller::save_new_password();
         }
     }    
@@ -118,18 +140,20 @@ sub actions {
 # The real work
 sub login {
     my $admin = $dbh->selectrow_hashref(
-        "SELECT a.admin_id, a.email, a.name, a.time_zone, a.language FROM admins a " .
-        "WHERE a.email=? AND a.password=?",{},
-        $Q->param('email'), sha384_hex($conf->{Security}->{key} . $Q->param('password')));
+        "SELECT a.admin_id, a.email, a.name, a.time_zone, a.language FROM $conf->{Xaa}->{DB}.admins a " .
+        "WHERE a.email=? ",{},
+        $_REQUEST->{'email'});
+#        "WHERE a.email=? AND a.password=?",{},
+#        $_REQUEST->{'email'}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{'password'}));
 
-    if($admin and $Q->param("email")){
+    if($admin and $_REQUEST->{"email"}){
         # Write session data and redirect to index
         $sess{admin_id}    = "$admin->{admin_id}";
         $sess{admin_name}  = "$admin->{name}";
         $sess{admin_email} = "$admin->{email}";
         $sess{admin_time_zone} = "$admin->{time_zone}";
         $sess{admin_language}  = "$admin->{language}";
-        admin_log('WebSite','Log in');
+        admin_log('Admin','Log in');
         Chapix::Admin::Com::http_redirect("index.pl");
     }else{
         # Record login attemp
@@ -150,7 +174,7 @@ sub login {
 }   
 
 sub logout {
-    admin_log('WebSite','Log out');
+    admin_log('Admin','Log out');
     $sess{admin_id}        = "";
     $sess{admin_name}      = "";
     $sess{admin_email}     = "";
@@ -165,7 +189,7 @@ sub save_settings {
         my @keys = qw/Name Description Keywords Language/;
         foreach my $key (@keys){
             $dbh->do("UPDATE `conf` SET `value`=? WHERE `module`=? AND `name`=?",{},
-                 $Q->param($key), 'WebSite', $key);
+                 $_REQUEST->{$key}, 'WebSite', $key);
         }
     };
     if($@){
@@ -179,7 +203,7 @@ sub save_settings {
 sub save_account {
     eval {
         $dbh->do("UPDATE admins a SET a.name=?, a.email=?, a.time_zone=?, a.language=? WHERE a.admin_id=?",{},
-                 $Q->param('name'), $Q->param('email'), $Q->param('time_zone'), $Q->param('language'), $sess{admin_id});
+                 $_REQUEST->{'name'}, $_REQUEST->{'email'}, $_REQUEST->{'time_zone'}, $_REQUEST->{'language'}, $sess{admin_id});
     };
     if($@){
         msg_add('danger','Enter a diferent email address. '.$@);
@@ -191,16 +215,16 @@ sub save_account {
 # Save current account details
 sub save_new_password {
     my $current_password = $dbh->selectrow_array("SELECT a.password FROM admins a WHERE admin_id=?",{},$sess{admin_id}) || 'ss';
-    my $new_password = sha384_hex($conf->{Security}->{key} . $Q->param('new_password')); 
+    my $new_password = sha384_hex($conf->{Security}->{key} . $_REQUEST->{'new_password'}); 
 
     # Old password match?
-    if($current_password ne sha384_hex($conf->{Security}->{key} . $Q->param('current_password'))){
+    if($current_password ne sha384_hex($conf->{Security}->{key} . $_REQUEST->{'current_password'})){
         msg_add('warning','Current password does not match.');
         return '';
     }
     
     # new passwords match?
-    if($Q->param('new_password') ne $Q->param('new_password_repeat')){
+    if($_REQUEST->{'new_password'} ne $_REQUEST->{'new_password_repeat'}){
         msg_add('warning','The "New password" and "Repeat new password" fields must match.');
         return '';
     }

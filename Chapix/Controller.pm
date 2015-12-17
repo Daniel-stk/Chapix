@@ -13,7 +13,8 @@ sub handler {
     if($_REQUEST->{Controller}){
         my $module = $_REQUEST->{Controller};
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
-        if(!$is_installed){
+        
+    	if(!$is_installed){
             msg_add('danger',"The module $module is not installed.");
             display();
             return '';
@@ -66,7 +67,7 @@ sub display {
                  return;
              }
         }else{
-            msg_add('danger',loc('The main module is not installed'));
+            msg_add('danger','The main module is not installed');
         }
     }
     print Chapix::Com::header_out();
