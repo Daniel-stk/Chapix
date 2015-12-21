@@ -33,7 +33,7 @@ sub display_settings_form {
         submit   => \@submit,
         submit_class => ['primary'],
         values   => $params,
-        bootstrap => '1',
+        materialize => '1',
         jsfunc    => q|
       if (form._submit.value == 'Cancel') {
          // skip validation since we're cancelling

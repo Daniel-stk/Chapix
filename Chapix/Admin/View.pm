@@ -29,7 +29,7 @@ sub display_login {
         method   => 'post',
         fields   => [qw/Controller email password/],
         submit   => \@submit,
-        bootstrap => '1',
+        materialize => 1,
     );
 
     $form->field(name => 'Controller', type=>'hidden', value=>'Admin', override=>1);
@@ -80,7 +80,7 @@ sub display_settings_form {
         fields   => [qw/Name Language Keywords Description/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
+        materialize => 1,
     );
     $form->field(name => 'Controller', type=>'hidden');
     $form->field(name => 'View', type=>'hidden');
@@ -116,7 +116,7 @@ sub display_account_form {
         fields   => [qw/name email language time_zone/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
+        materialize => 1,
     );
     $form->field(name => 'Controller', type=>'hidden');
     $form->field(name => 'View', type=>'hidden');
@@ -153,8 +153,8 @@ sub display_password_form {
         fields   => [qw/current_password new_password new_password_repeat/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
-    );
+        materialize => 1,
+	);
     $form->field(name => 'Controller', type=>'hidden');
     $form->field(name => 'View', type=>'hidden');
     $form->field(name => 'current_password', label=>"Current password", maxlength=>"45", required=>1, type=>'password', group=>'Current');

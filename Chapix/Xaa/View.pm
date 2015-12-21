@@ -37,8 +37,10 @@ sub set_path_route {
 sub display_home {
     my $HTML = "";
     my $template = Template->new();
+    
     my $vars = {
         REQUEST => $_REQUEST,
+        Domain  => $conf->{Domain},
         conf => $conf,
         sess => \%sess,
      	msg  => msg_print(),
@@ -138,7 +140,7 @@ sub display_login {
         fields   => [qw/controller email password/],
 	action   => '/Xaa/Xaa',
         submit   => \@submit,
-        bootstrap => '1',
+        materialize => '1',
     );
 
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
@@ -254,7 +256,7 @@ sub display_password_form {
         fields   => [qw/current_password new_password new_password_repeat/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
+        materialize => 1,
     );
     $form->field(name => 'current_password', label=> loc("Current password"), maxlength=>"45", required=>1, type=>'password', group=>loc('Current'));
     $form->field(name => 'new_password', label=> loc("New password"), maxlength=>"45", required=>1, type=>'password', group=> loc('New'));
@@ -287,7 +289,7 @@ sub display_domain_settings {
         fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
+        materialize => 1,
     );
 
     $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
@@ -316,13 +318,15 @@ sub display_domain_settings {
 sub display_edit_account_form {
     $conf->{Page}->{Title} = loc('Edit your settings');
     set_back_btn('Xaa/YourAccount',loc('Your account'));
-
+    
     my @submit = (loc('Save'));
+    
     my $params = {
         name => $sess{user_name},
         time_zone => $sess{user_time_zone},
         language  => $sess{user_language},
     };
+
     my $form = CGI::FormBuilder->new(
         name     => 'edit_account',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/EditAccount',
@@ -330,14 +334,17 @@ sub display_edit_account_form {
         fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
-        bootstrap => 1,
+        materialize => 1,
     );
+
     $form->field(name => 'name', required=>1, label=>loc('Name'));
 
     my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
+
     $form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    
     $form->field(name => 'language', required=>1, label=> loc('Language'), options=>['es_MX','en_US'], type=>'select',
-             labels => {'es_MX'=>'Español', 'en_US'=>'English'});
+		 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
     
     return $form->render(
         template => {
@@ -378,8 +385,8 @@ sub display_user_form {
 	action   => '/'.$_REQUEST->{Domain} . '/Xaa/User',
         submit   => \@submit,
         values   => $params,
-        bootstrap => '1',
-    );
+        materialize => '1',
+	);
 
     $form->field(name => 'user_id', type=>'hidden');
     $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
@@ -422,19 +429,19 @@ sub display_register {
         fields   => [qw/controller name email phone/],
 	action   => '/Xaa/Xaa',
         submit   => \@submit,
-        bootstrap => '1',
+        materialize => '1',
     );
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
 
     $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
-		 override=>1,jsmessage => loc('Please enter your password'), type=>"password", comment=>'<i class="icon-lock"></i>');
+		 override=>1,jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
 
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
     
     $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
-		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your phone'));
     
     $form->stylesheet('1');
 
@@ -451,6 +458,49 @@ sub display_register {
 	},
     );
     return $HTML;
+}
+
+
+sub display_logo_form {
+    $conf->{Page}->{Title} = loc('Upload logo');
+    set_back_btn('Xaa/YourAccount',loc('Your account'));
+    
+    my @submit = (loc('Save'));
+
+    Chapix::Com::conf_load("Xaa");
+    
+    my $params = {
+	logo => $conf->{Xaa}->{Logo}
+    };
+    
+    my $form = CGI::FormBuilder->new(
+        name     => 'upload_logo',
+        action   => '/'.$_REQUEST->{Domain} . '/Xaa/EditLogo',
+        method   => 'post',
+        fields   => [qw/logo/],
+        submit   => \@submit,
+        values   => $params,
+        materialize => 1,
+	);
+
+    $form->field(name => 'logo', label=> loc("Logo"), required=>1, type=>'file');
+
+    if($params->{logo}){
+	my $img = CGI::img({-src=>"/".$_REQUEST->{Domain}.'/img/site/'.$params->{logo}, -class=>'responsive-img'});
+	$form->field(name=>'logo', comment=> $img);
+    }
+    return $form->render(
+        template => {
+            type => 'TT2',
+            engine => {},
+            template => 'Chapix/Xaa/tmpl/form.html',
+            variable => 'form',
+            data => {
+                conf => $conf,
+                msg => msg_print()
+            },
+        },
+    );    
 }
 
 1;

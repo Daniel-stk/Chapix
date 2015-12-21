@@ -1,31 +1,53 @@
-<div class="row">
-  <div class="col s12 m10 l8 z-depth-1 card col-center">
-    [% tabs %]
-    [% form.jshead %]
-    [% form.start %]
-    <div class="card-content">
-      [% msg %]
-      [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
-      
-      <div class="row">
-        [% FOREACH field = form.fields %][% IF field.type != 'hidden'%]
-        [% IF field.group %]
-      </div><div class="row"><h6>[% field.group %]</h6>
-        [% END %]
-        <div class="input-field col s12 m6 l4">
-          [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
-          <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
-        </div>
-        [% END %][% END %]
-      </div>
-    </div>
-    <div class="card-action">
-      [% form.submit %][% buttons %]
-    </div>
-    [% form.end %]
-  </div>
-</div>
+<section>
+  <div class="section"></div>
+  <div class="container">    
 
+    <div class="row">
+      <div class="col s12 m10 l8 z-depth-1 card col-center hoverable">
+	[% tabs %]
+	[% form.jshead %]
+	[% form.start %]
+	<div class="card-content">
+	  [% msg %]
+	  [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]	  
+	  <div class="row">
+            [% FOREACH field = form.fields %][% IF field.type != 'hidden'%]
+            [% IF field.group %]
+	  </div>
+	  <div class="row">
+	    <h6>[% field.group %]</h6>
+            [% END %]
+            
+	    [% IF field.type == 'file' %]
+	    <div class="file-field input-field">
+	      <div class="btn">
+		<span>[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</span>
+		[% field.prefix %][% field.field %][% field.unit %]
+	      </div>
+	      <div class="file-path-wrapper">
+		<input class="file-path validate" type="text">
+		[% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+	      </div>
+	    </div>
+	    [% ELSE %]
+	    <div class="input-field col s12 m8 l12">
+              [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+              <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
+            </div>
+            [% END %]
+	    
+	    [% END %]
+	    [% END %]
+	  </div>
+	</div>
+	<div class="card-action">
+	  [% form.submit %][% buttons %]
+	</div>
+	[% form.end %]
+      </div>
+    </div>    
+  </div>
+</section>
 
 
 [% includes %]

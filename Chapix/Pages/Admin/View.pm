@@ -74,7 +74,7 @@ sub display_form {
 #        submit   => \@submit,
 #        submit_class => ['primary','danger'],
 #        values   => $params,
-#        bootstrap => '1',
+#        materialize => '1',
 #        jsfunc    => q|
 #      if (form._submit.value == 'Delete') {
 #         if (confirm("Really DELETE this entry?")) return true;

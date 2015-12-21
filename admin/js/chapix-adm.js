@@ -8,7 +8,7 @@ $(function() {
         $(this).siblings('label').addClass('active');
     });
 
-    $('.msg').each(function() {
+        $('.msg').each(function() {
         $(this).hide();
         if($(this).hasClass('msg-success')){
             Materialize.toast($(this).html(), 3000, 'msg-success');
@@ -20,13 +20,15 @@ $(function() {
             Materialize.toast($(this).html(), 180000, 'msg-warning');
             var snd = new Audio("/media/beep.wav");
             snd.play();
-        } else {
+        } else if ( $(this).hasClass('msg-info') ) {
+	    Materialize.toast($(this).html(), 180000, 'msg-info');
+            var snd = new Audio("/media/beep.wav");
+            snd.play();
+	}else {
             Materialize.toast($(this).html(), 3000);
-        }
-        
+        }        
     });
-    
-    
+      
 });
 
 function xaaTooggleSearch () {
@@ -34,3 +36,4 @@ function xaaTooggleSearch () {
         $('#xaa-search').find('#q').focus();
     });
 }
+

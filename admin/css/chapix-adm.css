@@ -45,9 +45,25 @@
 	color: #fff;
 }
 
+.msg-info {
+    background-color: #1e88e5 !important;
+    color: #fff;
+}
+
 .req {
 	color: #d32f2f;
 }
+
+
+.fill-body {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    /* top: 0px; */
+    left: 0px;
+}
+
+
 /* Base CSS
 
 

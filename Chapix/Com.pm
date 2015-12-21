@@ -1,7 +1,7 @@
 package Chapix::Com;
 
 use strict;
-use CGI qw/:cgi/;
+use CGI qw/:standard/;
 use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use Apache::Session::MySQL;
@@ -19,6 +19,7 @@ BEGIN {
 		  $cookie
 		  &msg_add
 		  &msg_print
+                  &upload_logo
 		  &http_redirect
 		  $_REQUEST
 		  $Template
@@ -47,6 +48,12 @@ $_REQUEST->{Domain}     =~ s/\W//g;
 $_REQUEST->{Controller} =~ s/\W//g;
 $_REQUEST->{View}       =~ s/\W//g;
 $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
+
+if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
+	$_REQUEST->{Domain}     = 'Home';
+	$_REQUEST->{Controller} = '';
+	$_REQUEST->{View}       = '';
+}
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
 # DataBase
@@ -56,19 +63,21 @@ $dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
 #$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
 
 # Change to domain database
-if($_REQUEST->{Domain}){
-    if($_REQUEST->{Domain} eq 'Xaa'){
-        $_REQUEST->{View} = $_REQUEST->{Controller};
-        $_REQUEST->{Controller} = $_REQUEST->{Domain};
-    }else{
-        eval {
-            $dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
-        };
-        if($@){
-            msg_add('danger','Data not found.');
-            http_redirect('/');
-        }
-    }
+if($_REQUEST->{Domain} eq 'Xaa'){
+	$_REQUEST->{View} = $_REQUEST->{Controller};
+	$_REQUEST->{Controller} = $_REQUEST->{Domain};
+}elsif($_REQUEST->{Domain} =~ /[A-Z]/){
+	$_REQUEST->{View} = $_REQUEST->{Domain};
+	$_REQUEST->{Domain} = 'Xaa';
+	$_REQUEST->{Controller} = 'Pages';
+}else{
+	eval {
+		$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+	};
+	if($@){
+		msg_add('danger','Data not found.');
+		http_redirect('/');
+	}
 }
 
 # Session
@@ -256,5 +265,57 @@ sub set_toolbar {
     
     $conf->{Page}->{Toolbar} = $HTML;
 }
+
+sub upload_logo {
+    my $cgi_param = shift || "";
+    my $dir = shift || "";
+    my $filename = param($cgi_param);
+    my $save_as = shift || "";
+    
+    if($filename){
+	my $type = uploadInfo($filename)->{'Content-Type'};
+	my $file = '';
+	my ($name, $ext) = split(/\./,$filename);
+	$name =~ s/\W/_/g;
+	
+	if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+	    $ext = ".jpg";
+	}elsif($type eq "image/png" or $type eq "image/x-png"){
+	    $ext = ".png";
+	}else{
+	    msg_add("error","Sólo imágenes jpeg y png son soportadas");
+	    return "";
+	}
+
+	if($ext){
+	    #Directory	    	    
+	    if(!(-e "$_REQUEST->{Domain}/img/$dir/")){
+		mkdir("$_REQUEST->{Domain}/img/$dir/") or die 'No se puede crear el directorio de datos. '.$!;
+	    }
+	    
+	    $file = $name . $ext;
+	    if(-e "$_REQUEST->{Domain}/img/$dir/" . $file){
+		foreach my $it (1 .. 1000000){
+		    $file = $name.'_'.$it.$ext;
+		    if(!(-e "$_REQUEST->{Domain}/img/$dir/" . $file)){
+			last;
+		    }
+		}
+	    }
+	    open (OUTFILE,">$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
+	    binmode(OUTFILE);
+	    my $bytesread;
+	    my $buffer;
+	    while ($bytesread=read($filename,$buffer,1024)) {
+		print OUTFILE $buffer;
+	    }
+	    close(OUTFILE);
+	    return $file;
+	}
+    }
+    return "";
+}
+
+
 
 1;

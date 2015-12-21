@@ -36,54 +36,47 @@ sub _init {
     $self->{main_db} = $conf->{Xaa}->{DB};
     $conf->{Domain} = $dbh->selectrow_hashref(
         "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.time_zone, d.language " .
-            "FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},$_REQUEST->{Domain});
+	"FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},$_REQUEST->{Domain});
 }
 
 # Main display function, this function prints the required view.
 sub display {
     my $self = shift;
-    msg_add('danger'," -- $_REQUEST->{View}  ");
-    # Validate if the user is logged in
-    if($_REQUEST->{View} eq 'Login'){
+    
+    if($sess{user_id}){
         print Chapix::Com::header_out();
-        print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
-        return;
-    }elsif($_REQUEST->{View} eq 'Register'){
-        print Chapix::Com::header_out();
-        print Chapix::Layout::print( Chapix::Xaa::View::display_register() );
-        return;
-    }
-
-    if(!$sess{user_id}){
-        msg_add('warning',loc('To continue, log into your account.' . $_REQUEST->{Controller} . $_REQUEST->{View} . $_REQUEST->{Domain}));
-#        Chapix::Com::http_redirect('/Xaa/Login');
-    }
-
-    print Chapix::Com::header_out();
-    if($_REQUEST->{View} eq 'YourAccount'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_your_account() );
-    }elsif($_REQUEST->{View} eq 'ChangePassword'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_password_form() );
-    }elsif($_REQUEST->{View} eq 'EditAccount'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_edit_account_form() );
-    }elsif($_REQUEST->{View} eq 'Settings'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_settings() );
-    }elsif($_REQUEST->{View} eq 'DomainSettings'){
-        print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
-    # }elsif($_REQUEST->{View} eq 'Users'){
-    #     if($_REQUEST->{user_id}){
-    #         print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
-    #     }else{
-    #         print Chapix::Layout::print( Chapix::Xaa::View::display_users_list() );
-    #     }
-    # }elsif($_REQUEST->{View} eq 'User'){
-    #     print Chapix::Layout::print( Chapix::Xaa::View::display_user_form() );
-    }else{
-        if($_REQUEST->{View}){
-	    print Chapix::Xaa::View::default();
+        if($_REQUEST->{View} eq 'YourAccount'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_your_account() );
+        }elsif($_REQUEST->{View} eq 'ChangePassword'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_password_form() );
+        }elsif($_REQUEST->{View} eq 'EditAccount'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_edit_account_form() );
+        }elsif($_REQUEST->{View} eq 'Settings'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_settings() );
+        }elsif($_REQUEST->{View} eq 'DomainSettings'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
+        }elsif($_REQUEST->{View} eq 'EditLogo'){
+	    print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
 	}else{
-	    print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
-	}
+            if($_REQUEST->{View}){
+            	print Chapix::Xaa::View::default();
+            }else{
+            	print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
+            }
+        }
+    }else{
+        # Validate if the user is logged in
+        if($_REQUEST->{View} eq 'Login'){
+            print Chapix::Com::header_out();
+            print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
+            return;
+        }elsif($_REQUEST->{View} eq 'Register'){
+            print Chapix::Com::header_out();
+            print Chapix::Layout::print( Chapix::Xaa::View::display_register() );
+            return;
+        }
+        msg_add('warning',loc('To continue, log into your account.->' . " $_REQUEST->{Domain} - $_REQUEST->{Controller}  - $_REQUEST->{View} "));
+        Chapix::Com::http_redirect('/Xaa/Login');
     }
 }
 
@@ -91,7 +84,7 @@ sub display {
 # Each action is detected by the "_submitted" param prefix
 sub actions {
     my $self = shift;
-
+    
     if(defined $_REQUEST->{_submitted_login}){
         $self->login();
     }elsif($_REQUEST->{View} eq 'Logout'){
@@ -116,8 +109,11 @@ sub actions {
             # Save user data
             $self->save_user();
         }
-    }elsif(defined $_REQUEST->{_submit_register}){
+    }elsif(defined $_REQUEST->{_submitted_register}){
+	#Register new account
 	$self->create_account();
+    }elsif(defined $_REQUEST->{_submitted_upload_logo}){
+	$self->save_logo();
     }
 }
 
@@ -138,16 +134,15 @@ sub login {
         $sess{user_email} = "$user->{email}";
         $sess{user_time_zone} = "$user->{time_zone}";
         $sess{user_language}  = "$user->{language}";
-
+	
 	my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
 	if($domain_id){
 	    my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM $self->{main_db}.xaa_domains WHERE domain_id=? ",{},$domain_id);
 	    Chapix::Com::http_redirect('/'.$domain->{folder});
 	}else{
-            msg_add('warning','Your account is not linked to any business account.');
-        }
-	
-        Chapix::Com::http_redirect('/Xaa');
+            msg_add('warning',loc('Your account is not linked to any business account.'));
+        }	
+        Chapix::Com::http_redirect('/Xaa/Login');
     }else{
         # Record login attemp
         # my $updated = $dbh->do(
@@ -160,6 +155,7 @@ sub login {
         # }
         # my $failed_logins = $dbh->selectrow_array("SELECT failed_logins FROM $self->{main_db}.ip_security ips WHERE ip_address=? AND DATE_ADD(ips.date,INTERVAL 1 HOUR) > NOW()",{},$ENV{REMOTE_ADDR});
         msg_add("warning","Email or password incorrect.");
+        Chapix::Com::http_redirect('/Xaa/Login?email='.$_REQUEST->{email});
         # if ($failed_logins > 3) {
         #     msg_add("danger","You have " . (10 - $failed_logins) . " attemps left before being blocked.");
         # }
@@ -238,5 +234,115 @@ sub save_account_settings {
         http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/YourAccount');
     }
 }
- 
+
+
+sub create_account {
+    my $self = shift;
+
+    # email validation
+    if($_REQUEST->{email} !~ /^[\w\-\+\._]+\@[a-zA-Z0-9][-a-zA-Z0-9\.]*\.[a-zA-Z]+$/){
+	msg_add('warning',loc('Please enter a valid email address'));
+    }
+    
+    my $exist = $dbh->selectrow_hashref("SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
+					"FROM $self->{main_db}.xaa_users u " .
+					"WHERE u.email=?",{},
+					$_REQUEST->{email});
+    
+    if($exist){
+	msg_add("warning", loc("This email already exist"));
+	http_redirect("/Xaa/Register");    
+	return '';
+    }
+    
+    my ($user_mail, $user_domain) = split('@', $_REQUEST->{email});        
+    
+    $user_mail =~ s/\W//g;    
+    $user_domain =~ s/\..*//g;
+    $user_domain =~ s/\W//g;
+    
+    my $domain_to_use = $user_domain;
+    
+    my @invalids_domains = qw/gmail hotmail yahoo outlook live/;
+    
+    foreach my $invalid (@invalids_domains) {	
+	if($invalid eq $domain_to_use) {
+	    $domain_to_use = $user_mail;
+	    last;
+	}
+    }
+    
+    my @current_names = $dbh->selectcol_arrayref("SELECT folder FROM $self->{main_db}.xaa_domains");
+    
+    foreach my $domain (@current_names) {
+	if($domain eq $domain_to_use) {
+	    $domain_to_use = $user_mail;
+	    last;
+	}
+    }
+    
+    # Check existing databases
+    my $db_exist = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
+					 {},'xaa_'.$domain_to_use) || 0;
+    if($db_exist){
+	$domain_to_use = $user_mail;
+	
+	my $taken = 1;
+	while ($taken) {
+	    $db_exist = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
+					      {},'xaa_'.$domain_to_use) || 0;
+	    
+	    if(!$db_exist){
+		$taken = 0;		
+	    }else{
+		$taken++;
+		$domain_to_use .= $taken;
+	    }
+	}
+    }
+    
+    
+    # $dbh->do("INSERT INTO $self->{main_db}.xaa_users (email, name) VALUES (?,?)",{},$_REQUEST->{email}, $_REQUEST->{name});    
+    #my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');    
+    # $dbh->do("INSERT INTO $self->{main_db}.xaa_domains (name, folder, database) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
+    #my $domain_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_domains",'domain_id');    
+    #$dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_by, active, default_domain) VALUES (?,?,1,1,1)",{},$user_id, $domain_id);
+    
+    http_redirect("/Xaa/Register");    
+}
+
+
+sub save_logo {
+    my $self = shift;
+    
+    Chapix::Com::conf_load("Xaa");
+    
+    my $current = $conf->{Xaa}->{Logo};
+    
+    my $logo = upload_logo('logo', 'site');
+    
+    if($logo) {	
+	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
+	
+	my $comando = 'convert '.$_REQUEST->{Domain}.'/img/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
+	my @posibles = `$comando`;
+	my $colores = '';
+	
+	foreach my $linea (@posibles) {
+	    if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
+		my $hex = $1;
+		$colores .= "," if($colores);
+		$colores .= '#'.$hex
+	    }
+	}
+		
+	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
+	
+	unlink($_REQUEST->{Domain}."/img/site/".$current);
+    }
+    
+    http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");    
+}
+
+
 1;

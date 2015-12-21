@@ -1,30 +1,34 @@
-<div id="xaa-search" class="row xaa-search" style="display:none;">
-  <div class="col s12 m10 l8 col-center">
-    <h6>Search</h6>
-    <form method="get" action="">
-      <div class="row">
-        <div class="col s9 ">
-          <input type="text" name="q" />
-        </div>
-        <div class="col s3">
-          <button type="submit" class="btn grey darken-2" type="submit"><i class="tiny material-icons">search</i></button>
-        </div>
+<section class="section">
+  <div class="container">
+    <div id="xaa-search" class="row xaa-search" style="display:none;">
+      <div class="col s12 m12 l12 col-center">
+	<h6>Search</h6>
+	<form method="get" action="">
+	  <div class="row">
+            <div class="col s9 ">
+              <input type="text" name="q" />
+            </div>
+            <div class="col s3">
+              <button type="submit" class="btn grey darken-2" type="submit"><i class="tiny material-icons">search</i></button>
+            </div>
+	  </div>
+	</form>
       </div>
-    </form>
+    </div>
+    <div class="row">
+      <div class="col s12 m12 l12 col-center">
+	[% tabs %]
+	[% form %]
+	[% msg %]
+	[% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
+	[% list %]
+	[% IF js %]
+	[% jsFile = 'tmpl/' _ js %]
+	<script type="text/javascript">
+	  [% INSERT $jsFile %]
+	</script>
+	[% END %]
+      </div>
+    </div>
   </div>
-</div>
-<div class="row">
-  <div class="col s12 m10 l8 col-center">
-    [% tabs %]
-    [% form %]
-    [% msg %]
-    [% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
-    [% list %]
-    [% IF js %]
-    [% jsFile = 'tmpl/' _ js %]
-    <script type="text/javascript">
-      [% INSERT $jsFile %]
-    </script>
-    [% END %]
-  </div>
-</div>
+</section>

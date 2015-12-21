@@ -28,12 +28,11 @@ sub handler {
             $Module = $module_name->new();
         };
         if($@){
-            print CGI::header();
             msg_add('danger', $@);
-            Chapix::Controller::display();
+            Chapix::Controller::display_error();
             return '';
         }
-    
+	
         # Actions
         $Module->actions();
         
@@ -54,18 +53,18 @@ sub display {
         
         if($is_installed){
             # Load module
-             my $Module;
-             eval {
-                 require "Chapix/" . $module ."/Controller.pm";
-                 my $module_name ='Chapix::'.$module.'::Controller';
-                 $Module = $module_name->new();
-             };
-             if($@){
-                 msg_add('danger', $@);
-             }else{
-                 $Module->display();
-                 return;
-             }
+	    my $Module;
+	    eval {
+		require "Chapix/" . $module ."/Controller.pm";
+		my $module_name ='Chapix::'.$module.'::Controller';
+		$Module = $module_name->new();
+	    };
+	    if($@){
+		msg_add('danger', $@);
+	    }else{
+		$Module->display();
+		return;
+	    }
         }else{
             msg_add('danger','The main module is not installed');
         }
@@ -74,8 +73,11 @@ sub display {
     print Chapix::View::default();
 }
 
+sub display_error {
+    print Chapix::Com::header_out();
+    print Chapix::View::default();
+}
 
-# Admin actions.
 # Each action is detected by the "_submitted" param prefix
 sub actions {
 
