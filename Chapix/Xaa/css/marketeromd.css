@@ -12,7 +12,6 @@ body {
   }
      
 
-
 nav ul a {
 	color: black;
 }
@@ -23,7 +22,7 @@ nav ul a {
 
 #account, #mkt, #trusty, #prices, #ready, .register-form {
 	padding-top: 15px;
-	padding-bottom: 15px;
+	padding-bottom: 15px
 }
 
 
@@ -177,9 +176,16 @@ footer a{
 
 .card.custom-card {
 	width: 200px;
-	height: 260px;
+	height: 235px;
 }
 
+.card-txt {
+	font-size: 12px;
+}
+
+.card.custom-card img{
+	max-width: 60px;
+}
 
 .card-wrapper {
 	position: relative;
@@ -188,6 +194,9 @@ footer a{
 	margin-top: 20px;
 }
 
+.card-wrapper a {
+	display: inherit;
+}
 
 .top-navbar ul a span.badge{
     position: static;
@@ -196,7 +205,6 @@ footer a{
     display: inline;
     vertical-align: super;
 }
-
 
 .fixed-btn-wrapper {
     position : relative;
@@ -210,8 +218,6 @@ footer a{
 .file-field .req{
     color:#fff;
 }
-
-
 
 
 /* ****************** HELPER STYLES ********************** */

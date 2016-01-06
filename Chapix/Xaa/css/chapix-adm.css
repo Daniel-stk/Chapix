@@ -81,8 +81,6 @@
     font-size: 2.0em;
     font-weight: bold;
 }
-
-
 /* Style to replace on other modules */
 
 .app-toolbar {
@@ -97,3 +95,13 @@ nav a {
     background-color: #eeeeee;
     color: #000;
 }
+
+.main-toolbar .container-fluid{
+       margin-left: 20px;
+       margin-right: 20px;
+}
+
+.main-toolbar .container-fluid .button-collapse i.small {
+    font-size: 2rem;
+}
+

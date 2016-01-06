@@ -427,22 +427,19 @@ sub display_register {
         name     => 'register',
         method   => 'post',
         fields   => [qw/controller name email phone/],
-	action   => '/Xaa/Xaa',
+    	action   => '/Xaa/Register',
         submit   => \@submit,
-        materialize => '1',
-    );
+        materialize => '1'
+	);
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
-
     $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
 		 override=>1,jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
-
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
-    
     $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
-		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your phone'));
-    
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your full phone number'),
+         validate=>'/[\d\s\-]{10,15}/');
     $form->stylesheet('1');
 
     my $HTML = $form->render(
@@ -463,14 +460,14 @@ sub display_register {
 
 sub display_logo_form {
     $conf->{Page}->{Title} = loc('Upload logo');
-    set_back_btn('Xaa/YourAccount',loc('Your account'));
+    set_back_btn('Xaa/Settings',loc('Your account'));
     
     my @submit = (loc('Save'));
 
     Chapix::Com::conf_load("Xaa");
     
     my $params = {
-	logo => $conf->{Xaa}->{Logo}
+    	logo => $conf->{Xaa}->{Logo}
     };
     
     my $form = CGI::FormBuilder->new(
@@ -486,8 +483,8 @@ sub display_logo_form {
     $form->field(name => 'logo', label=> loc("Logo"), required=>1, type=>'file');
 
     if($params->{logo}){
-	my $img = CGI::img({-src=>"/".$_REQUEST->{Domain}.'/img/site/'.$params->{logo}, -class=>'responsive-img'});
-	$form->field(name=>'logo', comment=> $img);
+    	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/site/'.$params->{logo}, -class=>'responsive-img'});
+    	$form->field(name=>'logo', comment=> $img);
     }
     return $form->render(
         template => {

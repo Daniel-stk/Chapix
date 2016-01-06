@@ -110,10 +110,10 @@ sub actions {
             $self->save_user();
         }
     }elsif(defined $_REQUEST->{_submitted_register}){
-	#Register new account
-	$self->create_account();
+    	#Register new account
+    	$self->create_account();
     }elsif(defined $_REQUEST->{_submitted_upload_logo}){
-	$self->save_logo();
+    	$self->save_logo();
     }
 }
 
@@ -129,7 +129,7 @@ sub login {
     
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
-	$sess{user_id}    = "$user->{user_id}";
+    	$sess{user_id}    = "$user->{user_id}";
         $sess{user_name}  = "$user->{name}";
         $sess{user_email} = "$user->{email}";
         $sess{user_time_zone} = "$user->{time_zone}";
@@ -241,76 +241,150 @@ sub create_account {
 
     # email validation
     if($_REQUEST->{email} !~ /^[\w\-\+\._]+\@[a-zA-Z0-9][-a-zA-Z0-9\.]*\.[a-zA-Z]+$/){
-	msg_add('warning',loc('Please enter a valid email address'));
+    	msg_add('warning',loc('Please enter a valid email address'));
+    	return '';
     }
     
-    my $exist = $dbh->selectrow_hashref("SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
-					"FROM $self->{main_db}.xaa_users u " .
-					"WHERE u.email=?",{},
-					$_REQUEST->{email});
+    my $exist = $dbh->selectrow_hashref(
+    	"SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
+    	"FROM $self->{main_db}.xaa_users u " .
+    	"WHERE u.email=?",{},
+    	$_REQUEST->{email});
     
     if($exist){
-	msg_add("warning", loc("This email already exist"));
-	http_redirect("/Xaa/Register");    
-	return '';
+    	msg_add("warning", loc("This email already exist"));
+    	return '';
     }
     
-    my ($user_mail, $user_domain) = split('@', $_REQUEST->{email});        
-    
-    $user_mail =~ s/\W//g;    
+    my ($user_mail, $user_domain) = split('@', $_REQUEST->{email});
+    $user_mail   = lc($user_mail);
+    $user_domain = lc($user_domain);
+    $user_mail =~ s/\W//g;
     $user_domain =~ s/\..*//g;
     $user_domain =~ s/\W//g;
     
     my $domain_to_use = $user_domain;
-    
     my @invalids_domains = qw/gmail hotmail yahoo outlook live/;
     
     foreach my $invalid (@invalids_domains) {	
-	if($invalid eq $domain_to_use) {
-	    $domain_to_use = $user_mail;
-	    last;
-	}
+    	if($invalid eq $domain_to_use) {
+    	    $domain_to_use = $user_mail;
+    	    last;
+    	}
     }
-    
-    my @current_names = $dbh->selectcol_arrayref("SELECT folder FROM $self->{main_db}.xaa_domains");
-    
-    foreach my $domain (@current_names) {
-	if($domain eq $domain_to_use) {
-	    $domain_to_use = $user_mail;
-	    last;
-	}
+
+    my @sistem_subdomains = 
+	[qw/root bin daemon adm lp sync shutdown halt mail uucp operator games gopher ftp
+            nobody vcsa saslauth mailnull smmsp sshd tcpdump rpc nscd apache dbus ntp mysql
+            postfix named dovecot dovenull test dkim-milter opendkim www app webmaster abuse jmrp
+            postmaster news radiusd nut vcsa canna wnn rpm pcap webalizer fax quagga radvd pvm
+            amanda privoxy ident xfs gdm mailnull postgres smmsp netdump ldap squid ntp
+            desktop rpcuser rpc nfsnobody ingres system toor manager dumper newsadm
+            newsadmin usenet ftpadm ftpadmin ftp-adm ftp-admin webmaster noc security
+            hostmaster info marketing sales support decode notificaciones notifications dev dmarc
+            ns1 ns2 test mail default xaandia marketero mail smtp pop pop3 pop3s imap imapd
+            isabel isabelborunda david davidromero cesar cesarrodriguez monica monicaborunda
+            contacto comunicacion soporte facturas pagos servicios atencionalcliente informacion contabilidad
+            mariadb httpd http https ssl
+            ventas sales venta sale comunicacion clientes soporte support customers xandia marketero
+            /];
+
+    foreach my $sis_user (@sistem_subdomains){
+    	if($sis_user eq $domain_to_use){
+    	    $domain_to_use = 'mark';
+    	    last;
+    	}
     }
-    
-    # Check existing databases
-    my $db_exist = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
-					 {},'xaa_'.$domain_to_use) || 0;
-    if($db_exist){
-	$domain_to_use = $user_mail;
-	
-	my $taken = 1;
-	while ($taken) {
-	    $db_exist = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",
-					      {},'xaa_'.$domain_to_use) || 0;
-	    
-	    if(!$db_exist){
-		$taken = 0;		
-	    }else{
-		$taken++;
-		$domain_to_use .= $taken;
-	    }
-	}
+
+    # Check folder and db
+    my $exist_folder_on_db = $dbh->selectrow_array("SELECT COUNT(*) FROM $self->{main_db}.xaa_domains WHERE folder=?",{},$domain_to_use) || 0;
+    my $exist_folder_on_fs = (-e('data/'.$domain_to_use));
+    my $exist_db = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$domain_to_use) || 0;
+
+    if($exist_folder_on_db or $exist_folder_on_fs or $exist_db){
+    	foreach my $it(1 .. 9999999){
+    	    my $current_domain_to_use = $domain_to_use . $it;
+    	    $exist_folder_on_db = $dbh->selectrow_array("SELECT COUNT(*) FROM $self->{main_db}.xaa_domains WHERE folder=?",{},$current_domain_to_use) || 0;
+    	    $exist_folder_on_fs = (-e('data/'.$current_domain_to_use));
+    	    $exist_db = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$current_domain_to_use) || 0;
+    	    if(!$exist_folder_on_db and !$exist_folder_on_fs and !$exist_db){
+    		$domain_to_use = $current_domain_to_use;
+    		last;
+    	    }
+    	}
     }
+
+    # User creation
+    my $password = substr(sha384_hex(time.$conf->{Site}->{Name}.'- Te deseamos el mayor éxito en todo lo que hagas -'),3,7);
+    $dbh->do("INSERT INTO $self->{main_db}.xaa_users (name, email, time_zone, language, password, last_login_on) VALUES(?,?,?,?,?,NOW())",{},
+	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
+    my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');
     
+    $dbh->do("INSERT INTO $self->{main_db}.xaa_domains (`name`, `folder`, `database`) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
+    my $domain_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_domains",'domain_id');
     
-    # $dbh->do("INSERT INTO $self->{main_db}.xaa_users (email, name) VALUES (?,?)",{},$_REQUEST->{email}, $_REQUEST->{name});    
-    #my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');    
-    # $dbh->do("INSERT INTO $self->{main_db}.xaa_domains (name, folder, database) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
-    #my $domain_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_domains",'domain_id');    
-    #$dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_by, active, default_domain) VALUES (?,?,1,1,1)",{},$user_id, $domain_id);
+    $dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
+
+    # Database init
+    my $DB = 'xaa_' . $domain_to_use;
+    database_init($DB);
+
+    # Domain setup
+    # $dbh->do("UPDATE $DB.`conf` SET `value` = ? WHERE `group` = 'Site' AND `name` = 'Address'",{},$address);
+
+    # User session
+    $sess{user_id}        = "$user_id";
+    $sess{user_name}      = "$_REQUEST->{name}";
+    $sess{user_email}     = "$_REQUEST->{email}";
+    $sess{user_time_zone} = "$conf->{App}->{TimeZone}";
+    $sess{user_language}  = "$conf->{App}->{Language}";
+
+    # Send Welcome Email
+    my $Mail = Chapix::Mail::Controller->new();
+    my $enviado = $Mail->html_template({
+        to       => $_REQUEST->{'email'},
+        subject  => $conf->{App}->{Name} . ': '. loc('Your new account is ready'),
+        template => {
+            file => 'Chapix/Xaa/tmpl/account-creation-letter.html',
+            vars => {
+                name     => $_REQUEST->{'name'},
+                email    => $_REQUEST->{email},
+                password => $password,
+                loc => \&loc,
+            }
+        }
+    });
     
-    http_redirect("/Xaa/Register");    
+    # Welcome msg
+    msg_add('success','Tu cuenta fue creada con éxito.');
+    
+    # Redirect to personal homepage
+    http_redirect("/$domain_to_use/");
 }
 
+sub database_init {
+    my $db_name = shift;
+    $dbh->do("CREATE DATABASE " .$db_name);
+    $dbh->do("USE $db_name ");
+    $dbh->do("SET foreign_key_checks = 0");
+
+    open (SQL, $conf->{App}->{Resources} . "sql/base_db.sql") or die "Can't open SQL file..\n\n";
+    my $SQL = '';
+    while(<SQL>){
+        my $line = $_;
+        next if($line =~ /^\-\-/);
+        next if($line =~ /^\/\*/);
+        $SQL .= $line;
+    }
+    close SQL;
+    my @instructions = split(/;/,$SQL);
+    foreach my $sql (@instructions){
+        $sql =~ s/\n/ /g;
+        next if($sql eq ' ' or $sql eq '  ' or $sql eq '   ' or $sql eq '     ');
+        $dbh->do("$sql") if($sql);
+    }
+    $dbh->do("SET foreign_key_checks = 1");
+}
 
 sub save_logo {
     my $self = shift;
@@ -322,23 +396,23 @@ sub save_logo {
     my $logo = upload_logo('logo', 'site');
     
     if($logo) {	
-	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
+    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
 	
-	my $comando = 'convert '.$_REQUEST->{Domain}.'/img/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
-	my @posibles = `$comando`;
-	my $colores = '';
+        my $comando = 'convert data/'.$_REQUEST->{Domain}.'/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
+        my @posibles = `$comando`;
+        my $colores = '';
 	
-	foreach my $linea (@posibles) {
-	    if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
-		my $hex = $1;
-		$colores .= "," if($colores);
-		$colores .= '#'.$hex
-	    }
-	}
+        foreach my $linea (@posibles) {
+            if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
+            	my $hex = $1;
+            	$colores .= "," if($colores);
+            	$colores .= '#'.$hex
+            }
+        }
 		
-	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
+    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
 	
-	unlink($_REQUEST->{Domain}."/img/site/".$current);
+    	unlink("data/".$_REQUEST->{Domain}."/site/".$current);
     }
     
     http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");    

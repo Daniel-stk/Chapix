@@ -273,45 +273,47 @@ sub upload_logo {
     my $save_as = shift || "";
     
     if($filename){
-	my $type = uploadInfo($filename)->{'Content-Type'};
-	my $file = '';
-	my ($name, $ext) = split(/\./,$filename);
-	$name =~ s/\W/_/g;
+		my $type = uploadInfo($filename)->{'Content-Type'};
+		my $file = '';
+		my ($name, $ext) = split(/\./,$filename);
+		$name =~ s/\W/_/g;
 	
-	if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-	    $ext = ".jpg";
-	}elsif($type eq "image/png" or $type eq "image/x-png"){
-	    $ext = ".png";
-	}else{
-	    msg_add("error","Sólo imágenes jpeg y png son soportadas");
-	    return "";
-	}
-
-	if($ext){
-	    #Directory	    	    
-	    if(!(-e "$_REQUEST->{Domain}/img/$dir/")){
-		mkdir("$_REQUEST->{Domain}/img/$dir/") or die 'No se puede crear el directorio de datos. '.$!;
-	    }
-	    
-	    $file = $name . $ext;
-	    if(-e "$_REQUEST->{Domain}/img/$dir/" . $file){
-		foreach my $it (1 .. 1000000){
-		    $file = $name.'_'.$it.$ext;
-		    if(!(-e "$_REQUEST->{Domain}/img/$dir/" . $file)){
-			last;
-		    }
+		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+		    $ext = ".jpg";
+		}elsif($type eq "image/png" or $type eq "image/x-png"){
+		    $ext = ".png";
+		}else{
+		    msg_add("error","Sólo imágenes jpeg y png son soportadas");
+		    return "";
 		}
-	    }
-	    open (OUTFILE,">$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
-	    binmode(OUTFILE);
-	    my $bytesread;
-	    my $buffer;
-	    while ($bytesread=read($filename,$buffer,1024)) {
-		print OUTFILE $buffer;
-	    }
-	    close(OUTFILE);
-	    return $file;
-	}
+
+		if($ext){
+		    #Directory	    	    
+		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
+				mkdir("data");
+				mkdir("data/$_REQUEST->{Domain}");
+				mkdir("data/$_REQUEST->{Domain}/$dir") or die 'No se puede crear el directorio de datos. '.$!;
+		    }
+	    
+		    $file = $name . $ext;
+		    if(-e "data/$_REQUEST->{Domain}/$dir/" . $file){
+				foreach my $it (1 .. 1000000){
+				    $file = $name.'_'.$it.$ext;
+				    if(!(-e "data/$_REQUEST->{Domain}/$dir/" . $file)){
+						last;
+				    }
+				}
+		    }
+		    open (OUTFILE,">data/$_REQUEST->{Domain}/$dir/" . $file) or die "$!";
+		    binmode(OUTFILE);
+		    my $bytesread;
+		    my $buffer;
+		    while ($bytesread=read($filename,$buffer,1024)) {
+				print OUTFILE $buffer;
+		    }
+		    close(OUTFILE);
+		    return $file;
+		}
     }
     return "";
 }

@@ -28,6 +28,7 @@ $(function() {
             Materialize.toast($(this).html(), 3000);
         }        
     });
+
       
 });
 

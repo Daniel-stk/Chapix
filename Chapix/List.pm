@@ -57,7 +57,7 @@ sub new {
 
     $self->{table} = {
 		      width       => "100%",
-		      class       => "bordered striped",
+		      class       => "materialize bordered striped",
 		      align       => "center",
 		      cellspacing => "0",
 		     };
@@ -220,7 +220,7 @@ sub get_data {
 #    }
 #
 #    if ( defined $self->{dbh}->errstr ) {
-#		
+#
     }else{
 	while ( my $rec = $self->{sth}->fetchrow_hashref() ) {
 	    push (@{$self->{rs}},$rec);
@@ -323,12 +323,12 @@ sub print_columns {
 	    $HTML .= th($self->{th}{params},$label) . "\n" if($self->{hidde_column} ne $label);
 	    $it++;
 	}
-	$HTML .= "    </thead>\n" if(!$self->{table_head}); 
+	$HTML .= "    </thead>\n" if(!$self->{table_head});
 	return "   " . Tr ($self->{columns}{params},$HTML);
 
-	
+
 	#$HTML .= Tr ($self->{columns}{params},[th($self->{th}{params},$self->{columns}{labels})]);
-	
+
 	#return $HTML;
     }
 }
@@ -593,7 +593,7 @@ sub print_detail {
 		$HTML .= "   " . Tr ({class=>"cg_separator"},td({colspan=>$colspan},'')) ."\n";
 	    }
 	}
-	
+
     return $HTML;
 }
 
@@ -620,9 +620,9 @@ sub js_row_effect {
 sub transit_params {
     my $self = shift;
     #Transit Params
-    $self->{cgi_cg_params} =  "cg_order=" . param("cg_order") . 
-		"&cg_side=" . param("cg_side") . 
-			"&cg_page=" . param("cg_page") . 
+    $self->{cgi_cg_params} =  "cg_order=" . param("cg_order") .
+		"&cg_side=" . param("cg_side") .
+			"&cg_page=" . param("cg_page") .
 				"&cg_list=" . $self->{name};
     if (defined $self->{link}{transit_params}){
 		foreach my $k (sort keys %{$self->{link}{transit_params}}){
@@ -669,11 +669,11 @@ sub print_pagination {
 	    }
 	    $pagination .= "<li>" .a({-href => $self->{script} . "?cg_page=" . (param("cg_page") +1) . "&cg_order=" . param("cg_order") . "&cg_side=" . param("cg_side") . "&cg_list=" . $self->{name} . $self->{transit_params},-alt=>"Next"},$self->{labels}{next_page}).'</li>';
 	}
-	
+
 	if($self->{display_rows_total}){
 	    my $rows = $self->{labels}{number_of_rows};
 	    $rows =~ s/_NUMBER_/$self->{rows}/g;
-	    
+
 	    $HTML .= "    " . Tr ({},td($self->{foother}{params},
 					'<div class="badge pull-left">' . $rows . '</div>' .
 					'<div class="pagination pull-right"><ul>' . $pagination . '</ul></div>'
@@ -684,7 +684,7 @@ sub print_pagination {
 		if($self->{display_rows_total}){
 			my $rows = $self->{labels}{number_of_rows};
 			$rows =~ s/_NUMBER_/$self->{rows}/g;
-			
+
 			$HTML .= "    " . Tr ({},td($self->{foother}{params},
 						    '<span class="cg_number_rows">' . $rows . '</span>'
 					      )) . "\n";
@@ -692,7 +692,7 @@ sub print_pagination {
     }
     return $HTML;
 }
-	
+
 sub row_format {
     my $self = shift;
     my %params = @_;
@@ -784,7 +784,7 @@ sub print_group_detail {
 			$HTML .= start_table($self->{table}) . "\n";
 			$HTML .= $self->print_detail_columns();
 		}
-		
+
 		$self->{rows} ++;
 		my @fields;
 		my $row_cells = "";
@@ -831,8 +831,8 @@ sub print_group_detail {
 				}
 			}
 		}
-		
-		
+
+
 		# #Links
 		if($self->{link}){
 			if($self->{link}{target}){
@@ -854,7 +854,7 @@ sub print_group_detail {
     }
     return $HTML;
 }
-	
+
 sub print_detail_columns {
     my $self = shift;
     if (defined $self->{columns_width} or defined $self->{columns_headers_align}){
@@ -879,12 +879,12 @@ sub get_detail_columns {
     foreach my $i(0 .. ($self->{colspan} - 1)) {
 		defined $self->{sth}->{NAME}->[$i] or $self->{sth}->{NAME}->[$i] = "";
 		if ($self->{sth}->{NAME}->[$i] and !($self->{link}{hidde_key_col} and $self->{sth}->{NAME}->[$i] eq $self->{link}{key}) and !$self->{group_fields_hash}{$self->{sth}->{NAME}->[$i]}){
-			
+
 			push(@{$self->{columns}{names}},$self->{sth}->{NAME}->[$i]);
 			my $col_label = $self->{sth}->{NAME}->[$i];
 			$col_label =~ s/_/ /g;
 			$col_label = ucfirst($col_label);
-			
+
 			#Auto order Links
 			my $side = 0;
 			$side = 1 if (!param("cg_side"));
@@ -1099,14 +1099,14 @@ sub AVG {
     return 0 if(!$field);
     my $avg = 0;
     my $it = 0;
-	
+
     foreach my $rec(@{$self->{rs}}) {
 		$it++;
 		$avg += $rec->{$field};
     }
 
     eval {
-		$avg = $avg / $it; 
+		$avg = $avg / $it;
     };
 
     if($@){
@@ -1133,7 +1133,7 @@ sub group_AVG {
     }
 
     eval {
-		$avg = $avg / $it; 
+		$avg = $avg / $it;
     };
 
     if($@){
@@ -1226,7 +1226,7 @@ sub sn {
 =head1 SYNOPSIS
 
 Easily create html lists whit auto order, auto pagination, grouping and conditional formats.
- 
+
 Perhaps a little code snippet.
 
     use Chapix::List;
@@ -1247,14 +1247,14 @@ Perhaps a little code snippet.
        },
     );
 
-    #Print 
+    #Print
     print $list->print();
 
 =head1 FEATURES
 
     * Auto Order
     * Auto Pagination
-    * CSS based. Contact developer for CSS examples 
+    * CSS based. Contact developer for CSS examples
     * Column totals(Only SUM, COUNT and AVG are supported)
     * Conditional formats for rows
     * Conditional Formats for cells
@@ -1339,16 +1339,16 @@ This function specify a format of row depending on their value
 
     $list->row_format(name=>"field_name",condition=>"'%%' eq 'urgent'",params=>{class=>"cg_row_urgent"});
 
-%% is the cell value, on this example you need to create 2 css class cg_row_urgent and cg_row_urgent_hover 
+%% is the cell value, on this example you need to create 2 css class cg_row_urgent and cg_row_urgent_hover
 for the hover action
-	
+
 =head2 cell_format();
 
 This function specify a format of cell depending on their value
 
     $list->cell_format(name=>"field_name",condition=>"'%%' eq 'urgent'",params=>{class=>"cg_cell_urgent"});
 
-%% is the cell value, on this example you need to create 2 css class cg_cell_urgent and cg_cell_urgent_hover 
+%% is the cell value, on this example you need to create 2 css class cg_cell_urgent and cg_cell_urgent_hover
 for the hover action
 
 =head2 columns_width()
@@ -1374,12 +1374,12 @@ This function specify the horizontal align of each column header
     $list->columns_headers_align(["left","center","right"]);
 
 On this example you have a 3 columns query and left, center, right are the alignment of each column header data
- 
+
 =head1 Examples
 
 This example provides an list of data with auto order, auto pagination and action on each row click
 
-    my $list = Chapix::List->new( 
+    my $list = Chapix::List->new(
                   dbh => $dbh,
                   name => "pays_list",
                   sql => {

@@ -14,16 +14,17 @@
     <link rel="stylesheet" href="/Chapix/Xaa/css/marketeromd.css">
     <link rel="stylesheet" href="/Chapix/Xaa/css/marketeromd-responsive.css">
     <link rel="stylesheet" href="/Chapix/Xaa/css/chapix-adm.css">
-    [% IF conf.Page.Style %]<link rel="stylesheet" href="[% conf.Page.Style %]">[% END %]
-    
-    [% vars.js %]
+
+    <link rel="stylesheet" href="/vendor/jquery-ui/jquery-ui.min.css">
+    [% IF conf.Page.Style %]<link rel="stylesheet" href="[% conf.Page.Style %]">[% END %]    
+    [% vars.js %]    
   </head>
 
   <body>
     <div class="top-navbar app-toolbar">
       <div class="top-navbar-wrap">
 	<a href="/[% Domain %]" class="brand-logo force-center">
-	  <img src="/Chapix/Xaa/img/logo.png" alt="[% conf.App.Name %]" class="responsive-img">
+	  <img src="/Chapix/Xaa/img/logo-gris.png" alt="[% conf.App.Name %]" class="responsive-img">
 	</a>
 	<ul class="right hide-on-med-and-down top-actions">
 	  <li>
@@ -52,8 +53,12 @@
     <header>
       <nav>
 	<div class="nav-wrapper main-toolbar">
-	  <div class="container">
-	    <a href="#" data-activates="mobile-app-menu" class="button-collapse"><i class="material-icons">menu</i></a>
+	  <div class="container-fluid">
+		[% IF conf.Page.BackBtn %]
+		[% conf.Page.BackBtn %]
+		[% ELSE %]
+	    <a href="#" data-activates="mobile-app-menu" class="button-collapse"><i class="small material-icons">menu</i></a>
+		[% END %]
 	    <span class="page-title">[% conf.Page.Title %]</span>
 	    <ul class="side-nav" id="mobile-app-menu">
 	      <li><a href="/[% Domain %]">Home</a></li>
@@ -79,10 +84,14 @@
     </main>
     
     <script type="text/javascript" src="/vendor/jquery.min.js"></script>
+    <script type="text/javascript" src="/vendor/jquery-ui/jquery-ui.min.js"></script>       
     <script type="text/javascript" src="/vendor/materialize/js/materialize.min.js"></script>
+
+    [% IF conf.Page.JS %] [% conf.Page.JS %][% END %]
+
     <script type="text/javascript" src="/vendor/owl-carousel/js/owl.carousel.min.js"></script>
     <script type="text/javascript" src="/admin/js/marketeromd.js"></script>
     <script src="/admin/js/chapix-adm.js"></script>
-
+    
   </body>
 </html>
