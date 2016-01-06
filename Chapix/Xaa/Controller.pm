@@ -308,14 +308,14 @@ sub create_account {
     	    $exist_folder_on_fs = (-e('data/'.$current_domain_to_use));
     	    $exist_db = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$current_domain_to_use) || 0;
     	    if(!$exist_folder_on_db and !$exist_folder_on_fs and !$exist_db){
-    		$domain_to_use = $current_domain_to_use;
-    		last;
+        		$domain_to_use = $current_domain_to_use;
+        		last;
     	    }
     	}
     }
 
     # User creation
-    my $password = substr(sha384_hex(time.$conf->{Site}->{Name}.'- Te deseamos el mayor éxito en todo lo que hagas -'),3,7);
+    my $password = $_REQUEST->{password};
     $dbh->do("INSERT INTO $self->{main_db}.xaa_users (name, email, time_zone, language, password, last_login_on) VALUES(?,?,?,?,?,NOW())",{},
 	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
     my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');

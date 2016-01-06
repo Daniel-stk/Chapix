@@ -426,7 +426,7 @@ sub display_register {
     my $form = CGI::FormBuilder->new(
         name     => 'register',
         method   => 'post',
-        fields   => [qw/controller name email phone/],
+        fields   => [qw/controller name phone email password/],
     	action   => '/Xaa/Register',
         submit   => \@submit,
         materialize => '1'
@@ -434,12 +434,15 @@ sub display_register {
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
     $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
-		 override=>1,jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
+		 jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
     $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your full phone number'),
          validate=>'/[\d\s\-]{10,15}/');
+    $form->field(name => 'password', label=> loc('Password'), comment=>'<i class="icon-lock"></i>', type=>'password',
+		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
+         validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
     $form->stylesheet('1');
 
     my $HTML = $form->render(
