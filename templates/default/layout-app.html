@@ -6,7 +6,7 @@
     <title>[% conf.App.Name %][% IF conf.Page.Title %] &rsaquo; [% conf.Page.Title %][% END %]</title>
     [% IF conf.Page.Description %]<meta name="description" content="[% conf.Page.Description %]">[% END %]
     [% IF conf.Page.Keywords %]<meta name="keywords" content="[% conf.Page.Keywords %]">[% END %]
-    
+
     <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!--Import materialize.css-->
     <link rel="stylesheet" href="/vendor/materialize/css/materialize.css">
@@ -16,8 +16,8 @@
     <link rel="stylesheet" href="/Chapix/Xaa/css/chapix-adm.css">
 
     <link rel="stylesheet" href="/vendor/jquery-ui/jquery-ui.min.css">
-    [% IF conf.Page.Style %]<link rel="stylesheet" href="[% conf.Page.Style %]">[% END %]    
-    [% vars.js %]    
+    [% IF conf.Page.Style %]<link rel="stylesheet" href="[% conf.Page.Style %]">[% END %]
+    [% vars.js %]
   </head>
 
   <body>
@@ -66,8 +66,8 @@
 	      <li[% IF menu.active  %] class="active"[% END %]><a href="/[% Domain %]/[% menu.url %]">[% menu.menu_label %]</a></li>
 	      [% END %]
 	      <li class="divider hide-on-large-only"></li>
-	      
-	      <li class="hide-on-large-only"> <a href="#">Notificaciones [% IF notifications.0 %]<span class="new badge">[% notifications.size %]</span>[% END %]</a></li> 
+
+	      <li class="hide-on-large-only"> <a href="#">Notificaciones [% IF notifications.0 %]<span class="new badge">[% notifications.size %]</span>[% END %]</a></li>
 	      <li class="hide-on-large-only"><a href="/[% Domain %]/Xaa/YourAccount">Tu cuenta</a></li>
 	      <li class="hide-on-large-only"> <a href="/[% Domain %]/Xaa/Settings">Configuración</a></li>
 	      <li class="hide-on-large-only"> <a href="/[% Domain %]/Xaa/Logout">Salir</a></li>
@@ -76,15 +76,15 @@
 	</div>
       </nav>
     </header>
-    
+
     <main id="main" class="main-content">
       [% msg %]
       [% content %]
       [% conf.Page.AddBtn %]
     </main>
-    
+
     <script type="text/javascript" src="/vendor/jquery.min.js"></script>
-    <script type="text/javascript" src="/vendor/jquery-ui/jquery-ui.min.js"></script>       
+    <script type="text/javascript" src="/vendor/jquery-ui/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/vendor/materialize/js/materialize.min.js"></script>
 
     [% IF conf.Page.JS %] [% conf.Page.JS %][% END %]
@@ -92,6 +92,8 @@
     <script type="text/javascript" src="/vendor/owl-carousel/js/owl.carousel.min.js"></script>
     <script type="text/javascript" src="/admin/js/marketeromd.js"></script>
     <script src="/admin/js/chapix-adm.js"></script>
-    
+
+    <script src="/vendor/ckeditor/ckeditor.js"></script>
+
   </body>
 </html>
