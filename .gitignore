@@ -1,4 +1,6 @@
 .komodotools
+.DS_Store
+._.DS_Store
 Chapix.komodoproject
 Chapix/Conf.pm
 admin/vendor/*
