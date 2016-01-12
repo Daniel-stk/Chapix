@@ -10,6 +10,7 @@ use base qw(Chapix::Xaa::L10N);
     'Log into your account' => 'Log into your account',
     'Login' => 'Login',
     'View does not exist' => 'View does not exist',
+    'Next' => 'Continuar',
 );
 
 1;
