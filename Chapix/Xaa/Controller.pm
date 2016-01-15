@@ -56,12 +56,12 @@ sub display {
         }elsif($_REQUEST->{View} eq 'DomainSettings'){
             print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
         }elsif($_REQUEST->{View} eq 'EditLogo'){
-	    print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
-	}else{
+           print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
+        }else{
             if($_REQUEST->{View}){
-            	print Chapix::Xaa::View::default();
+                print Chapix::Xaa::View::default();
             }else{
-            	print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
+                print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
             }
         }
     }else{
@@ -73,6 +73,27 @@ sub display {
         }elsif($_REQUEST->{View} eq 'Register'){
             print Chapix::Com::header_out();
             print Chapix::Layout::print( Chapix::Xaa::View::display_register() );
+            return;
+        }elsif($_REQUEST->{View} eq 'PasswordReset'){
+            print Chapix::Com::header_out();
+            print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset() );
+            return;
+        }elsif($_REQUEST->{View} eq 'PasswordResetSent'){
+            print Chapix::Com::header_out();
+            print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_sent() );
+            return;
+        }elsif($_REQUEST->{View} eq 'PasswordResetCheck'){
+            if ($self->validate_password_reset_key()) {
+                print Chapix::Com::header_out();
+                print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_form() );
+                return;
+            }else{
+                msg_add('danger','Tu clave de recuperación de contraseña a caducado. Favor de intentar de nuevo.');
+                http_redirect("/Xaa/PasswordReset");
+            }
+        }elsif($_REQUEST->{View} eq 'PasswordResetSuccess'){
+            print Chapix::Com::header_out();
+            print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_success() );
             return;
         }
         msg_add('warning',loc('To continue, log into your account.->' . " $_REQUEST->{Domain} - $_REQUEST->{Controller}  - $_REQUEST->{View} "));
@@ -87,8 +108,12 @@ sub actions {
     
     if(defined $_REQUEST->{_submitted_login}){
         $self->login();
+    }elsif(defined $_REQUEST->{_submitted_password_reset}){
+        $self->password_reset();
+    }elsif(defined $_REQUEST->{_submitted_password_reset_check}){
+        $self->password_reset_update();
     }elsif($_REQUEST->{View} eq 'Logout'){
-	$self->logout();
+    	$self->logout();
     }elsif(defined $_REQUEST->{_submitted_domain_settings}){
         # Change domain settings
         $self->save_domain_settings();
@@ -122,10 +147,8 @@ sub login {
     my $user = $dbh->selectrow_hashref(
         "SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
 	    "FROM $self->{main_db}.xaa_users u " .
-		"WHERE u.email=?",{},
-        $_REQUEST->{email});
-        #        "WHERE u.email=? AND u.password=?",{},
-    # $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
+        "WHERE u.email=? AND u.password=?",{},
+        $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
     
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
@@ -418,5 +441,91 @@ sub save_logo {
     http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");    
 }
 
+sub password_reset {
+    my $self = shift;
+    my $user = $dbh->selectrow_hashref(
+        "SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
+	    "FROM $self->{main_db}.xaa_users u " .
+		"WHERE u.email=?",{},
+        $_REQUEST->{email});
+            
+    if($user and $_REQUEST->{email}){
+        # Actualizar DB.
+        my $key = substr(sha384_hex($conf->{Security}->{key} . time() . 'PasswordReset'),10,20);
+        $dbh->do("UPDATE $self->{main_db}.xaa_users SET password_reset_expires=DATE_ADD(NOW(), INTERVAL 12 HOUR), password_reset_key=? WHERE user_id=?",{},
+                 $key, $user->{user_id});
+        
+        # Enviar correo.
+        my $Mail = Chapix::Mail::Controller->new();
+        my $enviado = $Mail->html_template({
+            to       => $user->{'email'},
+            subject  => loc('Restablece tu contraseña de ') . $conf->{App}->{Name},
+            template => {
+                file => 'Chapix/Xaa/tmpl/password-reset-email.html',
+                vars => {
+                    name  => $user->{name},
+                    email => $user->{email},
+                    key   => $key,
+                    loc   => \&loc,
+                }
+            }
+        });
+        
+        # Reenviar a mensaje
+        http_redirect("/Xaa/PasswordResetSent");
+    }else{
+        msg_add("danger",'Verifica tu dirección de correo.');
+    }
+}
+
+sub validate_password_reset_key {
+    my $self = shift;
+    my $key = $_REQUEST->{key};
+    my $email = $_REQUEST->{email};
+    if ($email and length($key) == 20) {
+        my $user_id = $dbh->selectrow_array(
+            "SELECT user_id FROM $self->{main_db}.xaa_users WHERE email=? AND password_reset_key=? AND password_reset_expires > NOW()",{},$email, $key) || 0;
+        if ($user_id) {
+            return $user_id;
+        }
+    }
+
+    # To avoid bruteforce attacks cut the expiration time by 1 hour.
+    $dbh->do("UPDATE $self->{main_db}.xaa_users SET password_reset_expires=DATE_SUB(password_reset_expires, INTERVAL 1 HOUR) WHERE email=?",{},$email);
+    return 0;
+}
+
+sub password_reset_update {
+    my $self = shift;
+    my $user_id = $self->validate_password_reset_key();
+    if ($user_id) {
+        # Actualizar DB.
+        $dbh->do("UPDATE $self->{main_db}.xaa_users SET password=? WHERE user_id=?",{},
+                 sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}), $user_id);
+
+        my $user = $dbh->selectrow_hashref("SELECT user_id, name, email FROM $self->{main_db}.xaa_users WHERE user_id=?",{},$user_id);        
+
+        # Enviar correo.
+        my $Mail = Chapix::Mail::Controller->new();
+        my $enviado = $Mail->html_template({
+            to       => $user->{'email'},
+            subject  => "Tu contraseña de $conf->{App}->{Name} ha sido cambiada",
+            template => {
+                file => 'Chapix/Xaa/tmpl/password-reset-success-email.html',
+                vars => {
+                    name  => $user->{name},
+                    email => $user->{email},
+                    loc   => \&loc,
+                }
+            }
+        });
+        
+        # Reenviar a mensaje
+        http_redirect("/Xaa/PasswordResetSuccess");
+    }else{
+        msg_add('danger','Tu clave de recuperación de contraseña a caducado. Favor de intentar de nuevo.');
+        http_redirect("/Xaa/PasswordReset");
+    }
+}
 
 1;

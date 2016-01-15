@@ -22,6 +22,7 @@ use base qw(Chapix::Xaa::L10N);
     'Search' => 'Buscar',
     'Time zone' => 'Zona horaria',
     'Language' => 'Idioma',
+    'Next' => 'Continuar'
 
     # Controller
     'Your account is not linked to any business account.' => 'Tu cuenta no esta ligada a ninguna cuenta de empresa.',
@@ -66,6 +67,8 @@ use base qw(Chapix::Xaa::L10N);
     'Reset Password' => 'Regenerar Contraseña',
     'Delete' => 'Borrar',
     'User does not exist' => 'El usuario no existe',
+    
+    
 );
 
 1;

@@ -138,7 +138,7 @@ sub display_login {
         name     => 'login',
         method   => 'post',
         fields   => [qw/controller email password/],
-	action   => '/Xaa/Xaa',
+        action   => '/Xaa/Xaa',
         submit   => \@submit,
         materialize => '1',
     );
@@ -158,7 +158,39 @@ sub display_login {
 	    variable => 'form',
 	    data => {
     		conf  => $conf,
-		loc => \&loc,
+        	loc => \&loc,
+    		msg   => msg_print(),
+            buttons => '<a href="/Xaa/PasswordReset" class="right"><small>¿Olvidaste tu contraseña?</small></a>',
+	    },
+	},
+    );
+    return $HTML;
+}
+
+sub display_password_reset {
+    my @submit = (loc("Next"));
+    
+    my $form = CGI::FormBuilder->new(
+        name     => 'password_reset',
+        method   => 'post',
+        fields   => [qw/controller email/],
+        action   => '/Xaa/PasswordReset',
+        submit   => \@submit,
+        materialize => '1',
+    );
+
+    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'));
+    $form->stylesheet('1');
+
+    my $HTML = $form->render(
+	template => {
+	    template => 'Chapix/Xaa/tmpl/password-reset-form.html',
+	    type => 'TT2',
+	    variable => 'form',
+	    data => {
+    		conf  => $conf,
+        	loc => \&loc,
     		msg   => msg_print(),
 	    },
 	},
@@ -501,6 +533,73 @@ sub display_logo_form {
             },
         },
     );    
+}
+
+sub display_password_reset_sent {
+    my $HTML = "";
+    my $template = Template->new();
+    my $vars = {
+        REQUEST => $_REQUEST,
+        conf => $conf,
+        sess => \%sess,
+     	msg  => msg_print(),
+        loc => \&loc,
+    };
+    $template->process("Chapix/Xaa/tmpl/password-reset-sent.html", $vars,\$HTML) or $HTML = $template->error();
+    return $HTML;
+}
+
+sub display_password_reset_success {
+    my $HTML = "";
+    my $template = Template->new();
+    my $vars = {
+        REQUEST => $_REQUEST,
+        conf => $conf,
+        sess => \%sess,
+     	msg  => msg_print(),
+        loc => \&loc,
+    };
+    $template->process("Chapix/Xaa/tmpl/password-reset-success.html", $vars,\$HTML) or $HTML = $template->error();
+    return $HTML;
+}
+
+sub display_password_reset_form {
+    my @submit = (loc("Guardar"));
+    $conf->{Page}->{Title} = 'Restablece tu contraseña';
+    $conf->{Page}->{Help}  = 'Las contraseñas fuertes incluyen números, letras mayúsculas, letras minúsculas y signos de puntuación.';
+    
+    my $form = CGI::FormBuilder->new(
+        name     => 'password_reset_check',
+        method   => 'post',
+        fields   => [qw/key email password password_confirm/],
+        action   => '/Xaa/PasswordResetCheck',
+        submit   => \@submit,
+        materialize => '1',
+    );
+
+    $form->field(name => 'key', type=>'hidden');
+    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+        maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'), readonly=>1);
+    $form->field(name => 'password', type=>'password', value=>'', label=>loc('Nueva Contraseña'), required=>1,
+                 jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
+                 validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
+    $form->field(name => 'password_confirm', type=>'password', value=>'', label=>loc('Confirmar Contraseña'), required=>1,
+                 jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
+                 validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
+
+    my $HTML = $form->render(
+        template => {
+            template => 'Chapix/Xaa/tmpl/pub-form.html',
+            type => 'TT2',
+            variable => 'form',
+            data => {
+                conf  => $conf,
+                loc => \&loc,
+                msg   => msg_print(),
+            },
+        },
+    );
+    return $HTML;
 }
 
 1;
