@@ -486,7 +486,7 @@ sub display_logo_form {
     $form->field(name => 'logo', label=> loc("Logo"), required=>1, type=>'file');
 
     if($params->{logo}){
-    	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/site/'.$params->{logo}, -class=>'responsive-img'});
+    	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/img/site/'.$params->{logo}, -class=>'responsive-img'});
     	$form->field(name=>'logo', comment=> $img);
     }
     return $form->render(

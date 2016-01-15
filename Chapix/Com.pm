@@ -6,6 +6,8 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use Apache::Session::MySQL;
 use Template;
+# use Image::Thumbnail;
+# use Image::Size;
 
 use Chapix::Conf;
 
@@ -19,7 +21,8 @@ BEGIN {
 		  $cookie
 		  &msg_add
 		  &msg_print
-                  &upload_logo
+          &upload_logo
+          &upload_file
 		  &http_redirect
 		  $_REQUEST
 		  $Template
@@ -292,19 +295,20 @@ sub upload_logo {
 		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
 				mkdir("data");
 				mkdir("data/$_REQUEST->{Domain}");
-				mkdir("data/$_REQUEST->{Domain}/$dir") or die 'No se puede crear el directorio de datos. '.$!;
+                mkdir("data/$_REQUEST->{Domain}/img");
+				mkdir("data/$_REQUEST->{Domain}/img/$dir") or die 'No se puede crear el directorio de datos. '.$!;
 		    }
 	    
 		    $file = $name . $ext;
-		    if(-e "data/$_REQUEST->{Domain}/$dir/" . $file){
+		    if(-e "data/$_REQUEST->{Domain}/img/$dir/" . $file){
 				foreach my $it (1 .. 1000000){
 				    $file = $name.'_'.$it.$ext;
-				    if(!(-e "data/$_REQUEST->{Domain}/$dir/" . $file)){
+				    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/" . $file)){
 						last;
 				    }
 				}
 		    }
-		    open (OUTFILE,">data/$_REQUEST->{Domain}/$dir/" . $file) or die "$!";
+		    open (OUTFILE,">data/$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
 		    binmode(OUTFILE);
 		    my $bytesread;
 		    my $buffer;
@@ -319,5 +323,128 @@ sub upload_logo {
 }
 
 
+sub upload_file {
+    my $cgi_param = shift || "";
+    my $dir = shift || "";
+    my $filename = param($cgi_param);
+    my $mime = '';
+    my $save_as = shift || "";
+
+    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
+        mkdir ("data/$_REQUEST->{Domain}/img/$dir/");
+    }
+
+    if($filename){
+    my $type = uploadInfo($filename)->{'Content-Type'};
+    my $file = $save_as || (time() . int(rand(9999999)));
+    if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+        $file .= ".jpg";
+        $mime = 'img';
+    }elsif($type eq "image/png" or $type eq "image/x-png"){
+        $file .= ".png";
+        $mime = 'img';
+    }elsif($type eq "image/gif" or $type eq "image/x-gif"){
+        $file .= ".gif";
+        $mime = 'img';
+    }elsif($filename =~ /\.pdf$/i){
+        $file .= ".pdf";
+        $mime = 'pdf';
+    }elsif($filename =~ /\.doc$/i){
+        $file .= ".doc";
+        $mime = 'doc';
+    }elsif($filename =~ /\.xls$/i){
+        $file .= ".xls";
+        $mime = 'xls';
+    }elsif($filename =~ /\.csv$/i){
+        $file .= ".csv";
+        $mime = 'csv';
+    }elsif($filename =~ /\.ppt$/i){
+        $file .= ".ppt";
+        $mime = 'ppt';
+    }elsif($filename =~ /\.docx$/i){
+        $file .= ".docx";
+        $mime = 'docx';
+    }elsif($filename =~ /\.xlsx$/i){
+        $file .= ".xlsx";
+        $mime = 'xlsx';
+    }elsif($filename =~ /\.pptx$/i){
+        $file .= ".pptx";
+        $mime = 'pptx';
+        }elsif($filename =~ /\.swf$/i){
+        $file .= ".swf";
+        $mime = 'swf';
+        }elsif($filename =~ /\.mp4$/i){
+        $file .= ".mp4";
+        $mime = 'mp4';
+    }elsif($filename =~ /\.zip$/i){
+            $file .= ".zip";
+        $mime = 'zip';
+    }elsif($filename =~ /\.txt$/i){
+        $file .= ".txt";
+        $mime = 'txt';
+    }else{
+        msg_add("danger","Solo imagenes y archivos pdf y zip son soportados.");
+        return "";
+    }
+    if($file){
+        open (OUTFILE,">data/$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
+        binmode(OUTFILE);
+        my $bytesread;
+        my $buffer;
+        while ($bytesread=read($filename,$buffer,1024)) {
+        print OUTFILE $buffer;
+        }
+        close(OUTFILE);
+        return $file;
+    }
+    }
+    return "";
+}
+
+
+sub thumbnail {
+    my $new_size = shift;
+    my $source   = shift;
+    my $target   = shift;
+    my $file     = shift;
+    my ($new_width, $new_height) = split(/x/,$new_size);
+
+    #existe la fuente
+    if(! (-e "data/$_REQUEST->{Domain}/img/$source/$file")){
+        msg_add('error','No se pudo crear imagen chica, no existe la fuente');
+        return;
+    }
+
+    #Target directory
+    if(!(-e "data/$_REQUEST->{Domain}/img/$target/")){
+         mkdir("data/$_REQUEST->{Domain}/img/$target/") or die 'No se puede crear el directorio de datos.';
+    }
+    my ($width, $height) = imgsize("data/$_REQUEST->{Domain}/img/$source/".$file);
+    if($file =~ /\.gif/i){
+        copy("data/$_REQUEST->{Domain}/img/$source/".$file, "data/$_REQUEST->{Domain}/img/$target/".$file);
+    }else{
+        if($width > $new_width or $height > $new_height){
+            my $t = new Image::Thumbnail(
+                size       => $new_size,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$target/".$file,
+            );
+        }else{
+            my $t = new Image::Thumbnail(
+                size       => $width.'x'.$height,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$source/".$file,
+            );
+        }
+    }
+}
 
 1;
