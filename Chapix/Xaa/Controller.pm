@@ -16,7 +16,7 @@ use Chapix::Xaa::L10N;
 my $lh = Chapix::Xaa::L10N->get_handle($sess{user_language}) || die "Language?";
 sub loc (@) { return ( $lh->maketext(@_)) }
 
-# 
+#
 sub new {
     my $class = shift;
     my $self = {
@@ -26,7 +26,7 @@ sub new {
 
     # Init app ENV
     $self->_init();
-	
+
     return $self;
 }
 
@@ -42,7 +42,7 @@ sub _init {
 # Main display function, this function prints the required view.
 sub display {
     my $self = shift;
-    
+
     if($sess{user_id}){
         print Chapix::Com::header_out();
         if($_REQUEST->{View} eq 'YourAccount'){
@@ -105,7 +105,7 @@ sub display {
 # Each action is detected by the "_submitted" param prefix
 sub actions {
     my $self = shift;
-    
+
     if(defined $_REQUEST->{_submitted_login}){
         $self->login();
     }elsif(defined $_REQUEST->{_submitted_password_reset}){
@@ -149,22 +149,22 @@ sub login {
 	    "FROM $self->{main_db}.xaa_users u " .
         "WHERE u.email=? AND u.password=?",{},
         $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
-    
+
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
-    	$sess{user_id}    = "$user->{user_id}";
+    	   $sess{user_id}    = "$user->{user_id}";
         $sess{user_name}  = "$user->{name}";
         $sess{user_email} = "$user->{email}";
         $sess{user_time_zone} = "$user->{time_zone}";
         $sess{user_language}  = "$user->{language}";
-	
+
 	my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
 	if($domain_id){
 	    my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM $self->{main_db}.xaa_domains WHERE domain_id=? ",{},$domain_id);
 	    Chapix::Com::http_redirect('/'.$domain->{folder});
 	}else{
             msg_add('warning',loc('Your account is not linked to any business account.'));
-        }	
+        }
         Chapix::Com::http_redirect('/Xaa/Login');
     }else{
         # Record login attemp
@@ -183,11 +183,11 @@ sub login {
         #     msg_add("danger","You have " . (10 - $failed_logins) . " attemps left before being blocked.");
         # }
     }
-}   
+}
 
 sub logout {
     my $self = shift;
-    
+
     $sess{user_id}        = "";
     $sess{user_name}      = "";
     $sess{user_email}     = "";
@@ -200,20 +200,20 @@ sub logout {
 sub save_new_password {
     my $self = shift;
     my $current_password = $dbh->selectrow_array("SELECT u.password FROM $self->{main_db}.xaa_users u WHERE u.user_id=?",{},$sess{user_id}) || '';
-    my $new_password = sha384_hex($conf->{Security}->{key} . $_REQUEST->{new_password}); 
+    my $new_password = sha384_hex($conf->{Security}->{key} . $_REQUEST->{new_password});
 
     # Old password match?
     if($current_password ne sha384_hex($conf->{Security}->{key} . $_REQUEST->{current_password})){
         msg_add('warning',loc('Current password does not match'));
         return '';
     }
-    
+
     # new passwords match?
     if($_REQUEST->{new_password} ne $_REQUEST->{new_password_repeat}){
         msg_add('warning', loc('The "New password" and "Repeat new password" fields must match'));
         return '';
     }
-    
+
     eval {
         $dbh->do("UPDATE $self->{main_db}.xaa_users u SET u.password=? WHERE u.user_id=?",{},
                  $new_password, $sess{user_id});
@@ -267,36 +267,36 @@ sub create_account {
     	msg_add('warning',loc('Please enter a valid email address'));
     	return '';
     }
-    
+
     my $exist = $dbh->selectrow_hashref(
     	"SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
     	"FROM $self->{main_db}.xaa_users u " .
     	"WHERE u.email=?",{},
     	$_REQUEST->{email});
-    
+
     if($exist){
     	msg_add("warning", loc("This email already exist"));
     	return '';
     }
-    
+
     my ($user_mail, $user_domain) = split('@', $_REQUEST->{email});
     $user_mail   = lc($user_mail);
     $user_domain = lc($user_domain);
     $user_mail =~ s/\W//g;
     $user_domain =~ s/\..*//g;
     $user_domain =~ s/\W//g;
-    
+
     my $domain_to_use = $user_domain;
     my @invalids_domains = qw/gmail hotmail yahoo outlook live/;
-    
-    foreach my $invalid (@invalids_domains) {	
+
+    foreach my $invalid (@invalids_domains) {
     	if($invalid eq $domain_to_use) {
     	    $domain_to_use = $user_mail;
     	    last;
     	}
     }
 
-    my @sistem_subdomains = 
+    my @sistem_subdomains =
 	[qw/root bin daemon adm lp sync shutdown halt mail uucp operator games gopher ftp
             nobody vcsa saslauth mailnull smmsp sshd tcpdump rpc nscd apache dbus ntp mysql
             postfix named dovecot dovenull test dkim-milter opendkim www app webmaster abuse jmrp
@@ -342,10 +342,10 @@ sub create_account {
     $dbh->do("INSERT INTO $self->{main_db}.xaa_users (name, email, time_zone, language, password, last_login_on) VALUES(?,?,?,?,?,NOW())",{},
 	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
     my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');
-    
+
     $dbh->do("INSERT INTO $self->{main_db}.xaa_domains (`name`, `folder`, `database`) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
     my $domain_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_domains",'domain_id');
-    
+
     $dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
 
     # Database init
@@ -377,10 +377,10 @@ sub create_account {
             }
         }
     });
-    
+
     # Welcome msg
     msg_add('success','Tu cuenta fue creada con éxito.');
-    
+
     # Redirect to personal homepage
     http_redirect("/$domain_to_use/");
 }
@@ -411,20 +411,20 @@ sub database_init {
 
 sub save_logo {
     my $self = shift;
-    
+
     Chapix::Com::conf_load("Xaa");
-    
+
     my $current = $conf->{Xaa}->{Logo};
-    
+
     my $logo = upload_logo('logo', 'site');
-    
-    if($logo) {	
+
+    if($logo) {
     	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
-	
+
         my $comando = 'convert data/'.$_REQUEST->{Domain}.'/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
         my @posibles = `$comando`;
         my $colores = '';
-	
+
         foreach my $linea (@posibles) {
             if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
             	my $hex = $1;
@@ -432,13 +432,13 @@ sub save_logo {
             	$colores .= '#'.$hex
             }
         }
-		
+
     	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
-	
+
     	unlink("data/".$_REQUEST->{Domain}."/site/".$current);
     }
-    
-    http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");    
+
+    http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");
 }
 
 sub password_reset {
@@ -448,13 +448,13 @@ sub password_reset {
 	    "FROM $self->{main_db}.xaa_users u " .
 		"WHERE u.email=?",{},
         $_REQUEST->{email});
-            
+
     if($user and $_REQUEST->{email}){
         # Actualizar DB.
         my $key = substr(sha384_hex($conf->{Security}->{key} . time() . 'PasswordReset'),10,20);
         $dbh->do("UPDATE $self->{main_db}.xaa_users SET password_reset_expires=DATE_ADD(NOW(), INTERVAL 12 HOUR), password_reset_key=? WHERE user_id=?",{},
                  $key, $user->{user_id});
-        
+
         # Enviar correo.
         my $Mail = Chapix::Mail::Controller->new();
         my $enviado = $Mail->html_template({
@@ -470,7 +470,7 @@ sub password_reset {
                 }
             }
         });
-        
+
         # Reenviar a mensaje
         http_redirect("/Xaa/PasswordResetSent");
     }else{
@@ -503,7 +503,7 @@ sub password_reset_update {
         $dbh->do("UPDATE $self->{main_db}.xaa_users SET password=? WHERE user_id=?",{},
                  sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}), $user_id);
 
-        my $user = $dbh->selectrow_hashref("SELECT user_id, name, email FROM $self->{main_db}.xaa_users WHERE user_id=?",{},$user_id);        
+        my $user = $dbh->selectrow_hashref("SELECT user_id, name, email FROM $self->{main_db}.xaa_users WHERE user_id=?",{},$user_id);
 
         # Enviar correo.
         my $Mail = Chapix::Mail::Controller->new();
@@ -519,7 +519,7 @@ sub password_reset_update {
                 }
             }
         });
-        
+
         # Reenviar a mensaje
         http_redirect("/Xaa/PasswordResetSuccess");
     }else{

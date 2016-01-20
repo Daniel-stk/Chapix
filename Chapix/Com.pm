@@ -6,8 +6,8 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use Apache::Session::MySQL;
 use Template;
-# use Image::Thumbnail;
-# use Image::Size;
+use Image::Thumbnail;
+use Image::Size;
 
 use Chapix::Conf;
 
@@ -21,11 +21,12 @@ BEGIN {
 		  $cookie
 		  &msg_add
 		  &msg_print
-          &upload_logo
-          &upload_file
+      &upload_logo
+      &upload_file
 		  &http_redirect
 		  $_REQUEST
 		  $Template
+      &format_name
         );
 }
 
@@ -193,7 +194,7 @@ sub conf_load {
     }
 }
 
-sub selectbox_data{
+sub selectbox_data {
     my %data = (
         values => [],
         labels => {},
@@ -240,7 +241,7 @@ sub set_toolbar {
     my $LeftHTML = '';
     my $RightHTML = '';
     my $HTML = '';
-    
+
     foreach my $action (@actions){
 	my $btn = '';
 	my $alt = '';
@@ -259,13 +260,13 @@ sub set_toolbar {
 	if($side eq 'right'){
 	    $RightHTML .= $btn;
 	}else{
-	    $LeftHTML .= $btn;			
+	    $LeftHTML .= $btn;
 	}
     }
-    
+
     $HTML .= $LeftHTML;
     $HTML .= '<div class="pull-right">' . $RightHTML .'</div>' if($RightHTML);
-    
+
     $conf->{Page}->{Toolbar} = $HTML;
 }
 
@@ -274,13 +275,13 @@ sub upload_logo {
     my $dir = shift || "";
     my $filename = param($cgi_param);
     my $save_as = shift || "";
-    
+
     if($filename){
 		my $type = uploadInfo($filename)->{'Content-Type'};
 		my $file = '';
 		my ($name, $ext) = split(/\./,$filename);
 		$name =~ s/\W/_/g;
-	
+
 		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
 		    $ext = ".jpg";
 		}elsif($type eq "image/png" or $type eq "image/x-png"){
@@ -291,14 +292,14 @@ sub upload_logo {
 		}
 
 		if($ext){
-		    #Directory	    	    
+		    #Directory
 		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
 				mkdir("data");
 				mkdir("data/$_REQUEST->{Domain}");
                 mkdir("data/$_REQUEST->{Domain}/img");
 				mkdir("data/$_REQUEST->{Domain}/img/$dir") or die 'No se puede crear el directorio de datos. '.$!;
 		    }
-	    
+
 		    $file = $name . $ext;
 		    if(-e "data/$_REQUEST->{Domain}/img/$dir/" . $file){
 				foreach my $it (1 .. 1000000){
@@ -445,6 +446,15 @@ sub thumbnail {
             );
         }
     }
+}
+
+
+sub format_name {
+    my $str = shift;
+    $str =~ s/,//g;
+    $str =~ s/<//g;
+    $str =~ s/>//g;
+    return (join " ", map {ucfirst} split " ", $str),
 }
 
 1;
