@@ -5,6 +5,9 @@ use warnings;
 use strict;
 use Carp;
 use Digest::SHA qw(sha384_hex);
+use Color::Rgb;
+use Math::Complex;
+use List::Util qw(min max);
 
 use Chapix::Conf;
 use Chapix::Com;
@@ -410,35 +413,164 @@ sub database_init {
 }
 
 sub save_logo {
-    my $self = shift;
+  my $self = shift;
 
-    Chapix::Com::conf_load("Xaa");
+  Chapix::Com::conf_load("Xaa");
 
-    my $current = $conf->{Xaa}->{Logo};
+  my $current = $conf->{Xaa}->{Logo};
 
-    my $logo = upload_logo('logo', 'site');
+  my $logo = upload_file('logo', 'site');
 
-    if($logo) {
-    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
+  if($logo) {
 
-        my $comando = 'convert data/'.$_REQUEST->{Domain}.'/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
-        my @posibles = `$comando`;
-        my $colores = '';
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='AccentColor'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='AccentColorFont'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='LogoBG'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='LogoColors'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryColor'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryColorFont'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryComplement'");
 
-        foreach my $linea (@posibles) {
-            if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
-            	my $hex = $1;
-            	$colores .= "," if($colores);
-            	$colores .= '#'.$hex
-            }
+
+    $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
+    unlink("data/".$_REQUEST->{Domain}."/img/site/".$current);
+
+    eval {
+      my $size_cmd = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.' -format "%w x %h" info:';
+      my $size = `$size_cmd`;
+
+      my ($w, $h) = split('x', $size);
+
+      $w =~ s/ //g;
+      $h =~ s/ //g;
+
+      my $cmd1 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+5+5] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd2 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+'.($w-5).'+5] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd3 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+5+'.($h-5).'] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd4 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+'.($w-5).'+'.($h-5).'] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+
+      my $c1 = `$cmd1`;
+      my $c2 = `$cmd2`;
+      my $c3 = `$cmd3`;
+      my $c4 = `$cmd4`;
+
+      my ($r, $g, $b, $a) = split(',', $c1);
+
+      if ($a >= 0 && $a < 1){
+        # TRANSLUCENT BACKGROUND
+        $conf->{Xaa}->{LogoBG} = 'transparent';
+        $dbh->do("UPDATE conf SET value='transparent' WHERE module='Xaa' AND name='LogoBG'");
+      } elsif($a == 1){
+        # B/W
+        my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
+        my $color_hex = $rgb->rgb2hex($r,$g,$b);
+        my $bw = getClosestColor($color_hex, qw/#ffffff #000000/);
+
+        if ($bw eq '#ffffff') {
+          $conf->{Xaa}->{LogoBG} = 'white';
+          $dbh->do("UPDATE conf SET value='white' WHERE module='Xaa' AND name='LogoBG'");
+        } elsif($bw eq '#000000') {
+          $conf->{Xaa}->{LogoBG} = 'black';
+          $dbh->do("UPDATE conf SET value='black' WHERE module='Xaa' AND name='LogoBG'");
         }
+      }
 
-    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
 
-    	unlink("data/".$_REQUEST->{Domain}."/site/".$current);
+      my $colores_prior_cmd = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info:|sort -rn|head -8';
+      my @posibles = qx/$colores_prior_cmd/;
+      my $colores = '';
+
+      foreach my $linea (@posibles) {
+        if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
+          my $hex = $1;
+
+          my $avoid_bg = getClosestColor($hex, qw/#FFFFFF #F44336 #E91E63 #9C27B0 #673AB7 #3F51B5 #2196F3 #03A9F4 #00BCD4 #009688 #4CAF50 #8BC34A #CDDC39 #FFEB3B #FFC107 #FF9800 #FF5722 #795548 #9E9E9E #607D8B #000000/);
+
+          if ( ($avoid_bg eq '#000000') || ($avoid_bg eq '#FFFFFF') ){
+            next;
+          }
+
+          $hex = getClosestColor($hex, qw/#F44336 #E91E63 #9C27B0 #673AB7 #3F51B5 #2196F3 #03A9F4 #00BCD4 #009688 #4CAF50 #8BC34A #CDDC39 #FFEB3B #FFC107 #FF9800 #FF5722 #795548 #9E9E9E #607D8B/);
+
+          if ($colores =~ $hex) {
+            next;
+          }
+
+          $colores .= "," if($colores);
+          $colores .= $hex;
+
+          Chapix::Com::conf_load('Xaa');
+
+          #SAVING PRIMARY COLOR
+          if (!$conf->{Xaa}->{PrimaryColor}){
+            $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColor'",{},$hex);
+          }elsif ($conf->{Xaa}->{PrimaryColor} && !$conf->{Xaa}->{AccentColor}) {
+            $dbh->do("UPDATE conf SET value=(SELECT accent_color FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?) WHERE module='Xaa' AND name='AccentColor'",{},$hex);
+          }elsif(!$conf->{Xaa}->{AccentColor}){
+            $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColor'",{},$hex);
+          }
+        }
+      }
+
+      Chapix::Com::conf_load('Xaa');
+
+      if(!$conf->{Xaa}->{PrimaryColor}){
+        my $random_palette = $dbh->selectrow_hashref("SELECT * FROM $conf->{Xaa}->{DB}.material_colors ORDER BY RAND() LIMIT 1");
+
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColor'",{},$random_palette->{primary_color});
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColorFont'",{},$random_palette->{font_color});
+
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColor'",{},$random_palette->{accent_color_b});
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColorFont'",{},$random_palette->{accent_font_b});
+
+        Chapix::Com::conf_load('Xaa');
+      }
+
+      #SAVING DARKER AND LIGHTEN COLORS
+      if ($conf->{Xaa}->{LogoBG} eq 'black'){
+        $dbh->do("UPDATE conf SET value=(SELECT primary_light FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='PrimaryComplement'",{},$conf->{Xaa}->{PrimaryColor});
+      }else{
+        $dbh->do("UPDATE conf SET value=(SELECT primary_dark FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='PrimaryComplement'",{},$conf->{Xaa}->{PrimaryColor});
+      }
+
+      # SAVING FONT COLORS
+      $dbh->do("UPDATE conf SET value=(SELECT font_color FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+      WHERE module='Xaa' AND name='PrimaryColorFont'",{},$conf->{Xaa}->{PrimaryColor});
+
+      $dbh->do("UPDATE conf SET value=(SELECT accent_font FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=? AND accent_color=?)
+      WHERE module='Xaa' AND name='AccentColorFont'",{},$conf->{Xaa}->{PrimaryColor}, $conf->{Xaa}->{AccentColor});
+
+      if (!$conf->{Xaa}->{AccentColor}){
+        $dbh->do("UPDATE conf SET value=(SELECT accent_color_a FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='AccentColor'",{},$conf->{Xaa}->{PrimaryColor});
+
+        Chapix::Com::conf_load('Xaa');
+
+        $dbh->do("UPDATE conf SET value=(SELECT accent_font_a FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=? AND accent_color_a=?)
+        WHERE module='Xaa' AND name='AccentColorFont'",{},$conf->{Xaa}->{PrimaryColor}, $conf->{Xaa}->{AccentColor});
+      }
+
+      if ( !$conf->{Xaa}->{AccentColorFont} ) {
+        $dbh->do("UPDATE conf SET value=(SELECT accent_font_a FROM $conf->{Xaa}->{DB}.material_colors WHERE accent_color_a=? LIMIT 1)
+        WHERE module='Xaa' AND name='AccentColorFont'",{}, $conf->{Xaa}->{AccentColor});
+      }
+
+      Chapix::Com::conf_load('Xaa');
+
+
+      if (!$conf->{Xaa}->{AccentColorFont} ) {
+        $dbh->do("UPDATE conf SET value='#FFFFFF' WHERE module='Xaa' AND name='AccentColorFont'",{});
+      }
+
+      $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
+    };
+    if ($@) {
+      msg_add('danger', 'Error al obtener colores principales '.$@);
     }
-
-    http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");
+  }
+  http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");
 }
 
 sub password_reset {
@@ -477,6 +609,7 @@ sub password_reset {
         msg_add("danger",'Verifica tu dirección de correo.');
     }
 }
+
 
 sub validate_password_reset_key {
     my $self = shift;
@@ -527,5 +660,53 @@ sub password_reset_update {
         http_redirect("/Xaa/PasswordReset");
     }
 }
+
+sub getClosestColor {
+  my $color = shift;
+  my @paleta = @_;
+
+  if ($color !~ /ˆ#/) {
+    $color = '#'.$color;
+  }
+
+  my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
+  my $color_rgb = $rgb->hex2rgb($color, ',');
+
+  my ($color_r, $color_g, $color_b)= split(',', $color_rgb);
+
+  my @differenceArray = [];
+
+  my @palette = @paleta;
+
+  my $index = 0;
+  foreach my $palette_color (@palette) {
+    $palette_color = $palette_color;
+
+    my $palette_rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt');
+    my $pcolor_rgb = $palette_rgb->hex2rgb($palette_color, ',');
+
+    my ($base_color_r, $base_color_g, $base_color_b)= split(',', $pcolor_rgb);
+
+    push(@differenceArray, sqrt(
+    ($color_r - $base_color_r) * ($color_r - $base_color_r) +
+    ($color_g - $base_color_g) * ($color_g - $base_color_g) +
+    ($color_b - $base_color_b) * ($color_b - $base_color_b)
+    ));
+    $index++;
+  }
+
+  my $lowest = min(@differenceArray);
+
+  my $idx = 0;
+  foreach my $palette_color (@differenceArray) {
+    if ($palette_color eq $lowest) {
+      last;
+    }
+    $idx++;
+  }
+
+  return $palette[$idx-1];
+}
+
 
 1;

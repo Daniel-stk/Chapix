@@ -21,7 +21,6 @@ BEGIN {
 		  $cookie
 		  &msg_add
 		  &msg_print
-      &upload_logo
       &upload_file
 		  &http_redirect
 		  $_REQUEST
@@ -127,6 +126,8 @@ conf_load('Website');
 conf_load('Domain');
 conf_load('Template');
 
+load_domain_info();
+
 # Default template
 $Template = Template->new(
     INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
@@ -187,10 +188,10 @@ sub set_path_route {
 
 sub conf_load {
     my $module = shift;
-    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module = ?",{Slice=>{}},$module);
-    foreach my $var(@$vars){
+    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module=? AND value IS NOT NULL",{Slice=>{}},$module);
+    foreach my $var (@$vars){
     	defined $conf->{$var->{module}} or $conf->{$var->{module}} = {};
-    	$conf->{$var->{module}}->{$var->{name}} = $var->{value};
+    	$conf->{$var->{module}}->{$var->{name}} = $var->{value} || '';
     }
 }
 
@@ -218,6 +219,11 @@ sub selectbox_data {
     return %data;
 }
 
+sub load_domain_info {
+  $conf->{Domain} = $dbh->selectrow_hashref(
+  "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+  $_REQUEST->{Domain});
+}
 
 # sub conf_set {
 #     my $group = shift;
@@ -268,59 +274,6 @@ sub set_toolbar {
     $HTML .= '<div class="pull-right">' . $RightHTML .'</div>' if($RightHTML);
 
     $conf->{Page}->{Toolbar} = $HTML;
-}
-
-sub upload_logo {
-    my $cgi_param = shift || "";
-    my $dir = shift || "";
-    my $filename = param($cgi_param);
-    my $save_as = shift || "";
-
-    if($filename){
-		my $type = uploadInfo($filename)->{'Content-Type'};
-		my $file = '';
-		my ($name, $ext) = split(/\./,$filename);
-		$name =~ s/\W/_/g;
-
-		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-		    $ext = ".jpg";
-		}elsif($type eq "image/png" or $type eq "image/x-png"){
-		    $ext = ".png";
-		}else{
-		    msg_add("error","Sólo imágenes jpeg y png son soportadas");
-		    return "";
-		}
-
-		if($ext){
-		    #Directory
-		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
-				mkdir("data");
-				mkdir("data/$_REQUEST->{Domain}");
-                mkdir("data/$_REQUEST->{Domain}/img");
-				mkdir("data/$_REQUEST->{Domain}/img/$dir") or die 'No se puede crear el directorio de datos. '.$!;
-		    }
-
-		    $file = $name . $ext;
-		    if(-e "data/$_REQUEST->{Domain}/img/$dir/" . $file){
-				foreach my $it (1 .. 1000000){
-				    $file = $name.'_'.$it.$ext;
-				    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/" . $file)){
-						last;
-				    }
-				}
-		    }
-		    open (OUTFILE,">data/$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
-		    binmode(OUTFILE);
-		    my $bytesread;
-		    my $buffer;
-		    while ($bytesread=read($filename,$buffer,1024)) {
-				print OUTFILE $buffer;
-		    }
-		    close(OUTFILE);
-		    return $file;
-		}
-    }
-    return "";
 }
 
 
@@ -447,7 +400,6 @@ sub thumbnail {
         }
     }
 }
-
 
 sub format_name {
     my $str = shift;
