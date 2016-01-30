@@ -38,7 +38,7 @@ use base qw(Chapix::Xaa::L10N);
 
     # Email templates
     'Hello' => 'Hola',
-    
+
     # View display_your_account
     'Your account' => 'Tu cuenta',
     'Edit your settings' => 'Editar tu cuenta',
@@ -50,7 +50,7 @@ use base qw(Chapix::Xaa::L10N);
     'New' => 'Nueva',
     'New password' => 'Nueva contraseña',
     'Repeat new password' => 'Confirmar nueva contraseña',
-    
+
     # View display_settings
     'Settings' => 'Configuración',
     'User management' => 'Administración de usuarios',
@@ -67,8 +67,6 @@ use base qw(Chapix::Xaa::L10N);
     'Reset Password' => 'Regenerar Contraseña',
     'Delete' => 'Borrar',
     'User does not exist' => 'El usuario no existe',
-    
-    
 );
 
 1;

@@ -44,7 +44,7 @@ section h4{
 	-moz-transition: all 0.1s ease-in;
 	-webkit-transition: all 0.1s ease-in;
 	transition: all 0.1s ease-in;
-} 
+}
 
 .sign-txt {
 	display: block;
@@ -236,7 +236,7 @@ footer a{
 }
 
 .msg {
-     display: none;	
+     display: none;
 }
 
 .msg-danger {
@@ -261,4 +261,8 @@ footer a{
 
 .req {
 	color: #d32f2f;
+}
+
+nav ul li:last-child:hover, nav ul li:last-child.active {
+  background-color : transparent;
 }

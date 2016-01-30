@@ -27,7 +27,7 @@
 }
 
 .msg {
-     display: none;	
+     display: none;
 }
 
 .msg-danger {
@@ -63,7 +63,6 @@
     left: 0px;
 }
 
-
 /* Base CSS
 
 
@@ -72,7 +71,7 @@
 }
 
 .card-title {
-    border-bottom: 1px solid rgba(160,160,160,.2);	
+    border-bottom: 1px solid rgba(160,160,160,.2);
 }
 
 .card-content p {
