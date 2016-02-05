@@ -134,7 +134,8 @@ $Template = Template->new(
 
 # Print the httpheader including cookie and characterset
 sub header_out {
-    return header(-cookie=>$cookie,-charset=>"utf-8",-Expires=>-1);
+  my $type = shift || 'text/html';
+  return header(-cookie=>$cookie,-charset=>"utf-8",-Expires=>-1, -type=>$type);
 }
 
 sub msg_add {
@@ -214,15 +215,6 @@ sub selectbox_data{
     return %data;
 }
 
-
-# sub conf_set {
-#     my $group = shift;
-#     my $name  = shift;
-#     my $value = shift;
-
-#     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
-# }
-
 sub admin_log {
     my $module = shift;
     my $action = shift;
@@ -269,13 +261,14 @@ sub set_toolbar {
 sub upload_logo {
     my $cgi_param = shift || "";
     my $dir = shift || "";
-    my $filename = param($cgi_param);
     my $save_as = shift || "";
+    my $filename = param($cgi_param);
     
     if($filename){
+		$save_as = $filename if(!$save_as);
 		my $type = uploadInfo($filename)->{'Content-Type'};
 		my $file = '';
-		my ($name, $ext) = split(/\./,$filename);
+		my ($name, $ext) = split(/\./,$save_as);
 		$name =~ s/\W/_/g;
 	
 		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
@@ -289,7 +282,7 @@ sub upload_logo {
 
 		if($ext){
 		    #Directory	    	    
-		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
+		    if(!(-e "data/$_REQUEST->{Domain}/$dir/")){
 				mkdir("data");
 				mkdir("data/$_REQUEST->{Domain}");
 				mkdir("data/$_REQUEST->{Domain}/$dir") or die 'No se puede crear el directorio de datos. '.$!;

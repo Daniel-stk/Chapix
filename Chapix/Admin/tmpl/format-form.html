@@ -1,0 +1,58 @@
+<div class="row">
+  <div class="col s12 m10 l8 z-depth-1 card col-center">
+    [% tabs %]
+    [% form.jshead %]
+    [% form.start %]
+    <div class="card-content">
+      [% msg %]
+      [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
+      
+      <div class="row">[% field=form.field.name %]
+        <div class="input-field col s12 m6 l4">
+          [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+          <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
+        </div>
+      </div>
+      
+      <div class="row">
+	<div class="col s12">
+	  <table width="100%" align="center" cellspacing="0" id="cg_table_cg_list" class="bordered striped highlight">
+	    <tr>
+	      <th align="center">#</th>
+	      <th align="center">Check point</th>
+	      <th align="center">Ponderation</th>
+	      <th align="center">Requires Evidence</th>
+	      <th align="center">Sort order</th>
+	      <th align="center">Eliminar</th>
+	    </tr>
+		[% FOREACH det = details %]
+	    <tr>
+	      <td>[% loop.count %]</td>
+	      <td>[% det.point %]</td>
+	      <td>[% fieldName = 'ponderation_' _ det.point_id %][% form.field.$fieldName.field %]</td>
+	      <td>[% fieldName = 'requires_evidence_' _ det.point_id %][% form.field.$fieldName.field %]</td>
+	      <td>[% fieldName = 'sort_order_' _ det.point_id %][% form.field.$fieldName.field %]</td>
+	      <td align="center">[% fieldName = 'delete_' _ det.point_id %][% form.field.$fieldName.field %]</td>
+	    </tr>
+		[% END %]
+	    <tr>
+	      <td>Nuevo</td>
+	      <td>[% form.field.point_id.field %]</td>
+	      <td>[% form.field.ponderation.field %]</td>
+	      <td>[% form.field.requires_evidence.field %]</td>
+		  <td></td>
+		  <td></td>
+	    </tr>
+	  </table>
+	</div>
+      </div>
+    </div>
+    <div class="card-action">
+      [% form.submit %][% buttons %]
+    </div>
+    [% form.end %]
+  </div>
+</div>
+
+
+

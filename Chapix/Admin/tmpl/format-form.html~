@@ -1,0 +1,63 @@
+<div class="row">
+  <div class="col s12 m10 l8 z-depth-1 card col-center">
+    [% tabs %]
+    [% form.jshead %]
+    [% form.start %]
+    <div class="card-content">
+      [% msg %]
+      [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
+      
+      <div class="row">
+        [% FOREACH field = form.fields %][% IF field.type != 'hidden'%]
+        [% IF field.group %]
+      </div><div class="row"><h6>[% field.group %]</h6>
+        [% END %]
+        <div class="input-field col s12 m6 l4">
+          [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+          <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
+        </div>
+        [% END %][% END %]
+      </div>
+    </div>
+    <div class="card-action">
+      [% form.submit %][% buttons %]
+    </div>
+    [% form.end %]
+  </div>
+</div>
+
+
+
+[% includes %]
+[% up_data %]
+[% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
+[% bottom_data %]
+[% IF js %]
+[% jsFile = 'tmpl/' _ js %]
+<script type="text/javascript">
+  [% INCLUDE $jsFile %]
+</script>
+[% END %]
+
+[% rte_fields = '' %]
+[% FOREACH field = form.fields %][% IF field.type != 'hidden'%][% IF field.rte == 1 %]
+[% IF rte_fields != '' %][% rte_fields = rte_fields _ ',' %][% END %]
+[% rte_fields = rte_fields _ field.name %]
+[% END %][% END %][% END %]
+[% IF rte_fields%]
+<script type="text/javascript">
+  $(document).ready(function(){
+  tinyMCE.init({
+  // General options
+  mode : "exact",
+  elements : "[% rte_fields %]",
+  // Theme options
+  menubar: "tools table format view insert edit",
+  relative_urls:false,
+  document_base_url : "http://[% conf.Site.URL %]/",
+  forced_root_block : false,
+  convert_urls:false
+  });
+  });
+</script>
+[% END %]
