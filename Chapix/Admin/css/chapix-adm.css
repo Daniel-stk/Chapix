@@ -31,7 +31,7 @@
 }
     
 .msg {
-     display: none;	
+     display: none;
 }
 
 .msg-danger {
@@ -67,6 +67,7 @@
     left: 0px;
 }
 
+<<<<<<< HEAD:Chapix/Admin/css/chapix-adm.css
 .page-title {
     margin-left: 20px;
     font-size: 25px !important;
@@ -85,10 +86,15 @@
     font-size: 2.0em;
     font-weight: bold;
 }
+
 /* Style to replace on other modules */
 
 .app-toolbar {
     background-color: #00abf7;
+}
+
+.card-title {
+    border-bottom: 1px solid rgba(160,160,160,.2);
 }
 
 nav a {
@@ -111,4 +117,8 @@ nav a {
 
 .collection a.collection-item {
     color: #FF9100;
+}
+
+.my-account-dropdown-content {
+	width: 200px !important;
 }

@@ -1,50 +1,53 @@
 <section class="section">
-  <div class="container">    
-    
+  <div class="container">
+
     <div class="row">
       <div class="col s12 m10 l8 z-depth-1 card col-center hoverable">
-	[% tabs %]
-	[% form.jshead %]
-	[% form.start %]
-	<div class="card-content">
-	  [% msg %]
-	  [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]	  
-	  <div class="row">
-            [% FOREACH field = form.fields %][% IF field.type != 'hidden'%]
+        [% tabs %]
+        [% form.jshead %]
+        [% form.start %]
+        <div class="card-content">
+          [% msg %]
+          [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
+          <div class="row">
+            [% FOREACH field = form.fields %]
+            [% IF field.type != 'hidden'%]
             [% IF field.group %]
-	  </div>
-	  <div class="row">
-	    <h6>[% field.group %]</h6>
+            <h6>[% field.group %]</h6>
             [% END %]
-            
-	    [% IF field.type == 'file' %]
-	    <div class="file-field input-field">
-	      <div class="btn">
-		<span>[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</span>
-		[% field.prefix %][% field.field %][% field.unit %]
-	      </div>
-	      <div class="file-path-wrapper">
-		<input class="file-path validate" type="text">
-		[% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
-	      </div>
-	    </div>
-	    [% ELSE %]
-	    <div class="input-field col s12 m8 l12">
+          </div>
+          <div class="row">
+            [% IF field.type == 'file' %]
+            <div class="file-field input-field">
+              <div class="btn">
+                <span>[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</span>
+                [% field.prefix %][% field.field %][% field.unit %]
+              </div>
+              <div class="file-path-wrapper">
+                <input class="file-path validate" type="text">
+                [% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+              </div>
+            </div>
+            [% ELSIF field.type == 'checkbox' %]
+            <label for="[% field.name %]">[% field.label %][% IF field.required %] <i class="req">*</i> [% END %]</label>
+                [% field.prefix %][% field.field %][% field.unit %]
+            [% ELSE %]
+            <div class="input-field col s12 m8 l12">
               [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
               <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
             </div>
             [% END %]
-	    
-	    [% END %]
-	    [% END %]
-	  </div>
-	</div>
-	<div class="card-action">
-	  [% form.submit %][% buttons %]
-	</div>
-	[% form.end %]
+
+            [% END %]
+            [% END %]
+          </div>
+        </div>
+        <div class="card-action">
+          [% form.submit %] [% buttons %]
+        </div>
+        [% form.end %]
       </div>
-    </div>    
+    </div>
   </div>
 </section>
 
@@ -56,7 +59,7 @@
 [% IF js %]
 [% jsFile = 'tmpl/' _ js %]
 <script type="text/javascript">
-  [% INCLUDE $jsFile %]
+[% INCLUDE $jsFile %]
 </script>
 [% END %]
 
@@ -67,18 +70,18 @@
 [% END %][% END %][% END %]
 [% IF rte_fields%]
 <script type="text/javascript">
-  $(document).ready(function(){
+$(document).ready(function(){
   tinyMCE.init({
-  // General options
-  mode : "exact",
-  elements : "[% rte_fields %]",
-  // Theme options
-  menubar: "tools table format view insert edit",
-  relative_urls:false,
-  document_base_url : "http://[% conf.Site.URL %]/",
-  forced_root_block : false,
-  convert_urls:false
+    // General options
+    mode : "exact",
+    elements : "[% rte_fields %]",
+    // Theme options
+    menubar: "tools table format view insert edit",
+    relative_urls:false,
+    document_base_url : "http://[% conf.Site.URL %]/",
+    forced_root_block : false,
+    convert_urls:false
   });
-  });
+});
 </script>
 [% END %]

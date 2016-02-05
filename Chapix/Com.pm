@@ -6,6 +6,8 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use Apache::Session::MySQL;
 use Template;
+use Image::Thumbnail;
+use Image::Size;
 
 use Chapix::Conf;
 
@@ -19,10 +21,11 @@ BEGIN {
 		  $cookie
 		  &msg_add
 		  &msg_print
-                  &upload_logo
+      &upload_file
 		  &http_redirect
 		  $_REQUEST
 		  $Template
+      &format_name
         );
 }
 
@@ -123,6 +126,8 @@ conf_load('Website');
 conf_load('Domain');
 conf_load('Template');
 
+load_domain_info();
+
 # Default template
 $Template = Template->new(
     INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
@@ -184,14 +189,14 @@ sub set_path_route {
 
 sub conf_load {
     my $module = shift;
-    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module = ?",{Slice=>{}},$module);
-    foreach my $var(@$vars){
+    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module=? AND value IS NOT NULL",{Slice=>{}},$module);
+    foreach my $var (@$vars){
     	defined $conf->{$var->{module}} or $conf->{$var->{module}} = {};
-    	$conf->{$var->{module}}->{$var->{name}} = $var->{value};
+    	$conf->{$var->{module}}->{$var->{name}} = $var->{value} || '';
     }
 }
 
-sub selectbox_data{
+sub selectbox_data {
     my %data = (
         values => [],
         labels => {},
@@ -215,6 +220,23 @@ sub selectbox_data{
     return %data;
 }
 
+<<<<<<< HEAD
+=======
+sub load_domain_info {
+  $conf->{Domain} = $dbh->selectrow_hashref(
+  "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+  $_REQUEST->{Domain});
+}
+
+# sub conf_set {
+#     my $group = shift;
+#     my $name  = shift;
+#     my $value = shift;
+
+#     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
+# }
+
+>>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
 sub admin_log {
     my $module = shift;
     my $action = shift;
@@ -229,7 +251,7 @@ sub set_toolbar {
     my $LeftHTML = '';
     my $RightHTML = '';
     my $HTML = '';
-    
+
     foreach my $action (@actions){
 	my $btn = '';
 	my $alt = '';
@@ -248,19 +270,21 @@ sub set_toolbar {
 	if($side eq 'right'){
 	    $RightHTML .= $btn;
 	}else{
-	    $LeftHTML .= $btn;			
+	    $LeftHTML .= $btn;
 	}
     }
-    
+
     $HTML .= $LeftHTML;
     $HTML .= '<div class="pull-right">' . $RightHTML .'</div>' if($RightHTML);
-    
+
     $conf->{Page}->{Toolbar} = $HTML;
 }
 
-sub upload_logo {
+
+sub upload_file {
     my $cgi_param = shift || "";
     my $dir = shift || "";
+<<<<<<< HEAD
     my $save_as = shift || "";
     my $filename = param($cgi_param);
     
@@ -307,10 +331,135 @@ sub upload_logo {
 		    close(OUTFILE);
 		    return $file;
 		}
+=======
+    my $filename = param($cgi_param);
+    my $mime = '';
+    my $save_as = shift || "";
+
+    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
+        mkdir ("data/$_REQUEST->{Domain}/img/$dir/");
+    }
+
+    if($filename){
+    my $type = uploadInfo($filename)->{'Content-Type'};
+    my $file = $save_as || (time() . int(rand(9999999)));
+    if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+        $file .= ".jpg";
+        $mime = 'img';
+    }elsif($type eq "image/png" or $type eq "image/x-png"){
+        $file .= ".png";
+        $mime = 'img';
+    }elsif($type eq "image/gif" or $type eq "image/x-gif"){
+        $file .= ".gif";
+        $mime = 'img';
+    }elsif($filename =~ /\.pdf$/i){
+        $file .= ".pdf";
+        $mime = 'pdf';
+    }elsif($filename =~ /\.doc$/i){
+        $file .= ".doc";
+        $mime = 'doc';
+    }elsif($filename =~ /\.xls$/i){
+        $file .= ".xls";
+        $mime = 'xls';
+    }elsif($filename =~ /\.csv$/i){
+        $file .= ".csv";
+        $mime = 'csv';
+    }elsif($filename =~ /\.ppt$/i){
+        $file .= ".ppt";
+        $mime = 'ppt';
+    }elsif($filename =~ /\.docx$/i){
+        $file .= ".docx";
+        $mime = 'docx';
+    }elsif($filename =~ /\.xlsx$/i){
+        $file .= ".xlsx";
+        $mime = 'xlsx';
+    }elsif($filename =~ /\.pptx$/i){
+        $file .= ".pptx";
+        $mime = 'pptx';
+        }elsif($filename =~ /\.swf$/i){
+        $file .= ".swf";
+        $mime = 'swf';
+        }elsif($filename =~ /\.mp4$/i){
+        $file .= ".mp4";
+        $mime = 'mp4';
+    }elsif($filename =~ /\.zip$/i){
+            $file .= ".zip";
+        $mime = 'zip';
+    }elsif($filename =~ /\.txt$/i){
+        $file .= ".txt";
+        $mime = 'txt';
+    }else{
+        msg_add("danger","Solo imagenes y archivos pdf y zip son soportados.");
+        return "";
+    }
+    if($file){
+        open (OUTFILE,">data/$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
+        binmode(OUTFILE);
+        my $bytesread;
+        my $buffer;
+        while ($bytesread=read($filename,$buffer,1024)) {
+        print OUTFILE $buffer;
+        }
+        close(OUTFILE);
+        return $file;
+    }
+>>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
     }
     return "";
 }
 
 
+sub thumbnail {
+    my $new_size = shift;
+    my $source   = shift;
+    my $target   = shift;
+    my $file     = shift;
+    my ($new_width, $new_height) = split(/x/,$new_size);
+
+    #existe la fuente
+    if(! (-e "data/$_REQUEST->{Domain}/img/$source/$file")){
+        msg_add('error','No se pudo crear imagen chica, no existe la fuente');
+        return;
+    }
+
+    #Target directory
+    if(!(-e "data/$_REQUEST->{Domain}/img/$target/")){
+         mkdir("data/$_REQUEST->{Domain}/img/$target/") or die 'No se puede crear el directorio de datos.';
+    }
+    my ($width, $height) = imgsize("data/$_REQUEST->{Domain}/img/$source/".$file);
+    if($file =~ /\.gif/i){
+        copy("data/$_REQUEST->{Domain}/img/$source/".$file, "data/$_REQUEST->{Domain}/img/$target/".$file);
+    }else{
+        if($width > $new_width or $height > $new_height){
+            my $t = new Image::Thumbnail(
+                size       => $new_size,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$target/".$file,
+            );
+        }else{
+            my $t = new Image::Thumbnail(
+                size       => $width.'x'.$height,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$source/".$file,
+            );
+        }
+    }
+}
+
+sub format_name {
+    my $str = shift;
+    $str =~ s/,//g;
+    $str =~ s/<//g;
+    $str =~ s/>//g;
+    return (join " ", map {ucfirst} split " ", $str),
+}
 
 1;

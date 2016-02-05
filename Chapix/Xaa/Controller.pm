@@ -5,6 +5,9 @@ use warnings;
 use strict;
 use Carp;
 use Digest::SHA qw(sha384_hex);
+use Color::Rgb;
+use Math::Complex;
+use List::Util qw(min max);
 
 use Chapix::Conf;
 use Chapix::Com;
@@ -16,7 +19,7 @@ use Chapix::Xaa::L10N;
 my $lh = Chapix::Xaa::L10N->get_handle($sess{user_language}) || die "Language?";
 sub loc (@) { return ( $lh->maketext(@_)) }
 
-# 
+#
 sub new {
     my $class = shift;
     my $self = {
@@ -26,7 +29,7 @@ sub new {
 
     # Init app ENV
     $self->_init();
-	
+
     return $self;
 }
 
@@ -42,7 +45,7 @@ sub _init {
 # Main display function, this function prints the required view.
 sub display {
     my $self = shift;
-    
+
     if($sess{user_id}){
         print Chapix::Com::header_out();
         if($_REQUEST->{View} eq 'YourAccount'){
@@ -105,7 +108,7 @@ sub display {
 # Each action is detected by the "_submitted" param prefix
 sub actions {
     my $self = shift;
-    
+
     if(defined $_REQUEST->{_submitted_login}){
         $self->login();
     }elsif(defined $_REQUEST->{_submitted_password_reset}){
@@ -149,22 +152,22 @@ sub login {
 	    "FROM $self->{main_db}.xaa_users u " .
         "WHERE u.email=? AND u.password=?",{},
         $_REQUEST->{email}, sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}));
-    
+
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
-    	$sess{user_id}    = "$user->{user_id}";
+    	   $sess{user_id}    = "$user->{user_id}";
         $sess{user_name}  = "$user->{name}";
         $sess{user_email} = "$user->{email}";
         $sess{user_time_zone} = "$user->{time_zone}";
         $sess{user_language}  = "$user->{language}";
-	
+
 	my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
 	if($domain_id){
 	    my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM $self->{main_db}.xaa_domains WHERE domain_id=? ",{},$domain_id);
 	    Chapix::Com::http_redirect('/'.$domain->{folder});
 	}else{
             msg_add('warning',loc('Your account is not linked to any business account.'));
-        }	
+        }
         Chapix::Com::http_redirect('/Xaa/Login');
     }else{
         # Record login attemp
@@ -183,11 +186,11 @@ sub login {
         #     msg_add("danger","You have " . (10 - $failed_logins) . " attemps left before being blocked.");
         # }
     }
-}   
+}
 
 sub logout {
     my $self = shift;
-    
+
     $sess{user_id}        = "";
     $sess{user_name}      = "";
     $sess{user_email}     = "";
@@ -200,20 +203,20 @@ sub logout {
 sub save_new_password {
     my $self = shift;
     my $current_password = $dbh->selectrow_array("SELECT u.password FROM $self->{main_db}.xaa_users u WHERE u.user_id=?",{},$sess{user_id}) || '';
-    my $new_password = sha384_hex($conf->{Security}->{key} . $_REQUEST->{new_password}); 
+    my $new_password = sha384_hex($conf->{Security}->{key} . $_REQUEST->{new_password});
 
     # Old password match?
     if($current_password ne sha384_hex($conf->{Security}->{key} . $_REQUEST->{current_password})){
         msg_add('warning',loc('Current password does not match'));
         return '';
     }
-    
+
     # new passwords match?
     if($_REQUEST->{new_password} ne $_REQUEST->{new_password_repeat}){
         msg_add('warning', loc('The "New password" and "Repeat new password" fields must match'));
         return '';
     }
-    
+
     eval {
         $dbh->do("UPDATE $self->{main_db}.xaa_users u SET u.password=? WHERE u.user_id=?",{},
                  $new_password, $sess{user_id});
@@ -267,36 +270,36 @@ sub create_account {
     	msg_add('warning',loc('Please enter a valid email address'));
     	return '';
     }
-    
+
     my $exist = $dbh->selectrow_hashref(
     	"SELECT u.user_id, u.email, u.name, u.time_zone, u.language " .
     	"FROM $self->{main_db}.xaa_users u " .
     	"WHERE u.email=?",{},
     	$_REQUEST->{email});
-    
+
     if($exist){
     	msg_add("warning", loc("This email already exist"));
     	return '';
     }
-    
+
     my ($user_mail, $user_domain) = split('@', $_REQUEST->{email});
     $user_mail   = lc($user_mail);
     $user_domain = lc($user_domain);
     $user_mail =~ s/\W//g;
     $user_domain =~ s/\..*//g;
     $user_domain =~ s/\W//g;
-    
+
     my $domain_to_use = $user_domain;
     my @invalids_domains = qw/gmail hotmail yahoo outlook live/;
-    
-    foreach my $invalid (@invalids_domains) {	
+
+    foreach my $invalid (@invalids_domains) {
     	if($invalid eq $domain_to_use) {
     	    $domain_to_use = $user_mail;
     	    last;
     	}
     }
 
-    my @sistem_subdomains = 
+    my @sistem_subdomains =
 	[qw/root bin daemon adm lp sync shutdown halt mail uucp operator games gopher ftp
             nobody vcsa saslauth mailnull smmsp sshd tcpdump rpc nscd apache dbus ntp mysql
             postfix named dovecot dovenull test dkim-milter opendkim www app webmaster abuse jmrp
@@ -342,10 +345,10 @@ sub create_account {
     $dbh->do("INSERT INTO $self->{main_db}.xaa_users (name, email, time_zone, language, password, last_login_on) VALUES(?,?,?,?,?,NOW())",{},
 	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
     my $user_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_users",'user_id');
-    
+
     $dbh->do("INSERT INTO $self->{main_db}.xaa_domains (`name`, `folder`, `database`) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
     my $domain_id = $dbh->last_insert_id('','',"$self->{main_db}.xaa_domains",'domain_id');
-    
+
     $dbh->do("INSERT IGNORE INTO $self->{main_db}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
 
     # Database init
@@ -377,10 +380,10 @@ sub create_account {
             }
         }
     });
-    
+
     # Welcome msg
     msg_add('success','Tu cuenta fue creada con éxito.');
-    
+
     # Redirect to personal homepage
     http_redirect("/$domain_to_use/");
 }
@@ -410,35 +413,164 @@ sub database_init {
 }
 
 sub save_logo {
-    my $self = shift;
-    
-    Chapix::Com::conf_load("Xaa");
-    
-    my $current = $conf->{Xaa}->{Logo};
-    
-    my $logo = upload_logo('logo', 'site');
-    
-    if($logo) {	
-    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
-	
-        my $comando = 'convert data/'.$_REQUEST->{Domain}.'/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info: | sort -r -k 1 | head -n 3';
-        my @posibles = `$comando`;
-        my $colores = '';
-	
-        foreach my $linea (@posibles) {
-            if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
-            	my $hex = $1;
-            	$colores .= "," if($colores);
-            	$colores .= '#'.$hex
-            }
+  my $self = shift;
+
+  Chapix::Com::conf_load("Xaa");
+
+  my $current = $conf->{Xaa}->{Logo};
+
+  my $logo = upload_file('logo', 'site');
+
+  if($logo) {
+
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='AccentColor'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='AccentColorFont'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='LogoBG'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='LogoColors'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryColor'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryColorFont'");
+    $dbh->do("UPDATE conf SET value='' WHERE module='Xaa' AND name='PrimaryComplement'");
+
+
+    $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='Logo'",{},$logo);
+    unlink("data/".$_REQUEST->{Domain}."/img/site/".$current);
+
+    eval {
+      my $size_cmd = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.' -format "%w x %h" info:';
+      my $size = `$size_cmd`;
+
+      my ($w, $h) = split('x', $size);
+
+      $w =~ s/ //g;
+      $h =~ s/ //g;
+
+      my $cmd1 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+5+5] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd2 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+'.($w-5).'+5] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd3 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+5+'.($h-5).'] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+      my $cmd4 = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.'[1x1+'.($w-5).'+'.($h-5).'] -format "%[fx:floor(255*u.r)],%[fx:floor(255*u.g)],%[fx:floor(255*u.b)],%[fx:u.a]" info:';
+
+      my $c1 = `$cmd1`;
+      my $c2 = `$cmd2`;
+      my $c3 = `$cmd3`;
+      my $c4 = `$cmd4`;
+
+      my ($r, $g, $b, $a) = split(',', $c1);
+
+      if ($a >= 0 && $a < 1){
+        # TRANSLUCENT BACKGROUND
+        $conf->{Xaa}->{LogoBG} = 'transparent';
+        $dbh->do("UPDATE conf SET value='transparent' WHERE module='Xaa' AND name='LogoBG'");
+      } elsif($a == 1){
+        # B/W
+        my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
+        my $color_hex = $rgb->rgb2hex($r,$g,$b);
+        my $bw = getClosestColor($color_hex, qw/#ffffff #000000/);
+
+        if ($bw eq '#ffffff') {
+          $conf->{Xaa}->{LogoBG} = 'white';
+          $dbh->do("UPDATE conf SET value='white' WHERE module='Xaa' AND name='LogoBG'");
+        } elsif($bw eq '#000000') {
+          $conf->{Xaa}->{LogoBG} = 'black';
+          $dbh->do("UPDATE conf SET value='black' WHERE module='Xaa' AND name='LogoBG'");
         }
-		
-    	$dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
-	
-    	unlink("data/".$_REQUEST->{Domain}."/site/".$current);
+      }
+
+
+      my $colores_prior_cmd = 'convert data/'.$_REQUEST->{Domain}.'/img/site/'.$logo.' -colors 16 -depth 8 -format "%c" histogram:info:|sort -rn|head -8';
+      my @posibles = qx/$colores_prior_cmd/;
+      my $colores = '';
+
+      foreach my $linea (@posibles) {
+        if ($linea =~ /#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})/) {
+          my $hex = $1;
+
+          my $avoid_bg = getClosestColor($hex, qw/#FFFFFF #F44336 #E91E63 #9C27B0 #673AB7 #3F51B5 #2196F3 #03A9F4 #00BCD4 #009688 #4CAF50 #8BC34A #CDDC39 #FFEB3B #FFC107 #FF9800 #FF5722 #795548 #9E9E9E #607D8B #000000/);
+
+          if ( ($avoid_bg eq '#000000') || ($avoid_bg eq '#FFFFFF') ){
+            next;
+          }
+
+          $hex = getClosestColor($hex, qw/#F44336 #E91E63 #9C27B0 #673AB7 #3F51B5 #2196F3 #03A9F4 #00BCD4 #009688 #4CAF50 #8BC34A #CDDC39 #FFEB3B #FFC107 #FF9800 #FF5722 #795548 #9E9E9E #607D8B/);
+
+          if ($colores =~ $hex) {
+            next;
+          }
+
+          $colores .= "," if($colores);
+          $colores .= $hex;
+
+          Chapix::Com::conf_load('Xaa');
+
+          #SAVING PRIMARY COLOR
+          if (!$conf->{Xaa}->{PrimaryColor}){
+            $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColor'",{},$hex);
+          }elsif ($conf->{Xaa}->{PrimaryColor} && !$conf->{Xaa}->{AccentColor}) {
+            $dbh->do("UPDATE conf SET value=(SELECT accent_color FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?) WHERE module='Xaa' AND name='AccentColor'",{},$hex);
+          }elsif(!$conf->{Xaa}->{AccentColor}){
+            $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColor'",{},$hex);
+          }
+        }
+      }
+
+      Chapix::Com::conf_load('Xaa');
+
+      if(!$conf->{Xaa}->{PrimaryColor}){
+        my $random_palette = $dbh->selectrow_hashref("SELECT * FROM $conf->{Xaa}->{DB}.material_colors ORDER BY RAND() LIMIT 1");
+
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColor'",{},$random_palette->{primary_color});
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='PrimaryColorFont'",{},$random_palette->{font_color});
+
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColor'",{},$random_palette->{accent_color_b});
+        $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='AccentColorFont'",{},$random_palette->{accent_font_b});
+
+        Chapix::Com::conf_load('Xaa');
+      }
+
+      #SAVING DARKER AND LIGHTEN COLORS
+      if ($conf->{Xaa}->{LogoBG} eq 'black'){
+        $dbh->do("UPDATE conf SET value=(SELECT primary_light FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='PrimaryComplement'",{},$conf->{Xaa}->{PrimaryColor});
+      }else{
+        $dbh->do("UPDATE conf SET value=(SELECT primary_dark FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='PrimaryComplement'",{},$conf->{Xaa}->{PrimaryColor});
+      }
+
+      # SAVING FONT COLORS
+      $dbh->do("UPDATE conf SET value=(SELECT font_color FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+      WHERE module='Xaa' AND name='PrimaryColorFont'",{},$conf->{Xaa}->{PrimaryColor});
+
+      $dbh->do("UPDATE conf SET value=(SELECT accent_font FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=? AND accent_color=?)
+      WHERE module='Xaa' AND name='AccentColorFont'",{},$conf->{Xaa}->{PrimaryColor}, $conf->{Xaa}->{AccentColor});
+
+      if (!$conf->{Xaa}->{AccentColor}){
+        $dbh->do("UPDATE conf SET value=(SELECT accent_color_a FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=?)
+        WHERE module='Xaa' AND name='AccentColor'",{},$conf->{Xaa}->{PrimaryColor});
+
+        Chapix::Com::conf_load('Xaa');
+
+        $dbh->do("UPDATE conf SET value=(SELECT accent_font_a FROM $conf->{Xaa}->{DB}.material_colors WHERE primary_color=? AND accent_color_a=?)
+        WHERE module='Xaa' AND name='AccentColorFont'",{},$conf->{Xaa}->{PrimaryColor}, $conf->{Xaa}->{AccentColor});
+      }
+
+      if ( !$conf->{Xaa}->{AccentColorFont} ) {
+        $dbh->do("UPDATE conf SET value=(SELECT accent_font_a FROM $conf->{Xaa}->{DB}.material_colors WHERE accent_color_a=? LIMIT 1)
+        WHERE module='Xaa' AND name='AccentColorFont'",{}, $conf->{Xaa}->{AccentColor});
+      }
+
+      Chapix::Com::conf_load('Xaa');
+
+
+      if (!$conf->{Xaa}->{AccentColorFont} ) {
+        $dbh->do("UPDATE conf SET value='#FFFFFF' WHERE module='Xaa' AND name='AccentColorFont'",{});
+      }
+
+      $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
+    };
+    if ($@) {
+      msg_add('danger', 'Error al obtener colores principales '.$@);
     }
-    
-    http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");    
+  }
+  http_redirect("/".$_REQUEST->{Domain}."/Xaa/EditLogo");
 }
 
 sub password_reset {
@@ -448,13 +580,13 @@ sub password_reset {
 	    "FROM $self->{main_db}.xaa_users u " .
 		"WHERE u.email=?",{},
         $_REQUEST->{email});
-            
+
     if($user and $_REQUEST->{email}){
         # Actualizar DB.
         my $key = substr(sha384_hex($conf->{Security}->{key} . time() . 'PasswordReset'),10,20);
         $dbh->do("UPDATE $self->{main_db}.xaa_users SET password_reset_expires=DATE_ADD(NOW(), INTERVAL 12 HOUR), password_reset_key=? WHERE user_id=?",{},
                  $key, $user->{user_id});
-        
+
         # Enviar correo.
         my $Mail = Chapix::Mail::Controller->new();
         my $enviado = $Mail->html_template({
@@ -470,13 +602,14 @@ sub password_reset {
                 }
             }
         });
-        
+
         # Reenviar a mensaje
         http_redirect("/Xaa/PasswordResetSent");
     }else{
         msg_add("danger",'Verifica tu dirección de correo.');
     }
 }
+
 
 sub validate_password_reset_key {
     my $self = shift;
@@ -503,7 +636,7 @@ sub password_reset_update {
         $dbh->do("UPDATE $self->{main_db}.xaa_users SET password=? WHERE user_id=?",{},
                  sha384_hex($conf->{Security}->{key} . $_REQUEST->{password}), $user_id);
 
-        my $user = $dbh->selectrow_hashref("SELECT user_id, name, email FROM $self->{main_db}.xaa_users WHERE user_id=?",{},$user_id);        
+        my $user = $dbh->selectrow_hashref("SELECT user_id, name, email FROM $self->{main_db}.xaa_users WHERE user_id=?",{},$user_id);
 
         # Enviar correo.
         my $Mail = Chapix::Mail::Controller->new();
@@ -519,7 +652,7 @@ sub password_reset_update {
                 }
             }
         });
-        
+
         # Reenviar a mensaje
         http_redirect("/Xaa/PasswordResetSuccess");
     }else{
@@ -527,5 +660,53 @@ sub password_reset_update {
         http_redirect("/Xaa/PasswordReset");
     }
 }
+
+sub getClosestColor {
+  my $color = shift;
+  my @paleta = @_;
+
+  if ($color !~ /ˆ#/) {
+    $color = '#'.$color;
+  }
+
+  my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
+  my $color_rgb = $rgb->hex2rgb($color, ',');
+
+  my ($color_r, $color_g, $color_b)= split(',', $color_rgb);
+
+  my @differenceArray = [];
+
+  my @palette = @paleta;
+
+  my $index = 0;
+  foreach my $palette_color (@palette) {
+    $palette_color = $palette_color;
+
+    my $palette_rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt');
+    my $pcolor_rgb = $palette_rgb->hex2rgb($palette_color, ',');
+
+    my ($base_color_r, $base_color_g, $base_color_b)= split(',', $pcolor_rgb);
+
+    push(@differenceArray, sqrt(
+    ($color_r - $base_color_r) * ($color_r - $base_color_r) +
+    ($color_g - $base_color_g) * ($color_g - $base_color_g) +
+    ($color_b - $base_color_b) * ($color_b - $base_color_b)
+    ));
+    $index++;
+  }
+
+  my $lowest = min(@differenceArray);
+
+  my $idx = 0;
+  foreach my $palette_color (@differenceArray) {
+    if ($palette_color eq $lowest) {
+      last;
+    }
+    $idx++;
+  }
+
+  return $palette[$idx-1];
+}
+
 
 1;
