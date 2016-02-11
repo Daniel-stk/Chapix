@@ -238,3 +238,8 @@ footer a{
 .uppercase {
 	text-transform: uppercase;
 }
+
+
+.large-modal {
+  width: 70%;
+}

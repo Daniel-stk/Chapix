@@ -565,6 +565,7 @@ sub save_logo {
       }
 
       $dbh->do("UPDATE conf SET value=? WHERE module='Xaa' AND name='LogoColors'",{},$colores) if($colores);
+
     };
     if ($@) {
       msg_add('danger', 'Error al obtener colores principales '.$@);
