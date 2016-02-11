@@ -139,7 +139,8 @@ $Template = Template->new(
 
 # Print the httpheader including cookie and characterset
 sub header_out {
-    return header(-cookie=>$cookie,-charset=>"utf-8",-Expires=>-1);
+  my $type = shift || 'text/html';
+  return header(-cookie=>$cookie,-charset=>"utf-8",-Expires=>-1, -type=>$type);
 }
 
 sub msg_add {
@@ -219,6 +220,8 @@ sub selectbox_data {
     return %data;
 }
 
+<<<<<<< HEAD
+=======
 sub load_domain_info {
   $conf->{Domain} = $dbh->selectrow_hashref(
   "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
@@ -233,6 +236,7 @@ sub load_domain_info {
 #     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
 # }
 
+>>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
 sub admin_log {
     my $module = shift;
     my $action = shift;
@@ -280,6 +284,54 @@ sub set_toolbar {
 sub upload_file {
     my $cgi_param = shift || "";
     my $dir = shift || "";
+<<<<<<< HEAD
+    my $save_as = shift || "";
+    my $filename = param($cgi_param);
+    
+    if($filename){
+		$save_as = $filename if(!$save_as);
+		my $type = uploadInfo($filename)->{'Content-Type'};
+		my $file = '';
+		my ($name, $ext) = split(/\./,$save_as);
+		$name =~ s/\W/_/g;
+	
+		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+		    $ext = ".jpg";
+		}elsif($type eq "image/png" or $type eq "image/x-png"){
+		    $ext = ".png";
+		}else{
+		    msg_add("error","Sólo imágenes jpeg y png son soportadas");
+		    return "";
+		}
+
+		if($ext){
+		    #Directory	    	    
+		    if(!(-e "data/$_REQUEST->{Domain}/$dir/")){
+				mkdir("data");
+				mkdir("data/$_REQUEST->{Domain}");
+				mkdir("data/$_REQUEST->{Domain}/$dir") or die 'No se puede crear el directorio de datos. '.$!;
+		    }
+	    
+		    $file = $name . $ext;
+		    if(-e "data/$_REQUEST->{Domain}/$dir/" . $file){
+				foreach my $it (1 .. 1000000){
+				    $file = $name.'_'.$it.$ext;
+				    if(!(-e "data/$_REQUEST->{Domain}/$dir/" . $file)){
+						last;
+				    }
+				}
+		    }
+		    open (OUTFILE,">data/$_REQUEST->{Domain}/$dir/" . $file) or die "$!";
+		    binmode(OUTFILE);
+		    my $bytesread;
+		    my $buffer;
+		    while ($bytesread=read($filename,$buffer,1024)) {
+				print OUTFILE $buffer;
+		    }
+		    close(OUTFILE);
+		    return $file;
+		}
+=======
     my $filename = param($cgi_param);
     my $mime = '';
     my $save_as = shift || "";
@@ -351,6 +403,7 @@ sub upload_file {
         close(OUTFILE);
         return $file;
     }
+>>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
     }
     return "";
 }

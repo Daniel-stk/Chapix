@@ -26,6 +26,10 @@
 	padding: 0px;
 }
 
+.btn {
+	margin-right: 5px !important;
+}
+    
 .msg {
      display: none;
 }
@@ -63,27 +67,58 @@
     left: 0px;
 }
 
-/* Base CSS
+<<<<<<< HEAD:Chapix/Admin/css/chapix-adm.css
+.page-title {
+    margin-left: 20px;
+    font-size: 25px !important;
+}
 
+.home-box {
+    color: #949697;
+}
 
-.text-small {
-	font-size: 70%;
+.home-box .title {
+    font-size: 1.0em;
+    font-weight: normal;
+}
+
+.home-box .qty {
+    font-size: 2.0em;
+    font-weight: bold;
+}
+
+/* Style to replace on other modules */
+
+.app-toolbar {
+    background-color: #00abf7;
 }
 
 .card-title {
     border-bottom: 1px solid rgba(160,160,160,.2);
 }
 
-.card-content p {
-	padding: 15px 0px;
+nav a {
+    color: #000;
 }
 
-.copyright {
-	text-align: center;
-	color: #EEE;
-	font-size: 60%;
+.main-toolbar {
+    background-color: #eeeeee;
+    color: #000;
+}
+
+.main-toolbar .container-fluid{
+       margin-left: 20px;
+       margin-right: 20px;
+}
+
+.main-toolbar .container-fluid .button-collapse i.small {
+    font-size: 2rem;
+}
+
+.collection a.collection-item {
+    color: #FF9100;
 }
 
 .my-account-dropdown-content {
 	width: 200px !important;
-}*/
+}

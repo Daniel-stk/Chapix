@@ -1,0 +1,43 @@
+<div class="row">
+  <div class="col s12 m6 col-center">
+    <div class="card">
+      <div class="card-content">
+	<p>
+          [% msg %]
+          <div class="collection">
+            <a href="/[% REQUEST.Domain %]/SUPERV/Users" class="collection-item">
+              <h5 class="black-text">
+                [% loc('User management') %]
+              </h5>
+              <p>[% loc('Add, modify or delete your users') %]</p>
+            </a>
+            <a href="/[% REQUEST.Domain %]/SUPERV/Places" class="collection-item">
+              <h5 class="black-text">
+                [% loc('Places') %]
+              </h5>
+              <p>[% loc('Add, edit, delete the places to supervise.') %]</p>
+            </a>
+            <a href="/[% REQUEST.Domain %]/SUPERV/Sections" class="collection-item">
+              <h5 class="black-text">
+                [% loc('Sections') %]
+              </h5>
+              <p>[% loc('Add, edit, delete the sections of the places to supervice.') %]</p>
+            </a>
+            <a href="/[% REQUEST.Domain %]/SUPERV/Points" class="collection-item">
+              <h5 class="black-text">
+                [% loc('Check Points') %]
+              </h5>
+              <p>[% loc('Add, edit, delete the the elements to verify.') %]</p>
+            </a>
+            <a href="/[% REQUEST.Domain %]/SUPERV/Formats" class="collection-item">
+              <h5 class="black-text">
+                [% loc('Formats') %]
+              </h5>
+              <p>[% loc('Add, edit, delete the formats used in the checklists.') %]</p>
+            </a>
+          </div>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

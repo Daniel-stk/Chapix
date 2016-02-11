@@ -3,13 +3,20 @@ use base qw(Chapix::Admin::L10N);
 
 %Lexicon = (
     '_AUTO' => 1,
-    'Email' => 'Correo',
-    'Please enter your email' => 'Introduce tu correo',
-    'Password' => 'Contraseña',
-    'Please enter your password' => 'Introduce tu contraseña',
-    'Log into your account' => 'Entra en tu cuenta',
-    'Login' => 'Entrar',
-    'View does not exist' => 'No existe la vista solicitada.',
+
+    # Common
+
+
+    # Controller
+    'Not Found' => 'Lá página no existe',
+
+    # Email templates
+
+    
+    # View display_settings
+    'Settings' => 'Configuración',
+    'Add, edit, delete the places to supervise.' => 'Add, edit, delete the places to supervise.',
+
 );
 
 1;

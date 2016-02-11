@@ -1990,7 +1990,7 @@ optgroup {
 /**
  * Remove most spacing between table cells.
  */
-table {
+table.materialize {
   border-collapse: collapse;
   border-spacing: 0; }
 
@@ -2239,10 +2239,10 @@ footer.page-footer {
     color: rgba(255, 255, 255, 0.8);
     background-color: rgba(51, 51, 51, 0.08); }
 
-table, th, td {
+table.materialize, table.materialize th, table.materialize td {
   border: none; }
 
-table {
+table.materialize {
   width: 100%;
   display: table; }
   table.bordered > thead > tr, table.bordered > tbody > tr {
@@ -2262,10 +2262,10 @@ table {
   table.centered thead tr th, table.centered tbody tr td {
     text-align: center; }
 
-thead {
+table.materialize thead {
   border-bottom: 1px solid #d0d0d0; }
 
-td, th {
+table.materialize td, table.materialize th {
   padding: 15px 5px;
   display: table-cell;
   text-align: left;
