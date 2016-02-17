@@ -16,7 +16,7 @@ sub handler {
 
     	if(!$is_installed){
             msg_add('danger',"The module $module is not installed.");
-            display();
+            view();
             return '';
         }
 
@@ -33,19 +33,24 @@ sub handler {
             return '';
         }
 
-        # Actions
-        $Module->actions();
+	if ($_REQUEST->{View} eq 'API') {
+	    # API
+	    $Module->api();
+	}else{
+	    # Actions
+	    $Module->actions();
 
-        # Views
-        $Module->display();
+	    # Views
+	    $Module->view();
+	}
     }else{
         Chapix::Controller::actions();
-        Chapix::Controller::display();
+        Chapix::Controller::view();
     }
 }
 
-# Main display function, this function prints the required view.
-sub display {
+# Main view function, this function prints the required view.
+sub view {
     if($conf->{Xaa}->{MainModule}){
         my $module = $conf->{Xaa}->{MainModule};
         $_REQUEST->{Controller} = $module;
@@ -55,16 +60,16 @@ sub display {
             # Load module
     	    my $Module;
     	    eval {
-        		require "Chapix/" . $module ."/Controller.pm";
-        		my $module_name ='Chapix::'.$module.'::Controller';
-        		$Module = $module_name->new();
-	        };
-	        if($@){
-		          msg_add('danger', $@);
-	        }else{
-		          $Module->display();
-		          return;
-	        }
+		require "Chapix/" . $module ."/Controller.pm";
+		my $module_name ='Chapix::'.$module.'::Controller';
+		$Module = $module_name->new();
+	    };
+	    if($@){
+		msg_add('danger', $@);
+	    }else{
+		$Module->view();
+		return;
+	    }
         }else{
             msg_add('danger','The main module is not installed');
         }

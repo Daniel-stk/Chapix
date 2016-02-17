@@ -43,7 +43,7 @@ sub _init {
 }
 
 # Main display function, this function prints the required view.
-sub display {
+sub view {
     my $self = shift;
 
     if($sess{user_id}){
