@@ -1,0 +1,51 @@
+@media (min-width: 993px) {
+    
+    .pricing-table {
+	width: 230px;
+    }
+}
+
+
+@media only screen and (min-width: 601px) {
+    
+    .button-collapse {
+	display: block !important;
+    }
+
+    .navbar-fixed.mini {
+	height: 30px;
+    }
+
+    .mini nav{
+	height: 30px;
+    }
+
+    .mini .brand-logo {
+	max-height: 30px;
+    }
+
+    .mini .brand-logo img, .top-navbar .brand-logo img {
+	display: block;
+	max-height: 30px;
+    }
+
+    .mini nav .nav-wrapper i {
+	height: 30px;
+	line-height: 30px;
+	font-size: 1.6rem;
+    }
+
+}
+
+@media only screen and (max-width: 600px) {
+    
+    .mini .brand-logo img, .top-navbar .brand-logo img {
+	display: block;
+	max-height: 30px;
+    }    
+}
+
+@media only screen and (min-width : 993px) {
+    
+
+}

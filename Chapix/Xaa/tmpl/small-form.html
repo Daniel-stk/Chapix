@@ -12,11 +12,11 @@
           <div class="row">
             [% FOREACH field = form.fields %]
             [% IF field.type != 'hidden'%]
+
             [% IF field.group %]
             <h6>[% field.group %]</h6>
             [% END %]
-          </div>
-          <div class="row">
+
             [% IF field.type == 'file' %]
             <div class="file-field input-field">
               <div class="btn">
@@ -32,7 +32,7 @@
             <label for="[% field.name %]">[% field.label %][% IF field.required %] <i class="req">*</i> [% END %]</label>
                 [% field.prefix %][% field.field %][% field.unit %]
             [% ELSE %]
-            <div class="input-field col s12 m8 l12">
+            <div class="input-field col s12 m6 l6">
               [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
               <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
             </div>
@@ -52,36 +52,10 @@
 </section>
 
 
-[% includes %]
-[% up_data %]
 [% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
-[% bottom_data %]
 [% IF js %]
 [% jsFile = 'tmpl/' _ js %]
 <script type="text/javascript">
 [% INCLUDE $jsFile %]
-</script>
-[% END %]
-
-[% rte_fields = '' %]
-[% FOREACH field = form.fields %][% IF field.type != 'hidden'%][% IF field.rte == 1 %]
-[% IF rte_fields != '' %][% rte_fields = rte_fields _ ',' %][% END %]
-[% rte_fields = rte_fields _ field.name %]
-[% END %][% END %][% END %]
-[% IF rte_fields%]
-<script type="text/javascript">
-$(document).ready(function(){
-  tinyMCE.init({
-    // General options
-    mode : "exact",
-    elements : "[% rte_fields %]",
-    // Theme options
-    menubar: "tools table format view insert edit",
-    relative_urls:false,
-    document_base_url : "http://[% conf.Site.URL %]/",
-    forced_root_block : false,
-    convert_urls:false
-  });
-});
 </script>
 [% END %]

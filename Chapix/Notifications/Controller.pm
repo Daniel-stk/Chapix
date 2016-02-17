@@ -25,8 +25,8 @@ sub new {
 
     # Logged user is required
     if(!$sess{user_id}){
-	msg_add('warning','To continue, log into your account.');
-	Chapix::Com::http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Login');
+    	msg_add('warning','To continue, log into your account.');
+    	Chapix::Com::http_redirect('/'.$_REQUEST->{Domain}.'/Xaa/Login');
     }
 
     # init app ENV
@@ -51,16 +51,6 @@ sub display {
     
     if($_REQUEST->{View} eq ''){
         print Chapix::Layout::print( Chapix::Notifications::View::display_home() );
-    #}elsif($_REQUEST->{View} eq 'Notification'){
-    #   print Chapix::Layout::print( Chapix::Notifications::View::display_notification );
-    #}elsif($_REQUEST->{View} eq 'Users'){
-    #    if($_REQUEST->{user_id}){
-    #        print Chapix::Layout::print( Chapix::EmailMkt::View::display_user_form() );
-    #    }else{
-    #        print Chapix::Layout::print( Chapix::EmailMkt::View::display_users_list() );
-    #    }
-    #}elsif($_REQUEST->{View} eq 'User'){
-    #    print Chapix::Layout::print( Chapix::EmailMkt::View::display_user_form() );
     }else{
         msg_add('warning',loc('Not Found'));
         print Chapix::Notifications::View::default();
@@ -75,21 +65,6 @@ sub actions {
     if($_REQUEST->{_view} eq 'Notification'){
 	$self->set_view_and_redirect();
     }
-
-    #if(defined $_REQUEST->{_submitted_user}){
-    #    if($_REQUEST->{_submit} eq loc('Resset Password')){
-    #        # Reset user password
-    #        $self->reset_user_password();
-    #    }elsif($_REQUEST->{_submit} eq loc('Delete')){
-    #        # Delete user
-    #        $self->delete_user();
-    #    }else{
-    #        # Save user data
-    #        $self->save_user();
-    #    }
-    #}elsif($_REQUEST->{View} eq 'SetPlaceLocation'){
-    #    $self->set_place_location();
-    #}
 }
 
 sub add {

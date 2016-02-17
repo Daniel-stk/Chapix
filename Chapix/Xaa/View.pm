@@ -37,13 +37,15 @@ sub set_path_route {
 sub display_home {
     my $HTML = "";
     my $template = Template->new();
-    
+
+    $conf->{Page}->{ShowSettings} = '1';
+
     my $vars = {
         REQUEST => $_REQUEST,
         Domain  => $conf->{Domain},
         conf => $conf,
         sess => \%sess,
-     	msg  => msg_print(),
+     	  msg  => msg_print(),
         loc => \&loc,
     };
     $template->process("Chapix/Xaa/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
@@ -53,7 +55,7 @@ sub display_home {
 sub set_toolbar {
     my @actions = @_;
     my $HTML = '';
-    
+
     foreach my $action (@actions){
         my $btn = '';
      	my ($script, $label, $alt, $icon, $class, $type) = @$action;
@@ -72,8 +74,8 @@ sub set_toolbar {
      	}
      	$btn .= $label;
         $btn .= '</a>';
-        $HTML .= $btn;			
-    }   
+        $HTML .= $btn;
+    }
     $conf->{Page}->{Toolbar} .= $HTML;
 }
 
@@ -82,7 +84,7 @@ sub set_add_btn {
     my $label   = shift || loc('Add');
     my @actions = @_;
     my $HTML = '';
-    
+
     if($script !~ /^\//){
         $script = '/'.$_REQUEST->{Domain}.'/' . $script;
     }
@@ -100,7 +102,7 @@ sub set_back_btn {
     my $label   = shift || loc('Go back');
     my @actions = @_;
     my $HTML = '';
-    
+
     if($script !~ /^\//){
         $script = '/'.$_REQUEST->{Domain}.'/' . $script;
     }
@@ -122,7 +124,7 @@ sub set_search_action {
     $btn   .= '<i class="material-icons">search</i>';
     $btn   .= '</a>';
     $conf->{Page}->{Toolbar} .= $btn;
-    
+
     $conf->{Page}->{Search} = {
         Field => (CGI::textfield({-name=>'q', -id=>'q'})),
         Show => ($_REQUEST->{'q'} || ''),
@@ -133,7 +135,7 @@ sub set_search_action {
 
 sub display_login {
     my @submit = (loc("Login"));
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'login',
         method   => 'post',
@@ -145,10 +147,10 @@ sub display_login {
 
     $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
 		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'));
-    
+
     $form->field(name => 'password', label=> loc('Password'), class=>"",maxlength=>"100", required=>"1",value=>"",
 		 override=>1,jsmessage => loc('Please enter your password'), type=>"password", comment=>'<i class="icon-lock"></i>');
-    
+
     $form->stylesheet('1');
 
     my $HTML = $form->render(
@@ -169,7 +171,7 @@ sub display_login {
 
 sub display_password_reset {
     my @submit = (loc("Next"));
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'password_reset',
         method   => 'post',
@@ -232,7 +234,7 @@ sub display_users_list {
     set_add_btn('Xaa/User',loc('Add user'));
     set_search_action();
     set_toolbar(['Xaa/User','',loc('Add user'),'add','waves-effect waves-light add']);
-    
+
     my $where = "ud.domain_id=? AND ud.active=1 ";
     my @params;
     push(@params,$conf->{Domain}->{domain_id});
@@ -263,7 +265,7 @@ sub display_users_list {
     $list->set_label('email',loc('Correo'));
     $list->set_label('added_on',loc('Added on'));
     $list->set_label('active',loc('Active'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -278,7 +280,7 @@ sub display_users_list {
 sub display_password_form {
     $conf->{Page}->{Title} = loc('Change your password');
     set_back_btn('Xaa/YourAccount',loc('Your account'));
-    
+
     my @submit = (loc('Save'));
     my $params = {};
     my $form = CGI::FormBuilder->new(
@@ -311,7 +313,7 @@ sub display_password_form {
 sub display_domain_settings {
     $conf->{Page}->{Title} = loc('Business Settigs');
     set_back_btn('Xaa/Settings',loc('Settings'));
-    
+
     my @submit = (loc('Save'));
     my $params = $conf->{Domain};
     my $form = CGI::FormBuilder->new(
@@ -328,7 +330,7 @@ sub display_domain_settings {
     my %time_zones = Chapix::Com::selectbox_data(
         "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
     $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
-    
+
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
 
@@ -350,9 +352,9 @@ sub display_domain_settings {
 sub display_edit_account_form {
     $conf->{Page}->{Title} = loc('Edit your settings');
     set_back_btn('Xaa/YourAccount',loc('Your account'));
-    
+
     my @submit = (loc('Save'));
-    
+
     my $params = {
         name => $sess{user_name},
         time_zone => $sess{user_time_zone},
@@ -374,10 +376,10 @@ sub display_edit_account_form {
     my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
 
     $form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
-    
+
     $form->field(name => 'language', required=>1, label=> loc('Language'), options=>['es_MX','en_US'], type=>'select',
 		 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
-    
+
     return $form->render(
         template => {
             type => 'TT2',
@@ -397,7 +399,7 @@ sub display_user_form {
     my $params = {};
     $conf->{Page}->{Title} = loc('User');
     set_back_btn('Xaa/Users',loc('Users'));
-    
+
     if($_REQUEST->{user_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT u.user_id, u.name, u.email, u.time_zone, u.language, ud.active " .
@@ -409,7 +411,7 @@ sub display_user_form {
             return display_users_list();
         }
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'user',
         method   => 'post',
@@ -434,7 +436,7 @@ sub display_user_form {
     $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
-        
+
     $form->stylesheet('1');
 
     my $HTML = $form->render(
@@ -454,7 +456,7 @@ sub display_user_form {
 
 sub display_register {
     my @submit = (loc("Register"));
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'register',
         method   => 'post',
@@ -496,15 +498,15 @@ sub display_register {
 sub display_logo_form {
     $conf->{Page}->{Title} = loc('Upload logo');
     set_back_btn('Xaa/Settings',loc('Your account'));
-    
+
     my @submit = (loc('Save'));
 
     Chapix::Com::conf_load("Xaa");
-    
+
     my $params = {
     	logo => $conf->{Xaa}->{Logo}
     };
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'upload_logo',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/EditLogo',
@@ -518,7 +520,7 @@ sub display_logo_form {
     $form->field(name => 'logo', label=> loc("Logo"), required=>1, type=>'file');
 
     if($params->{logo}){
-    	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/site/'.$params->{logo}, -class=>'responsive-img'});
+    	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/img/site/'.$params->{logo}, -class=>'responsive-img'});
     	$form->field(name=>'logo', comment=> $img);
     }
     return $form->render(
@@ -532,7 +534,7 @@ sub display_logo_form {
                 msg => msg_print()
             },
         },
-    );    
+    );
 }
 
 sub display_password_reset_sent {
@@ -567,7 +569,7 @@ sub display_password_reset_form {
     my @submit = (loc("Guardar"));
     $conf->{Page}->{Title} = 'Restablece tu contraseña';
     $conf->{Page}->{Help}  = 'Las contraseñas fuertes incluyen números, letras mayúsculas, letras minúsculas y signos de puntuación.';
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'password_reset_check',
         method   => 'post',

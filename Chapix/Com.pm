@@ -6,23 +6,26 @@ use CGI::Carp qw(fatalsToBrowser);
 use DBI;
 use Apache::Session::MySQL;
 use Template;
+use Image::Thumbnail;
+use Image::Size;
 
 use Chapix::Conf;
 
 BEGIN {
-  use Exporter();
-  use vars qw( @ISA @EXPORT @EXPORT_OK );
-  @ISA = qw( Exporter );
+    use Exporter();
+    use vars qw( @ISA @EXPORT @EXPORT_OK );
+    @ISA = qw( Exporter );
   @EXPORT = qw(
-		  $dbh
-		  %sess
-		  $cookie
-		  &msg_add
-		  &msg_print
-                  &upload_logo
-		  &http_redirect
-		  $_REQUEST
-		  $Template
+        $dbh
+        %sess
+        $cookie
+        &msg_add
+        &msg_print
+      &upload_file
+        &http_redirect
+        $_REQUEST
+        $Template
+      &format_name
         );
 }
 
@@ -50,9 +53,9 @@ $_REQUEST->{View}       =~ s/\W//g;
 $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 
 if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
-	$_REQUEST->{Domain}     = 'Home';
-	$_REQUEST->{Controller} = '';
-	$_REQUEST->{View}       = '';
+    $_REQUEST->{Domain}     = 'Home';
+    $_REQUEST->{Controller} = '';
+    $_REQUEST->{View}       = '';
 }
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
@@ -64,20 +67,20 @@ $dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
 
 # Change to domain database
 if($_REQUEST->{Domain} eq 'Xaa'){
-	$_REQUEST->{View} = $_REQUEST->{Controller};
-	$_REQUEST->{Controller} = $_REQUEST->{Domain};
+    $_REQUEST->{View} = $_REQUEST->{Controller};
+    $_REQUEST->{Controller} = $_REQUEST->{Domain};
 }elsif($_REQUEST->{Domain} =~ /[A-Z]/){
-	$_REQUEST->{View} = $_REQUEST->{Domain};
-	$_REQUEST->{Domain} = 'Xaa';
-	$_REQUEST->{Controller} = 'Pages';
+    $_REQUEST->{View} = $_REQUEST->{Domain};
+    $_REQUEST->{Domain} = 'Xaa';
+    $_REQUEST->{Controller} = 'Pages';
 }else{
-	eval {
-		$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
-	};
-	if($@){
-		msg_add('danger','Data not found.');
-		http_redirect('/');
-	}
+    eval {
+	$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+    };
+    if($@){
+	msg_add('danger','Data not found.');
+	http_redirect('/');
+    }
 }
 
 # Session
@@ -89,20 +92,20 @@ if (defined $ENV{'HTTP_COOKIE'}){
 
 eval {
     tie %sess, 'Apache::Session::MySQL', $session_id, {
-    	Handle     => $dbh,
-    	LockHandle => $dbh,
+	Handle     => $dbh,
+	LockHandle => $dbh,
 	TableName  => $conf->{Xaa}->{DB} . '.sessions',
     };
 };
 
 if ($@) {
     eval {
-    	$session_id = '';
-    	tie %sess, 'Apache::Session::MySQL' , $session_id,{
-    	    Handle     => $dbh,
-    	    LockHandle => $dbh,
-	    TableName  => $conf->{Xaa}->{DB} . '.sessions',
-    	};
+	$session_id = '';
+	tie %sess, 'Apache::Session::MySQL' , $session_id,{
+	        Handle     => $dbh,
+		    LockHandle => $dbh,
+		TableName  => $conf->{Xaa}->{DB} . '.sessions',
+	};
     };
     die "Can't create session data $@" if($@);
 }
@@ -115,7 +118,7 @@ $cookie = cookie(-name    => $conf->{SESSION}->{name},
 		 -value   => $sess{_session_id},
 		 -path    => $conf->{SESSION}->{path},
 		 -expires => $conf->{SESSION}->{life},
-	     );
+    );
 #Session END
 
 # Load basic config
@@ -123,10 +126,12 @@ conf_load('Website');
 conf_load('Domain');
 conf_load('Template');
 
+load_domain_info();
+
 # Default template
 $Template = Template->new(
     INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
-);
+    );
 
 #################################################################################
 # Common Functions
@@ -183,18 +188,18 @@ sub set_path_route {
 
 sub conf_load {
     my $module = shift;
-    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module = ?",{Slice=>{}},$module);
-    foreach my $var(@$vars){
-    	defined $conf->{$var->{module}} or $conf->{$var->{module}} = {};
-    	$conf->{$var->{module}}->{$var->{name}} = $var->{value};
+    my $vars = $dbh->selectall_arrayref("SELECT c.module, c.name, c.value FROM conf c WHERE c.module=? AND value IS NOT NULL",{Slice=>{}},$module);
+    foreach my $var (@$vars){
+	defined $conf->{$var->{module}} or $conf->{$var->{module}} = {};
+	$conf->{$var->{module}}->{$var->{name}} = $var->{value} || '';
     }
 }
 
-sub selectbox_data{
+sub selectbox_data {
     my %data = (
         values => [],
         labels => {},
-    );
+	);
     my $select = shift || "";
     my $params = shift;
     my $sth = $dbh->prepare($select);
@@ -214,6 +219,11 @@ sub selectbox_data{
     return %data;
 }
 
+sub load_domain_info {
+    $conf->{Domain} = $dbh->selectrow_hashref(
+	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	$_REQUEST->{Domain});
+}
 
 # sub conf_set {
 #     my $group = shift;
@@ -237,87 +247,258 @@ sub set_toolbar {
     my $LeftHTML = '';
     my $RightHTML = '';
     my $HTML = '';
-    
+
     foreach my $action (@actions){
 	my $btn = '';
 	my $alt = '';
-     	my ($script, $label, $side, $icon, $class, $type) = @$action;
+	my ($script, $label, $side, $icon, $class, $type) = @$action;
         $class = 'btn btn-default btn-sm' if(!$class);
-     	if($script eq 'index.pl' or ($label eq '')){
-     	    $alt = 'Level up';
-     	    $icon  = 'level-up';
+	if($script eq 'index.pl' or ($label eq '')){
+	    $alt = 'Level up';
+	    $icon  = 'level-up';
 	    $side  = 'right';
-     	}
-     	$btn .= ' <a href="'.$script.'" class="'.$class.'" alt="'.$alt.'" title="'.$alt.'" >';
-     	if($icon){
-     	    $btn .= '<i class="glyphicon glyphicon-'.$icon.'"></i> ';
-     	}
-     	$btn .= $label.'</a>';
+	}
+	$btn .= ' <a href="'.$script.'" class="'.$class.'" alt="'.$alt.'" title="'.$alt.'" >';
+	if($icon){
+	    $btn .= '<i class="glyphicon glyphicon-'.$icon.'"></i> ';
+	}
+	$btn .= $label.'</a>';
 	if($side eq 'right'){
 	    $RightHTML .= $btn;
 	}else{
-	    $LeftHTML .= $btn;			
+	    $LeftHTML .= $btn;
 	}
     }
-    
+
     $HTML .= $LeftHTML;
     $HTML .= '<div class="pull-right">' . $RightHTML .'</div>' if($RightHTML);
-    
+
     $conf->{Page}->{Toolbar} = $HTML;
 }
 
-sub upload_logo {
+
+sub upload_file {
     my $cgi_param = shift || "";
     my $dir = shift || "";
     my $filename = param($cgi_param);
+    my $mime = '';
     my $save_as = shift || "";
-    
-    if($filename){
-		my $type = uploadInfo($filename)->{'Content-Type'};
-		my $file = '';
-		my ($name, $ext) = split(/\./,$filename);
-		$name =~ s/\W/_/g;
-	
-		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-		    $ext = ".jpg";
-		}elsif($type eq "image/png" or $type eq "image/x-png"){
-		    $ext = ".png";
-		}else{
-		    msg_add("error","Sólo imágenes jpeg y png son soportadas");
-		    return "";
-		}
 
-		if($ext){
-		    #Directory	    	    
-		    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
-				mkdir("data");
-				mkdir("data/$_REQUEST->{Domain}");
-				mkdir("data/$_REQUEST->{Domain}/$dir") or die 'No se puede crear el directorio de datos. '.$!;
-		    }
-	    
-		    $file = $name . $ext;
-		    if(-e "data/$_REQUEST->{Domain}/$dir/" . $file){
-				foreach my $it (1 .. 1000000){
-				    $file = $name.'_'.$it.$ext;
-				    if(!(-e "data/$_REQUEST->{Domain}/$dir/" . $file)){
-						last;
-				    }
-				}
-		    }
-		    open (OUTFILE,">data/$_REQUEST->{Domain}/$dir/" . $file) or die "$!";
-		    binmode(OUTFILE);
-		    my $bytesread;
-		    my $buffer;
-		    while ($bytesread=read($filename,$buffer,1024)) {
-				print OUTFILE $buffer;
-		    }
-		    close(OUTFILE);
-		    return $file;
-		}
+    if(!(-e "data/$conf->{Domain}->{folder}/img/$dir/")){
+        mkdir ("data/$conf->{Domain}->{folder}/img/$dir/");
+    }
+
+    if($filename){
+	my $type = uploadInfo($filename)->{'Content-Type'};
+	my $file = $save_as || (time() . int(rand(9999999)));
+	if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+	    $file .= ".jpg";
+	    $mime = 'img';
+	}elsif($type eq "image/png" or $type eq "image/x-png"){
+	    $file .= ".png";
+	    $mime = 'img';
+	}elsif($type eq "image/gif" or $type eq "image/x-gif"){
+	    $file .= ".gif";
+	    $mime = 'img';
+	}elsif($filename =~ /\.pdf$/i){
+	    $file .= ".pdf";
+	    $mime = 'pdf';
+	}elsif($filename =~ /\.doc$/i){
+	    $file .= ".doc";
+	    $mime = 'doc';
+	}elsif($filename =~ /\.xls$/i){
+	    $file .= ".xls";
+	    $mime = 'xls';
+	}elsif($filename =~ /\.csv$/i){
+	    $file .= ".csv";
+	    $mime = 'csv';
+	}elsif($filename =~ /\.ppt$/i){
+	    $file .= ".ppt";
+	    $mime = 'ppt';
+	}elsif($filename =~ /\.docx$/i){
+	    $file .= ".docx";
+	    $mime = 'docx';
+	}elsif($filename =~ /\.xlsx$/i){
+	    $file .= ".xlsx";
+	    $mime = 'xlsx';
+	}elsif($filename =~ /\.pptx$/i){
+	    $file .= ".pptx";
+	    $mime = 'pptx';
+        }elsif($filename =~ /\.swf$/i){
+	    $file .= ".swf";
+	    $mime = 'swf';
+        }elsif($filename =~ /\.mp4$/i){
+	    $file .= ".mp4";
+	    $mime = 'mp4';
+	}elsif($filename =~ /\.zip$/i){
+            $file .= ".zip";
+	    $mime = 'zip';
+	}elsif($filename =~ /\.txt$/i){
+	    $file .= ".txt";
+	    $mime = 'txt';
+	}else{
+	    msg_add("danger","Solo imagenes y archivos pdf y zip son soportados.");
+	    return "";
+	}
+	if($file){
+	    open (OUTFILE,">data/$conf->{Domain}->{folder}/img/$dir/" . $file) or die "$!";
+	    binmode(OUTFILE);
+	    my $bytesread;
+	    my $buffer;
+	    while ($bytesread=read($filename,$buffer,1024)) {
+		print OUTFILE $buffer;
+	    }
+	    close(OUTFILE);
+	    return $file;
+	}
     }
     return "";
 }
 
 
+sub thumbnail {
+    my $new_size = shift;
+    my $source   = shift;
+    my $target   = shift;
+    my $file     = shift;
+    my ($new_width, $new_height) = split(/x/,$new_size);
+
+    #existe la fuente
+    if(! (-e "data/$_REQUEST->{Domain}/img/$source/$file")){
+        msg_add('error','No se pudo crear imagen chica, no existe la fuente');
+        return;
+    }
+
+    #Target directory
+    if(!(-e "data/$_REQUEST->{Domain}/img/$target/")){
+	mkdir("data/$_REQUEST->{Domain}/img/$target/") or die 'No se puede crear el directorio de datos.';
+    }
+    my ($width, $height) = imgsize("data/$_REQUEST->{Domain}/img/$source/".$file);
+    if($file =~ /\.gif/i){
+        copy("data/$_REQUEST->{Domain}/img/$source/".$file, "data/$_REQUEST->{Domain}/img/$target/".$file);
+    }else{
+        if($width > $new_width or $height > $new_height){
+            my $t = new Image::Thumbnail(
+                size       => $new_size,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$target/".$file,
+		);
+        }else{
+            my $t = new Image::Thumbnail(
+                size       => $width.'x'.$height,
+                module     => "Image::Magick",
+                attr       => {colorspace=>'RGB'},
+                create     => 1,
+                input      => "data/$_REQUEST->{Domain}/img/$source/".$file,
+                quality    => 90,
+                outputpath => "data/$_REQUEST->{Domain}/img/$source/".$file,
+		);
+        }
+    }
+}
+
+sub format_name {
+    my $str = shift;
+    $str =~ s/,//g;
+    $str =~ s/<//g;
+    $str =~ s/>//g;
+    return (join " ", map {ucfirst} split " ", $str),
+}
+
+
+sub upload_usr_file {
+    my $cgi_param = shift || "";
+    my $dir = shift || "";
+    my $filename = param($cgi_param);
+    my $mime = '';
+    my $save_as = shift || "";
+
+    if(!(-e "data/$conf->{Domain}->{folder}/$dir/")){
+        mkdir ("data/$conf->{Domain}->{folder}/$dir/");
+    }
+
+    if($filename){
+	my $type = uploadInfo($filename)->{'Content-Type'};
+	my ($name, $extension) = split(/\./, $filename);
+
+	my $file = $name;
+
+	if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+	    $file .= ".jpg";
+	    $mime = 'img';
+	}elsif($type eq "image/png" or $type eq "image/x-png"){
+	    $file .= ".png";
+	    $mime = 'img';
+	}elsif($type eq "image/gif" or $type eq "image/x-gif"){
+	    $file .= ".gif";
+	    $mime = 'img';
+	}elsif($filename =~ /\.pdf$/i){
+	    $file .= ".pdf";
+	    $mime = 'pdf';
+	}elsif($filename =~ /\.doc$/i){
+	    $file .= ".doc";
+	    $mime = 'doc';
+	}elsif($filename =~ /\.xls$/i){
+	    $file .= ".xls";
+	    $mime = 'xls';
+	}elsif($filename =~ /\.csv$/i){
+	    $file .= ".csv";
+	    $mime = 'csv';
+	}elsif($filename =~ /\.ppt$/i){
+	    $file .= ".ppt";
+	    $mime = 'ppt';
+	}elsif($filename =~ /\.docx$/i){
+	    $file .= ".docx";
+	    $mime = 'docx';
+	}elsif($filename =~ /\.xlsx$/i){
+	    $file .= ".xlsx";
+	    $mime = 'xlsx';
+	}elsif($filename =~ /\.pptx$/i){
+	    $file .= ".pptx";
+	    $mime = 'pptx';
+        }elsif($filename =~ /\.swf$/i){
+	    $file .= ".swf";
+	    $mime = 'swf';
+        }elsif($filename =~ /\.mp4$/i){
+	    $file .= ".mp4";
+	    $mime = 'mp4';
+	}elsif($filename =~ /\.zip$/i){
+            $file .= ".zip";
+	    $mime = 'zip';
+	}elsif($filename =~ /\.txt$/i){
+	    $file .= ".txt";
+	    $mime = 'txt';
+	}else{
+	    msg_add("danger","Solo documentos y zip son soportados.");
+	    return "";
+	}
+	if($file){
+
+	    if (-e "data/$conf->{Domain}->{folder}/$dir/$file") {
+		foreach my $it (1 .. 1000000) {
+		    $file = $name.'_'.$it.$extension;
+		    if(!(-e "data/$conf->{Domain}->{folder}/$dir/$file")){
+			last;
+		    }
+		}
+	    }
+
+	    open (OUTFILE,">data/$conf->{Domain}->{folder}/$dir/" . $file) or die "$!";
+	    binmode(OUTFILE);
+	    my $bytesread;
+	    my $buffer;
+	    while ($bytesread=read($filename,$buffer,1024)) {
+		print OUTFILE $buffer;
+	    }
+	    close(OUTFILE);
+	    return $file;
+	}
+    }
+    return "";
+}
 
 1;

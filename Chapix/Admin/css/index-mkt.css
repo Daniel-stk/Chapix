@@ -5,12 +5,12 @@ body {
     display: flex;
     min-height: 100vh;
     flex-direction: column;
-  }
+    height:100%;
+}
 
-  main {
+main {
     flex: 1 0 auto;
-  }
-
+}
 
 nav ul a {
 	color: black;
@@ -20,9 +20,9 @@ nav ul a {
 	max-width: 220px;
 }
 
-#account, #mkt, #trusty, #prices, #ready, .register-form {
+#account, #mkt, #trusty, #prices, #ready, .register-form, #login-form {
 	padding-top: 15px;
-	padding-bottom: 15px
+	padding-bottom: 15px;
 }
 
 
@@ -36,12 +36,6 @@ section h4{
 }
 
 
-.form-overlay {
-	position: relative;
-	width: 100%;
-    min-height: 100px;
-}
-
 .fade-out {
 	visibility: hidden;
 	opacity: 0;
@@ -50,7 +44,7 @@ section h4{
 	-moz-transition: all 0.1s ease-in;
 	-webkit-transition: all 0.1s ease-in;
 	transition: all 0.1s ease-in;
-}
+} 
 
 .sign-txt {
 	display: block;
@@ -109,14 +103,14 @@ section h4{
 }
 
 .table-list li:first-child {
-	border-radius: 8px 8px 0px 0px;
+    border-radius: 8px 8px 0px 0px;
 }
 
 .table-list li:last-child {
-	border-radius: 0px 0px 8px 8px;
-	background-color: rgba(0,0,0,0.8);
-	color: white;
-	font-size: 1.6em;
+    border-radius: 0px 0px 8px 8px;
+    background-color: rgba(0,0,0,0.8);
+    color: white;
+    font-size: 1.6em;
 }
 
 .table-list li {
@@ -148,20 +142,20 @@ footer a{
 	height: 30px;
 }
 
-.top-navbar ul.top-actions {
-    margin: 0px;
-    position: absolute;
+.top-navbar ul {
+	margin: 0px;
+	position: absolute;
     right: 0px;
     top: 1px;
 }
 
-.top-navbar ul.top-actions > li {
-    float: left;
+.top-navbar ul li {
+	float: left;
 }
 
-.top-navbar ul.top-actions > li > a {
-    font-size: 1rem;
-    color: #212121;
+.top-navbar ul a {
+	font-size: 1rem;
+    color: #000;
     display: block;
     padding: 0 15px;
 }
@@ -176,16 +170,9 @@ footer a{
 
 .card.custom-card {
 	width: 200px;
-	height: 235px;
+	height: 260px;
 }
 
-.card-txt {
-	font-size: 12px;
-}
-
-.card.custom-card img{
-	max-width: 60px;
-}
 
 .card-wrapper {
 	position: relative;
@@ -194,35 +181,16 @@ footer a{
 	margin-top: 20px;
 }
 
-.card-wrapper a {
-	display: inherit;
-}
 
 .top-navbar ul a span.badge{
-    position: static;
+	position: static;
     margin-left: 4px;
     line-height: 0;
-    display: inline;
+        display: inline;
     vertical-align: super;
 }
 
-.fixed-btn-wrapper {
-    position : relative;
-}
 
-.fixed-btn-wrapper .fixed-action-btn {
-    position: initial;
-    float: right;
-}
-
-.file-field .req{
-    color:#fff;
-}
-
-.fixed-action-btn {
-  right: 35px;
-  bottom: 35px;
-}
 
 
 /* ****************** HELPER STYLES ********************** */
@@ -239,7 +207,58 @@ footer a{
 	text-transform: uppercase;
 }
 
+.col-center {
+    float: none !important;
+    margin: auto !important;
+}
 
-.large-modal {
-  width: 70%;
+.space-sm {
+	height: 10px;
+}
+
+.space-md {
+	height: 25px;
+}
+
+.space-lg {
+	height: 50px;
+}
+
+.space-xl {
+	height: 100px;
+}
+
+.label-danger {
+	color: #F44336;
+	font-size: 13px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.msg {
+     display: none;	
+}
+
+.msg-danger {
+	background-color: #e53935 !important;
+	color: #FFF;
+}
+
+.msg-success {
+	background-color: #7cb342 !important;
+	color: #FFF;
+}
+
+.msg-warning {
+    background-color: #ffb300 !important;
+    color: #fff;
+}
+
+.msg-info {
+    background-color: #1e88e5 !important;
+    color: #fff;
+}
+
+.req {
+	color: #d32f2f;
 }
