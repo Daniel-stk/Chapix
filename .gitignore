@@ -3,6 +3,7 @@
 ._.DS_Store
 Chapix.komodoproject
 Chapix/Conf.pm
+Chapix/Xaa/img/*
 admin/vendor/*
 vendor/*
 cpan/*

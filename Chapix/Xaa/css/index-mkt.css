@@ -266,3 +266,17 @@ footer a{
 nav ul li:last-child:hover, nav ul li:last-child.active {
   background-color : transparent;
 }
+
+.mkt-que-es {
+  font-size: 16px;
+}
+
+
+.you-can-wrapper img {
+  max-width: 140px;
+}
+
+.you-can {
+  margin-bottom: 40px;
+  font-size: 20px;
+}
