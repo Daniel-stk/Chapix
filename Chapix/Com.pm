@@ -224,7 +224,6 @@ sub load_domain_info {
     $conf->{Domain} = $dbh->selectrow_hashref(
 	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
 	$_REQUEST->{Domain});
-    $conf->{Domain} = $dbh->selectrow_hashref(
 }
 
 sub admin_log {
