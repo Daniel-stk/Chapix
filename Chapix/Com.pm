@@ -220,12 +220,10 @@ sub selectbox_data {
     return %data;
 }
 
-<<<<<<< HEAD
-=======
 sub load_domain_info {
-  $conf->{Domain} = $dbh->selectrow_hashref(
-  "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
-  $_REQUEST->{Domain});
+    $conf->{Domain} = $dbh->selectrow_hashref(
+	  "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	  $_REQUEST->{Domain});
 }
 
 # sub conf_set {
@@ -236,7 +234,6 @@ sub load_domain_info {
 #     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
 # }
 
->>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
 sub admin_log {
     my $module = shift;
     my $action = shift;
@@ -284,9 +281,9 @@ sub set_toolbar {
 sub upload_file {
     my $cgi_param = shift || "";
     my $dir = shift || "";
-<<<<<<< HEAD
     my $save_as = shift || "";
     my $filename = param($cgi_param);
+	my $mime = '';
     
     if($filename){
 		$save_as = $filename if(!$save_as);
@@ -295,14 +292,55 @@ sub upload_file {
 		my ($name, $ext) = split(/\./,$save_as);
 		$name =~ s/\W/_/g;
 	
-		if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-		    $ext = ".jpg";
+        if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+			$file .= ".jpg";
+			$mime = 'img';
 		}elsif($type eq "image/png" or $type eq "image/x-png"){
-		    $ext = ".png";
-		}else{
-		    msg_add("error","Sólo imágenes jpeg y png son soportadas");
-		    return "";
-		}
+			$file .= ".png";
+			$mime = 'img';
+		}elsif($type eq "image/gif" or $type eq "image/x-gif"){
+			$file .= ".gif";
+			$mime = 'img';
+		}elsif($filename =~ /\.pdf$/i){
+			$file .= ".pdf";
+			$mime = 'pdf';
+		}elsif($filename =~ /\.doc$/i){
+			$file .= ".doc";
+			$mime = 'doc';
+		}elsif($filename =~ /\.xls$/i){
+			$file .= ".xls";
+			$mime = 'xls';
+		}elsif($filename =~ /\.csv$/i){
+			$file .= ".csv";
+			$mime = 'csv';
+		}elsif($filename =~ /\.ppt$/i){
+			$file .= ".ppt";
+			$mime = 'ppt';
+		}elsif($filename =~ /\.docx$/i){
+			$file .= ".docx";
+			$mime = 'docx';
+		}elsif($filename =~ /\.xlsx$/i){
+			$file .= ".xlsx";
+			$mime = 'xlsx';
+		}elsif($filename =~ /\.pptx$/i){
+			$file .= ".pptx";
+			$mime = 'pptx';
+        }elsif($filename =~ /\.swf$/i){
+			$file .= ".swf";
+			$mime = 'swf';
+        }elsif($filename =~ /\.mp4$/i){
+			$file .= ".mp4";
+			$mime = 'mp4';
+	    }elsif($filename =~ /\.zip$/i){
+            $file .= ".zip";
+	        $mime = 'zip';
+	    }elsif($filename =~ /\.txt$/i){
+            $file .= ".txt";
+            $mime = 'txt';
+	    }else{
+	        msg_add("danger","Solo imagenes y archivos pdf y zip son soportados.");
+	        return "";
+	    }
 
 		if($ext){
 		    #Directory	    	    
@@ -331,79 +369,6 @@ sub upload_file {
 		    close(OUTFILE);
 		    return $file;
 		}
-=======
-    my $filename = param($cgi_param);
-    my $mime = '';
-    my $save_as = shift || "";
-
-    if(!(-e "data/$_REQUEST->{Domain}/img/$dir/")){
-        mkdir ("data/$_REQUEST->{Domain}/img/$dir/");
-    }
-
-    if($filename){
-    my $type = uploadInfo($filename)->{'Content-Type'};
-    my $file = $save_as || (time() . int(rand(9999999)));
-    if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-        $file .= ".jpg";
-        $mime = 'img';
-    }elsif($type eq "image/png" or $type eq "image/x-png"){
-        $file .= ".png";
-        $mime = 'img';
-    }elsif($type eq "image/gif" or $type eq "image/x-gif"){
-        $file .= ".gif";
-        $mime = 'img';
-    }elsif($filename =~ /\.pdf$/i){
-        $file .= ".pdf";
-        $mime = 'pdf';
-    }elsif($filename =~ /\.doc$/i){
-        $file .= ".doc";
-        $mime = 'doc';
-    }elsif($filename =~ /\.xls$/i){
-        $file .= ".xls";
-        $mime = 'xls';
-    }elsif($filename =~ /\.csv$/i){
-        $file .= ".csv";
-        $mime = 'csv';
-    }elsif($filename =~ /\.ppt$/i){
-        $file .= ".ppt";
-        $mime = 'ppt';
-    }elsif($filename =~ /\.docx$/i){
-        $file .= ".docx";
-        $mime = 'docx';
-    }elsif($filename =~ /\.xlsx$/i){
-        $file .= ".xlsx";
-        $mime = 'xlsx';
-    }elsif($filename =~ /\.pptx$/i){
-        $file .= ".pptx";
-        $mime = 'pptx';
-        }elsif($filename =~ /\.swf$/i){
-        $file .= ".swf";
-        $mime = 'swf';
-        }elsif($filename =~ /\.mp4$/i){
-        $file .= ".mp4";
-        $mime = 'mp4';
-    }elsif($filename =~ /\.zip$/i){
-            $file .= ".zip";
-        $mime = 'zip';
-    }elsif($filename =~ /\.txt$/i){
-        $file .= ".txt";
-        $mime = 'txt';
-    }else{
-        msg_add("danger","Solo imagenes y archivos pdf y zip son soportados.");
-        return "";
-    }
-    if($file){
-        open (OUTFILE,">data/$_REQUEST->{Domain}/img/$dir/" . $file) or die "$!";
-        binmode(OUTFILE);
-        my $bytesread;
-        my $buffer;
-        while ($bytesread=read($filename,$buffer,1024)) {
-        print OUTFILE $buffer;
-        }
-        close(OUTFILE);
-        return $file;
-    }
->>>>>>> f84234299beda9f7c5cdc7c0285d3b3917d5c3ec
     }
     return "";
 }

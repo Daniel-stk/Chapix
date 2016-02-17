@@ -27,7 +27,7 @@ sub print {
         "SELECT SQL_CACHE * FROM menus WHERE menu_group='UserAccount' AND parent_id=0 AND publish=1 ORDER BY sort_order",{Slice=>{}});
 
     my $notifications = $dbh->selectall_arrayref(
-	"SELECT * FROM $conf->{Xaa}->{DB}.notifications WHERE readed=0 AND user_id=?",{Slice=>{}},$sess{user_id});
+        "SELECT * FROM $conf->{Xaa}->{DB}.notifications WHERE readed=0 AND user_id=?",{Slice=>{}},$sess{user_id});
         
     my $l_vars = {
     	content => $content,
