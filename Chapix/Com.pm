@@ -21,11 +21,11 @@ BEGIN {
         $cookie
         &msg_add
         &msg_print
-      &upload_file
+        &upload_file
         &http_redirect
         $_REQUEST
         $Template
-      &format_name
+        &format_name
         );
 }
 
@@ -75,11 +75,11 @@ if($_REQUEST->{Domain} eq 'Xaa'){
     $_REQUEST->{Controller} = 'Pages';
 }else{
     eval {
-	$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+      $dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
     };
     if($@){
-	msg_add('danger','Data not found.');
-	http_redirect('/');
+      msg_add('danger','Data not found.');
+      http_redirect('/');
     }
 }
 
@@ -221,17 +221,9 @@ sub selectbox_data {
 
 sub load_domain_info {
     $conf->{Domain} = $dbh->selectrow_hashref(
-	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
-	$_REQUEST->{Domain});
+	     "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	      $_REQUEST->{Domain});
 }
-
-# sub conf_set {
-#     my $group = shift;
-#     my $name  = shift;
-#     my $value = shift;
-
-#     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
-# }
 
 sub admin_log {
     my $module = shift;

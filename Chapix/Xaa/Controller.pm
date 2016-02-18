@@ -161,11 +161,13 @@ sub login {
         $sess{user_time_zone} = "$user->{time_zone}";
         $sess{user_language}  = "$user->{language}";
 
-	my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
-	if($domain_id){
-	    my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM $self->{main_db}.xaa_domains WHERE domain_id=? ",{},$domain_id);
-	    Chapix::Com::http_redirect('/'.$domain->{folder});
-	}else{
+        $dbh->do("UPDATE $self->{main_db}.xaa_users SET last_login_on=NOW() WHERE user_id=?",{},$user->{user_id});
+
+        my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM $self->{main_db}.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
+        if($domain_id){
+            my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM $self->{main_db}.xaa_domains WHERE domain_id=? ",{},$domain_id);
+            Chapix::Com::http_redirect('/'.$domain->{folder});
+        }else{
             msg_add('warning',loc('Your account is not linked to any business account.'));
         }
         Chapix::Com::http_redirect('/Xaa/Login');

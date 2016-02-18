@@ -14,8 +14,8 @@ use Chapix::Com;
 use Chapix::Layout;
 
 # Language
-use Chapix::SUPERV::L10N;
-my $lh = Chapix::SUPERV::L10N->get_handle($sess{user_language}) || die "Language?";
+use Chapix::Admin::L10N;
+my $lh = Chapix::Admin::L10N->get_handle($sess{user_language}) || die "Language?";
 sub loc (@) { return ( $lh->maketext(@_)) }
 
 sub default {
@@ -40,7 +40,7 @@ sub default {
 sub set_toolbar {
     my @actions = @_;
     my $HTML = '';
-    
+
     foreach my $action (@actions){
         my $btn = '';
      	my ($script, $label, $alt, $icon, $class, $type) = @$action;
@@ -59,8 +59,8 @@ sub set_toolbar {
      	}
      	$btn .= $label;
         $btn .= '</a>';
-        $HTML .= $btn;			
-    }   
+        $HTML .= $btn;
+    }
     $conf->{Page}->{Toolbar} .= $HTML;
 }
 
@@ -69,7 +69,7 @@ sub set_add_btn {
     my $label   = shift || loc('Add');
     my @actions = @_;
     my $HTML = '';
-    
+
     if($script !~ /^\//){
         $script = '/'.$_REQUEST->{Domain}.'/' . $script;
     }
@@ -87,7 +87,7 @@ sub set_back_btn {
     my $label   = shift || loc('Go back');
     my @actions = @_;
     my $HTML = '';
-    
+
     if($script !~ /^\//){
         $script = '/'.$_REQUEST->{Domain}.'/' . $script;
     }
@@ -109,7 +109,7 @@ sub set_search_action {
     $btn   .= '<i class="material-icons">search</i>';
     $btn   .= '</a>';
     $conf->{Page}->{Toolbar} .= $btn;
-    
+
     $conf->{Page}->{Search} = {
         Field => (CGI::textfield({-name=>'q', -id=>'q'})),
         Show => ($_REQUEST->{'q'} || ''),
@@ -119,7 +119,7 @@ sub set_search_action {
 
 # View functions
 sub display_home {
-    set_add_btn('SUPERV/Checklist',loc('Hacer un checklist'));
+    set_add_btn('Admin/Checklist',loc('Hacer un checklist'));
     my $HTML = "";
     my $template = Template->new();
     my $vars = {
@@ -129,7 +129,7 @@ sub display_home {
      	msg  => msg_print(),
         loc => \&loc,
     };
-    $template->process("Chapix/SUPERV/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
+    $template->process("Chapix/Admin/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
     return $HTML;
 }
 
@@ -157,7 +157,7 @@ sub display_places_list {
     set_add_btn('SUPERV/Place',loc('Add place'));
     set_search_action();
     set_toolbar(['SUPERV/Place','',loc('Add place'),'add','waves-effect waves-light add']);
-    
+
     my $where = " p.active=1 ";
     my @params;
     if($_REQUEST->{q}){
@@ -185,7 +185,7 @@ sub display_places_list {
     $list->set_label('place',loc('Place'));
     $list->set_label('city',loc('City'));
     $list->set_label('State',loc('State'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -202,7 +202,7 @@ sub display_place_form {
     my $params = {};
     $conf->{Page}->{Title} = loc('Place');
     set_back_btn('SUPERV/Places',loc('Places'));
-    
+
     if($_REQUEST->{place_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT * FROM places WHERE place_id=?",{},$_REQUEST->{place_id});
@@ -212,7 +212,7 @@ sub display_place_form {
             time_zone => $conf->{Domain}->{time_zone},
         };
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'place',
         method   => 'post',
@@ -244,7 +244,7 @@ sub display_place_form {
         $buttons = CGI::button({-onclick=>"document.location = '/$_REQUEST->{Domain}/SUPERV/PlaceLocation?place_id=$params->{place_id}';", -class=>'btn btn-primary',
             -value=>loc('Set location')});
     }
-    
+
     my $HTML = $form->render(
 	template => {
 	    template => 'Chapix/SUPERV/tmpl/form.html',
@@ -266,7 +266,7 @@ sub display_place_location_form {
     set_back_btn('SUPERV/Place?place_id='.$_REQUEST->{place_id},loc('Place'));
     my $place = $dbh->selectrow_hashref(
             "SELECT * FROM places WHERE place_id=?",{},$_REQUEST->{place_id});
-    
+
     my $HTML = "";
     my $vars = {
         place => $place,
@@ -289,7 +289,7 @@ sub display_sections_list {
     set_add_btn('SUPERV/Section',loc('Add section'));
     set_search_action();
     set_toolbar(['SUPERV/Section','',loc('Add section'),'add','waves-effect waves-light add']);
-    
+
     my $where = "";
     my @params;
     if($_REQUEST->{q}){
@@ -317,7 +317,7 @@ sub display_sections_list {
 
     $list->set_label('section',loc('Section'));
     $list->set_label('manager',loc('Manager'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -334,7 +334,7 @@ sub display_section_form {
     my $params = {};
     $conf->{Page}->{Title} = loc('Section');
     set_back_btn('SUPERV/Sections',loc('Sections'));
-    
+
     if($_REQUEST->{section_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT * FROM sections WHERE section_id=?",{},$_REQUEST->{section_id});
@@ -343,7 +343,7 @@ sub display_section_form {
         $params = {
         };
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'section',
         method   => 'post',
@@ -384,7 +384,7 @@ sub display_points_list {
     set_add_btn('SUPERV/Point',loc('Add point'));
     set_search_action();
     set_toolbar(['SUPERV/Point','',loc('Add point'),'add','waves-effect waves-light add']);
-    
+
     my $where = "";
     my @params;
     if($_REQUEST->{q}){
@@ -412,7 +412,7 @@ sub display_points_list {
 
     $list->set_label('point',loc('Point'));
     $list->set_label('manager',loc('Manager'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -429,7 +429,7 @@ sub display_point_form {
     my $params = {};
     $conf->{Page}->{Title} = loc('Check Point');
     set_back_btn('SUPERV/Points',loc('Points'));
-    
+
     if($_REQUEST->{point_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT * FROM check_points WHERE point_id=?",{},$_REQUEST->{point_id});
@@ -438,7 +438,7 @@ sub display_point_form {
         $params = {
         };
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'point',
         method   => 'post',
@@ -481,7 +481,7 @@ sub display_formats_list {
     set_add_btn('SUPERV/Format',loc('Add format'));
     set_search_action();
     set_toolbar(['SUPERV/Format','',loc('Add format'),'add','waves-effect waves-light add']);
-    
+
     my $where = "";
     my @params;
     if($_REQUEST->{q}){
@@ -507,7 +507,7 @@ sub display_formats_list {
     );
 
     $list->set_label('name',loc('Format'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -527,7 +527,7 @@ sub display_format_form {
     my @points;
     $conf->{Page}->{Title} = loc('Check Format');
     set_back_btn('SUPERV/Formats',loc('Formats'));
-    
+
     if($_REQUEST->{format_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT * FROM formats WHERE format_id=?",{},$_REQUEST->{format_id});
@@ -547,7 +547,7 @@ sub display_format_form {
         }
         push(@fields, 'point_id','ponderation', 'requires_evidence');
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'format',
         method   => 'post',
@@ -566,7 +566,7 @@ sub display_format_form {
     }else{
         %points = Chapix::Com::selectbox_data("SELECT p.point_id, p.point FROM check_points p ORDER BY 2");
     }
-    
+
     $form->field(name => 'point_id', required=>0, label=>loc('Check point'), options=>$points{values}, type=>'select', labels => $points{labels});
     $form->field(name => 'ponderation', label=>loc('Ponderation'), required=>0, validate=>'INT', value=>10, class=>"center-align");
     $form->field(name => 'requires_evidence', label=>loc('Requires evidence'), required=>0, type=>'select', options=>[qw/0 1/], labels=>{0=>'No',1=>'Si'}, value=>0);
@@ -577,7 +577,7 @@ sub display_format_form {
         $form->field(name => 'sort_order_'.$det->{point_id}, label=>loc('Sort order'), required=>1, validate=>'INT', class=>"center-align");
         $form->field(name => 'delete_'.$det->{point_id}, type=>'checkbox', options=>[1], labels=>{1=>' '});
     }
-    
+
     my $HTML = $form->render(
         template => {
             template => 'Chapix/SUPERV/tmpl/format-form.html',
@@ -602,7 +602,7 @@ sub display_users_list {
     set_add_btn('SUPERV/User',loc('Add user'));
     set_search_action();
     set_toolbar(['SUPERV/User','',loc('Add user'),'add','waves-effect waves-light add']);
-    
+
     my $where = "ud.domain_id=? AND ud.active=1 ";
     my @params;
     push(@params,$conf->{Domain}->{domain_id});
@@ -633,7 +633,7 @@ sub display_users_list {
     $list->set_label('email',loc('Correo'));
     $list->set_label('added_on',loc('Added on'));
     $list->set_label('active',loc('Active'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
@@ -650,7 +650,7 @@ sub display_user_form {
     my $params = {};
     $conf->{Page}->{Title} = loc('User');
     set_back_btn('SUPERV/Users',loc('Users'));
-    
+
     if($_REQUEST->{user_id}){
         $params = $dbh->selectrow_hashref(
             "SELECT u.user_id, u.name, u.email, u.time_zone, u.language, ud.active, ua.group_id " .
@@ -669,7 +669,7 @@ sub display_user_form {
             group_id  => 60,
         };
     }
-    
+
     my $form = CGI::FormBuilder->new(
         name     => 'user',
         method   => 'post',
@@ -692,13 +692,13 @@ sub display_user_form {
     }
     my %group = Chapix::Com::selectbox_data("SELECT group_id, group_name FROM user_groups ORDER BY 2");
     $form->field(name => 'group_id', required=>1, label=>loc('Group'), options=>$group{values}, labels=>$group{labels},type=>'select');
-    
+
     my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
     $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
-    
+
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
-    
+
     $form->stylesheet('1');
 
     my $HTML = $form->render(
@@ -735,7 +735,7 @@ sub display_checklist_chose_format {
     $conf->{Page}->{Title} = loc('Checklist');
     set_back_btn('SUPERV',loc('Home'));
     set_search_action();
-    
+
     my $where = "";
     my @params;
 #    push(@params,$conf->{Domain}->{domain_id});
@@ -762,7 +762,7 @@ sub display_checklist_chose_format {
     );
 
     $list->set_label('name',loc('Name'));
-    
+
     my $HTML = "";
     my $vars = {
     	list => $list->print(),
