@@ -155,7 +155,7 @@ sub login {
 
     if($user and $_REQUEST->{email}){
         # Write session data and redirect to index
-    	   $sess{user_id}    = "$user->{user_id}";
+    	$sess{user_id}    = "$user->{user_id}";
         $sess{user_name}  = "$user->{name}";
         $sess{user_email} = "$user->{email}";
         $sess{user_time_zone} = "$user->{time_zone}";

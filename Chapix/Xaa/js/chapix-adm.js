@@ -8,7 +8,18 @@ $(function() {
         $(this).siblings('label').addClass('active');
     });
 
-
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15, // Creates a dropdown of 15 years to control year
+        format: 'yyyy/mm/dd'
+    });
+    
+    $('.timepicker').pickatime({
+        clear: '',
+        format: 'HH:i',
+        closeOnSelect: true
+    });
+        
     $('.msg').each(function() {
         $(this).hide();
         if($(this).hasClass('msg-success')){
