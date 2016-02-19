@@ -1,12 +1,35 @@
 <div class="row">
-  <div class="col s12 m12 col-center">
+  <div class="col s12 m12">
+    [% msg %]
     <div class="card">
       <div class="card-content">
-    	<p>
-            [% msg %]
-            
-        </p>
+    	<h5>Clientes</h5>
+        <div class="row">
+	  <div class="col s12 m4 l4">
+	    <div id="customers_total_div" style="height: 150px;"></div>
+	  </div>
+	  <div class="col s12 m4 l4">
+	    <div id="customers_new_churned_div" style="height: 150px;"></div>
+	  </div>
+	  <div class="col s12 m4 l4">
+	    <div id="revenue_div" style="height: 150px;"></div>
+	  </div>
+	</div>
+        <h5>Cuentas</h5>
+        <div class="row">
+	  <div class="col s12 m6 l6">
+	    <div id="domains_total_div" style="height: 150px;"></div>
+	  </div>
+	  <div class="col s12 m6 l6">
+	    <div id="domains_new_div" style="height: 150px;"></div>
+	  </div>
+	</div>
       </div>
     </div>
   </div>
 </div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+  [% INCLUDE 'Chapix/Admin/tmpl/home.js' %]
+</script>
