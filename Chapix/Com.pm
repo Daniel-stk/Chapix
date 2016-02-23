@@ -16,7 +16,6 @@ BEGIN {
   use vars qw( @ISA @EXPORT @EXPORT_OK );
   @ISA = qw( Exporter );
   @EXPORT = qw(
-
         $dbh
         %sess
         $cookie
@@ -24,11 +23,13 @@ BEGIN {
         &msg_print
         &msg_get
         &upload_file
+	      &upload_usr_file
         &http_redirect
         $_REQUEST
         $Template
         &format_name
         &process_results
+        &get_display_key
         );
 }
 
@@ -407,6 +408,13 @@ sub thumbnail {
   }
 }
 
+
+sub get_display_key {
+    my $salt = shift || rand(999);
+    require Digest::SHA1;
+    return substr(Digest::SHA1::sha1_hex($salt.time().$conf->{Misc}->{Key}),10,30);
+}
+
 sub format_name {
   my $str = shift;
   $str =~ s/,//g;
@@ -431,7 +439,7 @@ sub upload_usr_file {
     my $type = uploadInfo($filename)->{'Content-Type'};
     my ($name, $extension) = split(/\./, $filename);
 
-    my $file = $name;
+    my $file = clean_str($name);
 
     if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
       $file .= ".jpg";
@@ -512,6 +520,17 @@ sub process_results {
     if($results->{redirect}){
         http_redirect($results->{redirect});
     }
+}
+
+sub clean_str {
+  my $cadena = shift;
+
+    $cadena =~ s/\s+/ /g;
+    $cadena =~ s/^\W//g;
+    $cadena =~ s/\W+$//g;
+    $cadena =~ s/\s/_/g;
+    
+    return $cadena;
 }
 
 1;

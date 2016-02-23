@@ -1,0 +1,25 @@
+.sociales__icons {
+  text-align: center;
+}
+
+.social__icon img {
+  display: inline-block;
+  max-width: 50px;
+  padding: 6px;
+}
+
+.social__icon {
+    display: inline-block;
+    max-width: 50px;
+    padding: 6px;
+}
+
+.no-margin {
+	margin: 0;
+}
+
+.force-center {
+	display: table !important;
+	margin: 0 auto !important;
+	text-align: center;
+}
