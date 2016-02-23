@@ -12,6 +12,7 @@ use List::Util qw(min max);
 use Chapix::Conf;
 use Chapix::Com;
 use Chapix::Xaa::View;
+use Chapix::Xaa::Actions;
 use Chapix::Mail::Controller;
 
 # Language

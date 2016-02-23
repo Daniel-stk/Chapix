@@ -40,11 +40,11 @@ sub login {
         my $domain_id = $dbh->selectrow_array("SELECT domain_id FROM xaa.xaa_users_domains WHERE user_id=? AND active=1 ORDER BY default_domain DESC, added_on LIMIT 1 ",{},$user->{user_id}) || 0;
         if($domain_id){
             my $domain = $dbh->selectrow_hashref("SELECT name, folder FROM xaa.xaa_domains WHERE domain_id=? ",{},$domain_id);
-	    $results->{redirect} = '/'.$domain->{folder};
+            $results->{redirect} = '/'.$domain->{folder};
         }else{
             msg_add('warning',loc('Your account is not linked to any business account.'));
+            $results->{redirect} = '/Xaa/Login';
         }
-        $results->{redirect} = '/Xaa/Login';
     }else{
         # Record login attemp
         # my $updated = $dbh->do(
@@ -513,7 +513,7 @@ sub validate_password_reset_key {
 
 sub password_reset_update {
     my $results  = {};
-    my $user_id = $self->validate_password_reset_key();
+    my $user_id = validate_password_reset_key();
     if ($user_id) {
         # Actualizar DB.
         $dbh->do("UPDATE xaa.xaa_users SET password=? WHERE user_id=?",{},
