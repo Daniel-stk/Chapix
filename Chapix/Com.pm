@@ -28,6 +28,7 @@ BEGIN {
         $_REQUEST
         $Template
         &format_name
+        &process_results
         );
 }
 
@@ -504,6 +505,13 @@ sub upload_usr_file {
     }
   }
   return "";
+}
+
+sub process_results {
+    my $results = shift;
+    if($results->{redirect}){
+        http_redirect($results->{redirect});
+    }
 }
 
 1;
