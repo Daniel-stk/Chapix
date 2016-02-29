@@ -16,18 +16,19 @@ BEGIN {
   use vars qw( @ISA @EXPORT @EXPORT_OK );
   @ISA = qw( Exporter );
   @EXPORT = qw(
-  $dbh
-  %sess
-  $cookie
-  &msg_add
-  &msg_print
-  &upload_file
-  &upload_usr_file
-  &http_redirect
-  $_REQUEST
-  $Template
-  &format_name
-  );
+        $dbh
+        %sess
+        $cookie
+        &msg_add
+        &msg_print
+        &msg_get
+        &upload_file
+	&upload_usr_file
+        &http_redirect
+        $_REQUEST
+        $Template
+        &format_name
+        );
 }
 
 use vars @EXPORT;
@@ -68,20 +69,20 @@ $dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
 
 # Change to domain database
 if($_REQUEST->{Domain} eq 'Xaa'){
-  $_REQUEST->{View} = $_REQUEST->{Controller};
-  $_REQUEST->{Controller} = $_REQUEST->{Domain};
+    $_REQUEST->{View} = $_REQUEST->{Controller};
+    $_REQUEST->{Controller} = $_REQUEST->{Domain};
 }elsif($_REQUEST->{Domain} =~ /[A-Z]/){
-  $_REQUEST->{View} = $_REQUEST->{Domain};
-  $_REQUEST->{Domain} = 'Xaa';
-  $_REQUEST->{Controller} = 'Pages';
+    $_REQUEST->{View} = $_REQUEST->{Domain};
+    $_REQUEST->{Domain} = 'Xaa';
+    $_REQUEST->{Controller} = 'Pages';
 }else{
-  eval {
-    $dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
-  };
-  if($@){
-    msg_add('danger','Data not found.');
-    http_redirect('/');
-  }
+    eval {
+	$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+    };
+    if($@){
+	msg_add('danger','Data not found.');
+	http_redirect('/');
+    }
 }
 
 # Session
@@ -160,6 +161,17 @@ sub msg_print {
   return $HTML;
 }
 
+sub msg_get {
+  my $HTML = "";
+  my $msgs = $dbh->selectall_arrayref("SELECT m.type, m.msg FROM $conf->{Xaa}->{DB}.sessions_msg m WHERE m.session_id=?",{},$sess{_session_id});
+#  foreach my $msg (@$msgs){
+#    my $class = '';
+#    $HTML .= '<div class="card-panel msg-'.$msg->[0].'">' . $msg->[1] . '</div>';
+#  }
+  $dbh->do("DELETE FROM $conf->{Xaa}->{DB}.sessions_msg WHERE session_id=?",{},$sess{_session_id}) if($msgs->[0]);
+  return $msgs;
+}
+
 # Web browser redirect
 sub http_redirect {
   my $dest = shift;
@@ -221,18 +233,10 @@ sub selectbox_data {
 }
 
 sub load_domain_info {
-  $conf->{Domain} = $dbh->selectrow_hashref(
-  "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
-  $_REQUEST->{Domain});
+    $conf->{Domain} = $dbh->selectrow_hashref(
+	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	$_REQUEST->{Domain});
 }
-
-# sub conf_set {
-#     my $group = shift;
-#     my $name  = shift;
-#     my $value = shift;
-
-#     $dbh->do("UPDATE conf c SET c.value=? WHERE c.group=? AND c.name=?",{},$value, $group, $name);
-# }
 
 sub admin_log {
   my $module = shift;

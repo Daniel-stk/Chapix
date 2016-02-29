@@ -13,13 +13,13 @@ sub handler {
     if($_REQUEST->{Controller}){
         my $module = $_REQUEST->{Controller};
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
-        
+
     	if(!$is_installed){
             msg_add('danger',"The module $module is not installed.");
-            display();
+            view();
             return '';
         }
-	
+
         # Load module
         my $Module;
         eval {
@@ -32,29 +32,34 @@ sub handler {
             Chapix::Controller::display_error();
             return '';
         }
-	
-        # Actions
-        $Module->actions();
-        
-        # Views
-        $Module->display();
+
+	if ($_REQUEST->{View} eq 'API') {
+	    # API
+	    $Module->api();
+	}else{
+	    # Actions
+	    $Module->actions();
+
+	    # Views
+	    $Module->view();
+	}
     }else{
         Chapix::Controller::actions();
-        Chapix::Controller::display();
+        Chapix::Controller::view();
     }
 }
 
-# Main display function, this function prints the required view.
-sub display {
+# Main view function, this function prints the required view.
+sub view {
     if($conf->{Xaa}->{MainModule}){
         my $module = $conf->{Xaa}->{MainModule};
         $_REQUEST->{Controller} = $module;
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
-        
+
         if($is_installed){
             # Load module
-	    my $Module;
-	    eval {
+    	    my $Module;
+    	    eval {
 		require "Chapix/" . $module ."/Controller.pm";
 		my $module_name ='Chapix::'.$module.'::Controller';
 		$Module = $module_name->new();
@@ -62,7 +67,7 @@ sub display {
 	    if($@){
 		msg_add('danger', $@);
 	    }else{
-		$Module->display();
+		$Module->view();
 		return;
 	    }
         }else{

@@ -21,7 +21,7 @@ sub new {
 }
 
 # Main display function, this function prints the required view.
-sub display {
+sub view {
     my $self = shift;
     $_REQUEST->{View} = 'Home' if(!$_REQUEST->{View});
 

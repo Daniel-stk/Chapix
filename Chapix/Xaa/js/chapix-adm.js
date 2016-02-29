@@ -49,3 +49,9 @@ function xaaTooggleSearch () {
         $('#xaa-search').find('#q').focus();
     });
 }
+
+function xaaDisplayMsg (msg) {
+    for(var i = 0; i < msg.length; i++) {
+	Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+    }
+}
