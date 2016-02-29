@@ -22,6 +22,7 @@ BEGIN {
   &msg_add
   &msg_print
   &upload_file
+  &upload_usr_file
   &http_redirect
   $_REQUEST
   $Template
@@ -425,7 +426,7 @@ sub upload_usr_file {
     my $type = uploadInfo($filename)->{'Content-Type'};
     my ($name, $extension) = split(/\./, $filename);
 
-    my $file = $name;
+    my $file = clean_str($name);
 
     if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
       $file .= ".jpg";
@@ -499,6 +500,18 @@ sub upload_usr_file {
     }
   }
   return "";
+}
+
+
+sub clean_str {
+  my $cadena = shift;
+
+    $cadena =~ s/\s+/ /g;
+    $cadena =~ s/^\W//g;
+    $cadena =~ s/\W+$//g;
+    $cadena =~ s/\s/_/g;
+    
+    return $cadena;
 }
 
 1;

@@ -228,7 +228,8 @@ footer a{
 /* ****************** HELPER STYLES ********************** */
 .force-center {
 	display: table;
-	margin: 0 auto;
+	margin: 0 auto !important;
+	text-align: center;
 }
 
 .no-margin {
