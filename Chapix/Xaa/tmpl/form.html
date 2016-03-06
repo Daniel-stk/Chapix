@@ -34,7 +34,7 @@
             [% ELSE %]
             <div class="input-field col s12 m8 l12">
               [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
-              <label for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
+              <label [% IF field.type == 'select' %]class="active"[% END %] for="[% field.name %]">[% field.label %][% IF field.required %]<i class="req">*</i>[% END %]</label>
             </div>
             [% END %]
 

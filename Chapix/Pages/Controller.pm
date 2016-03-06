@@ -1,5 +1,7 @@
 package Chapix::Pages::Controller;
 
+# This module read pages from the base URL /Precios -> templates/ID/Precios.html
+
 use lib('cpan/');
 use warnings;
 use strict;
@@ -30,11 +32,8 @@ sub view {
 }
 
 # Admin actions.
-# Each action is detected by the "_submitted" param prefix
 sub actions {
     my $self = shift;
-#    if(defined $_REQUEST->{_submitted_user}){
-#    }
 }
 
 1;
