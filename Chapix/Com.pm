@@ -28,6 +28,7 @@ BEGIN {
         $_REQUEST
         $Template
         &format_name
+        &process_results
         &get_display_key
         );
 }
@@ -514,6 +515,12 @@ sub upload_usr_file {
   return "";
 }
 
+sub process_results {
+    my $results = shift;
+    if($results->{redirect}){
+        http_redirect($results->{redirect});
+    }
+}
 
 sub clean_str {
   my $cadena = shift;

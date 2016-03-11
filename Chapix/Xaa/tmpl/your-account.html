@@ -2,30 +2,27 @@
   <div class="container">
     <div class="row">
       <div class="col s12 m8 l8 push-m2 push-l2">
-	<div class="card hoverable">
-	  <div class="card-title center">	    
-	    <div class="valign-wrapper">	      
-	      <i class="valign medium material-icons">account_circle</i> [% loc('Your account') %]	
-	    </div>
-	  </div>
-	  <div class="card-content">
-	    <p>
-              [% msg %]
-              <ul>
-		<li>[% sess.user_name %]</li>
-		<li>[% sess.user_email %]</li>
-		<li>[% loc('Time zone') %]: [% sess.user_time_zone %]</li>
-		<li>[% loc('Language') %]: [% sess.user_language %]</li>
-              </ul>
+        <div class="card hoverable">
+          <div class="card-content">
+            <p>
+                [% msg %]
+                <div class="valign-wrapper">
+                  <h4>[% loc('Your account') %]</h4>
+                </div>
+                <ul>
+                    <li>Nombre: [% sess.user_name %]</li>
+                    <li>Correo: [% sess.user_email %]</li>
+                    <li>[% loc('Language') %]: [% sess.user_language %]</li>
+                </ul>
             </p>
-	  </div>
-	  <div class="card-action">
-	    <a href="/[% REQUEST.Domain %]/Xaa/EditAccount" class="waves-effect waves-light">[% loc('Edit your settings') %]</a>
-	  </div>
-	  <div class="card-action">
-	    <a href="/[% REQUEST.Domain %]/Xaa/ChangePassword" class="waves-effect waves-light">[% loc('Change your password') %]</a>
-	  </div>
-	</div>
+          </div>
+          <div class="card-action">
+            <a href="/[% REQUEST.Domain %]/Xaa/EditAccount" class="waves-effect waves-light">[% loc('Edit your settings') %]</a>
+          </div>
+          <div class="card-action">
+            <a href="/[% REQUEST.Domain %]/Xaa/ChangePassword" class="waves-effect waves-light">[% loc('Change your password') %]</a>
+          </div>
+        </div>
       </div>
     </div>
   </div>  
