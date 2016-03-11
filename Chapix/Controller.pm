@@ -23,7 +23,7 @@ sub handler {
         # Load module
         my $Module;
         eval {
-            require "Chapix/" . $module ."/Controller.pm";
+            require "Chapix/".$module ."/Controller.pm";
             my $module_name ='Chapix::'.$module.'::Controller';
             $Module = $module_name->new();
         };
@@ -33,16 +33,16 @@ sub handler {
             return '';
         }
 
-	if ($_REQUEST->{View} eq 'API') {
-	    # API
-	    $Module->api();
-	}else{
-	    # Actions
-	    $Module->actions();
+    	if ($_REQUEST->{View} eq 'API') {
+    	    # API
+    	    $Module->api();
+    	}else{
+    	    # Actions
+    	    $Module->actions();
 
-	    # Views
-	    $Module->view();
-	}
+    	    # Views
+    	    $Module->view();
+    	}
     }else{
         Chapix::Controller::actions();
         Chapix::Controller::view();
