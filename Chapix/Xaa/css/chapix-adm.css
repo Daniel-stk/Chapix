@@ -104,3 +104,11 @@ nav a {
 .main-toolbar .container-fluid .button-collapse i.small {
     font-size: 2rem;
 }
+
+.small-text {
+    font-size: 12px;
+}
+
+.small-line-height {
+    line-height: 95% !important;
+}
