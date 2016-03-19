@@ -203,6 +203,9 @@ sub display_password_reset {
 sub display_your_account {
     my $HTML = "";
     my $template = Template->new();
+
+    $conf->{Page}->{ShowSettings} = 'true';
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,
@@ -217,6 +220,9 @@ sub display_your_account {
 sub display_settings {
     my $HTML = "";
     my $template = Template->new();
+
+      $conf->{Page}->{ShowSettings} = 'true';
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,
@@ -281,6 +287,8 @@ sub display_password_form {
     $conf->{Page}->{Title} = loc('Change your password');
     set_back_btn('Xaa/YourAccount',loc('Your account'));
 
+  $conf->{Page}->{ShowSettings} = 'true';
+
     my @submit = (loc('Save'));
     my $params = {};
     my $form = CGI::FormBuilder->new(
@@ -314,22 +322,24 @@ sub display_domain_settings {
     $conf->{Page}->{Title} = loc('Business Settigs');
     set_back_btn('Xaa/Settings',loc('Settings'));
 
+  $conf->{Page}->{ShowSettings} = '1';
+
     my @submit = (loc('Save'));
     my $params = $conf->{Domain};
     my $form = CGI::FormBuilder->new(
         name     => 'domain_settings',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/DomainSettings',
         method   => 'post',
-        fields   => [qw/name language/],
+        fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
         materialize => 1,
     );
 
     $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
-    #my %time_zones = Chapix::Com::selectbox_data(
-    #    "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
-    #$form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data(
+        "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
+    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
 
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
@@ -357,7 +367,7 @@ sub display_edit_account_form {
 
     my $params = {
         name => $sess{user_name},
-        # time_zone => $sess{user_time_zone},
+        time_zone => $sess{user_time_zone},
         language  => $sess{user_language},
     };
 
@@ -365,7 +375,7 @@ sub display_edit_account_form {
         name     => 'edit_account',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/EditAccount',
         method   => 'post',
-        fields   => [qw/name language/],
+        fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
         materialize => 1,
@@ -373,8 +383,9 @@ sub display_edit_account_form {
 
     $form->field(name => 'name', required=>1, label=>loc('Name'));
 
-    #my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
-    #$form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
+
+    $form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
 
     $form->field(name => 'language', required=>1, label=> loc('Language'), options=>['es_MX','en_US'], type=>'select',
 		 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
@@ -401,7 +412,7 @@ sub display_user_form {
 
     if($_REQUEST->{user_id}){
         $params = $dbh->selectrow_hashref(
-            "SELECT u.user_id, u.name, u.email, u.language, ud.active " .
+            "SELECT u.user_id, u.name, u.email, u.time_zone, u.language, ud.active " .
                 "FROM $conf->{Xaa}->{DB}.xaa_users u " .
                     "INNER JOIN $conf->{Xaa}->{DB}.xaa_users_domains ud ON u.user_id=ud.user_id " .
                         "WHERE ud.user_id=? AND ud.domain_id=?",{},$_REQUEST->{user_id}, $conf->{Domain}->{domain_id});
@@ -414,7 +425,7 @@ sub display_user_form {
     my $form = CGI::FormBuilder->new(
         name     => 'user',
         method   => 'post',
-        fields   => [qw/user_id name email language active/],
+        fields   => [qw/user_id name email time_zone language active/],
 	action   => '/'.$_REQUEST->{Domain} . '/Xaa/User',
         submit   => \@submit,
         values   => $params,
@@ -431,8 +442,8 @@ sub display_user_form {
                      class=> "span12", jsmessage => loc('Please enter your email'), validate=>'EMAIL');
         $form->field(name => 'active', type=>'hidden');
     }
-    #my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
-    #$form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
+    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
 
@@ -496,6 +507,8 @@ sub display_register {
 
 sub display_logo_form {
     $conf->{Page}->{Title} = loc('Upload logo');
+    $conf->{Page}->{ShowSettings} = '1';
+    
     set_back_btn('Xaa/Settings',loc('Your account'));
 
     my @submit = (loc('Save'));
