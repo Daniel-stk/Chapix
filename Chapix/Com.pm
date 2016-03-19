@@ -425,82 +425,97 @@ sub format_name {
 
 
 sub upload_usr_file {
-  my $cgi_param = shift || "";
-  my $dir = shift || "";
-  my $filename = param($cgi_param);
-  my $mime = '';
-  my $save_as = shift || "";
-
-  if(!(-e "data/$conf->{Domain}->{folder}/$dir/")){
-    mkdir ("data/$conf->{Domain}->{folder}/$dir/");
-  }
-
-  if($filename){
-    my $type = uploadInfo($filename)->{'Content-Type'};
-    my ($name, $extension) = split(/\./, $filename);
-
-    my $file = clean_str($name);
-
-    if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
-      $file .= ".jpg";
-      $mime = 'img';
-    }elsif($type eq "image/png" or $type eq "image/x-png"){
-      $file .= ".png";
-      $mime = 'img';
-    }elsif($type eq "image/gif" or $type eq "image/x-gif"){
-      $file .= ".gif";
-      $mime = 'img';
-    }elsif($filename =~ /\.pdf$/i){
-      $file .= ".pdf";
-      $mime = 'pdf';
-    }elsif($filename =~ /\.doc$/i){
-      $file .= ".doc";
-      $mime = 'doc';
-    }elsif($filename =~ /\.xls$/i){
-      $file .= ".xls";
-      $mime = 'xls';
-    }elsif($filename =~ /\.csv$/i){
-      $file .= ".csv";
-      $mime = 'csv';
-    }elsif($filename =~ /\.ppt$/i){
-      $file .= ".ppt";
-      $mime = 'ppt';
-    }elsif($filename =~ /\.docx$/i){
-      $file .= ".docx";
-      $mime = 'docx';
-    }elsif($filename =~ /\.xlsx$/i){
-      $file .= ".xlsx";
-      $mime = 'xlsx';
-    }elsif($filename =~ /\.pptx$/i){
-      $file .= ".pptx";
-      $mime = 'pptx';
-    }elsif($filename =~ /\.swf$/i){
-      $file .= ".swf";
-      $mime = 'swf';
-    }elsif($filename =~ /\.mp4$/i){
-      $file .= ".mp4";
-      $mime = 'mp4';
-    }elsif($filename =~ /\.zip$/i){
-      $file .= ".zip";
-      $mime = 'zip';
-    }elsif($filename =~ /\.txt$/i){
-      $file .= ".txt";
-      $mime = 'txt';
-    }else{
-      msg_add("danger","Solo documentos y zip son soportados.");
-      return "";
+    my $cgi_param = shift || "";
+    my $dir = shift || "";
+    my $filename = param($cgi_param);
+    my $mime = '';
+    my $save_as = shift || "";
+    
+    if(!(-e "data/$conf->{Domain}->{folder}/")){
+	mkdir ("data/$conf->{Domain}->{folder}") or die "$! ";
     }
-    if($file){
 
-      if (-e "data/$conf->{Domain}->{folder}/$dir/$file") {
-        foreach my $it (1 .. 1000000) {
-          $file = $name.'_'.$it.$extension;
-          if(!(-e "data/$conf->{Domain}->{folder}/$dir/$file")){
-            last;
-          }
-        }
-      }
+    if($dir =~ /\//){
+	my @dirs = split(/\//,$dir);
+	my $root_path = "data/$conf->{Domain}->{folder}/";
+	foreach my $cdir (@dirs){
+	    $root_path .= "$cdir/";
+	    if(!(-e "$root_path")){
+		mkdir ("$root_path") or die "$! ";
+	    }
+	}
+    }else{
+	if(!(-e "data/$conf->{Domain}->{folder}/$dir/")){
+	    mkdir ("data/$conf->{Domain}->{folder}/$dir/") or die "$! ";
+	}
+    }
 
+    if($filename){
+	my $type = uploadInfo($filename)->{'Content-Type'};
+	my ($name, $extension) = split(/\./, $filename);
+	
+	my $file = clean_str($name);
+
+	if($type eq "image/jpeg" or $type eq "image/x-jpeg"  or $type eq "image/pjpeg"){
+	    $file .= ".jpg";
+	    $mime = 'img';
+	}elsif($type eq "image/png" or $type eq "image/x-png"){
+	    $file .= ".png";
+	    $mime = 'img';
+	}elsif($type eq "image/gif" or $type eq "image/x-gif"){
+	    $file .= ".gif";
+	    $mime = 'img';
+	}elsif($filename =~ /\.pdf$/i){
+	    $file .= ".pdf";
+	    $mime = 'pdf';
+	}elsif($filename =~ /\.doc$/i){
+	    $file .= ".doc";
+	    $mime = 'doc';
+	}elsif($filename =~ /\.xls$/i){
+	    $file .= ".xls";
+	    $mime = 'xls';
+	}elsif($filename =~ /\.csv$/i){
+	    $file .= ".csv";
+	    $mime = 'csv';
+	}elsif($filename =~ /\.ppt$/i){
+	    $file .= ".ppt";
+	    $mime = 'ppt';
+	}elsif($filename =~ /\.docx$/i){
+	    $file .= ".docx";
+	    $mime = 'docx';
+	}elsif($filename =~ /\.xlsx$/i){
+	    $file .= ".xlsx";
+	    $mime = 'xlsx';
+	}elsif($filename =~ /\.pptx$/i){
+	    $file .= ".pptx";
+	    $mime = 'pptx';
+	}elsif($filename =~ /\.swf$/i){
+	    $file .= ".swf";
+	    $mime = 'swf';
+	}elsif($filename =~ /\.mp4$/i){
+	    $file .= ".mp4";
+	    $mime = 'mp4';
+	}elsif($filename =~ /\.zip$/i){
+	    $file .= ".zip";
+	    $mime = 'zip';
+	}elsif($filename =~ /\.txt$/i){
+	    $file .= ".txt";
+	    $mime = 'txt';
+	}else{
+	    msg_add("danger","Solo documentos y zip son soportados.");
+	    return "";
+	}
+	if($file){
+	    
+	    if (-e "data/$conf->{Domain}->{folder}/$dir/$file") {
+		foreach my $it (1 .. 1000000) {
+		    $file = $name.'_'.$it.$extension;
+		    if(!(-e "data/$conf->{Domain}->{folder}/$dir/$file")){
+			last;
+		    }
+		}
+	    }
+	    
       open (OUTFILE,">data/$conf->{Domain}->{folder}/$dir/" . $file) or die "$!";
       binmode(OUTFILE);
       my $bytesread;

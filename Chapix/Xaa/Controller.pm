@@ -184,7 +184,7 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_sent() );
             return;
         }elsif($_REQUEST->{View} eq 'PasswordResetCheck'){
-            if ($self->validate_password_reset_key()) {
+            if (Chapix::Xaa::Actions::validate_password_reset_key()) {
                 print Chapix::Com::header_out();
                 print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_form() );
                 return;
