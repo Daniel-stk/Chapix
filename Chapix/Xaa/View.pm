@@ -37,9 +37,11 @@ sub set_path_route {
 sub display_home {
     my $HTML = "";
     my $template = Template->new();
-
     $conf->{Page}->{ShowSettings} = '1';
-
+    set_toolbar(
+        ['','Save','black-text','save'],
+	);
+    
     my $vars = {
         REQUEST => $_REQUEST,
         Domain  => $conf->{Domain},
@@ -54,27 +56,37 @@ sub display_home {
 
 sub set_toolbar {
     my @actions = @_;
-    my $HTML = '';
-
+    my $HTML = '<ul>';
+    
     foreach my $action (@actions){
-        my $btn = '';
-     	my ($script, $label, $alt, $icon, $class, $type) = @$action;
-        if($script !~ /^\//){
-            $script = '/'.$_REQUEST->{Domain}.'/' . $script;
-        }
-        $class = 'waves-effect waves-light ' if(!$class);
-     	if($script eq 'index.pl'){
-     	    $alt = 'Go back';
-            #$label = 'Go back';
-     	    $icon  = 'arrow_back';
-     	}
-     	$btn .= ' <a href="'.$script.'" class="'.$class.'" alt="'.$alt.'" title="'.$alt.'" >';
-     	if($icon){
-     	    $btn .= '<i class="material-icons">'.$icon.'</i> ';
-     	}
-     	$btn .= $label;
-        $btn .= '</a>';
-        $HTML .= $btn;
+	my $btn = '<li>';
+	my ($script, $label, $class, $icon) = @$action;
+	
+	if($script !~ /^\//){
+	    $script = '/'.$_REQUEST->{Domain}.'/' . $script;
+	}
+	
+	$class = 'waves-effect waves-light ' if(!$class);
+	my $id = '';
+
+	if ($label) {
+	    $class .= ' tooltipped ';
+	    
+	    $id = loc($label);
+	    $id =~ s/\s/_/g;
+	    $id = lc($id).'_action';
+	}
+	
+	$btn .= ' <a id="'.$id.'" href="'.$script.'" class="'.$class.'" data-position="bottom" data-delay="50" data-tooltip="'.$label.'">';
+	
+	if($icon){
+	    $btn .= '<i class="material-icons">'.$icon.'</i> ';
+	}
+	
+	# $btn .= $label;
+	$btn .= '</a>';
+	$btn .= '</li>';
+	$HTML .= $btn;
     }
     $conf->{Page}->{Toolbar} .= $HTML;
 }
@@ -203,7 +215,7 @@ sub display_password_reset {
 sub display_your_account {
     my $HTML = "";
     my $template = Template->new();
-
+    set_back_btn('','Inicio');
     $conf->{Page}->{ShowSettings} = 'true';
 
     my $vars = {
@@ -220,8 +232,8 @@ sub display_your_account {
 sub display_settings {
     my $HTML = "";
     my $template = Template->new();
-
-      $conf->{Page}->{ShowSettings} = 'true';
+    set_back_btn('','Inicio');
+    $conf->{Page}->{ShowSettings} = 'true';
 
     my $vars = {
         REQUEST => $_REQUEST,
@@ -338,7 +350,7 @@ sub display_domain_settings {
 
     $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
     my %time_zones = Chapix::Com::selectbox_data(
-        "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
+        "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' ORDER BY tzn.Name");# WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
     $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
 
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
