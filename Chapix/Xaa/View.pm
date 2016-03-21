@@ -39,7 +39,7 @@ sub display_home {
     my $template = Template->new();
     $conf->{Page}->{ShowSettings} = '1';
     set_toolbar(
-        ['','Save','black-text','save'],
+        ['','Contratar Marketero','black-text','favorite'],
 	);
     
     my $vars = {
