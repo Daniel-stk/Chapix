@@ -9,6 +9,7 @@ use CGI::Carp qw(fatalsToBrowser);
 use CGI::FormBuilder;
 use Digest::SHA qw(sha384_hex);
 use JSON::XS;
+use List::Util qw(min max);
 
 use Chapix::Conf;
 use Chapix::Com;
@@ -378,7 +379,7 @@ sub save_logo {
         $dbh->do("UPDATE conf SET value='transparent' WHERE module='Xaa' AND name='LogoBG'");
       } elsif($a == 1){
         # B/W
-        my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
+        my $rgb = new Color::Rgb(rgb_txt=>'Chapix/Xaa/tmpl/rgb.txt') or die 'error '.$!;
         my $color_hex = $rgb->rgb2hex($r,$g,$b);
         my $bw = getClosestColor($color_hex, qw/#ffffff #000000/);
 
@@ -593,50 +594,50 @@ sub password_reset_update {
 }
 
 sub getClosestColor {
-  my $color = shift;
-  my @paleta = @_;
-
-  if ($color !~ /ˆ#/) {
-    $color = '#'.$color;
-  }
-
-  my $rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt') or die 'error '.$!;
-  my $color_rgb = $rgb->hex2rgb($color, ',');
-
-  my ($color_r, $color_g, $color_b)= split(',', $color_rgb);
-
-  my @differenceArray = [];
-
-  my @palette = @paleta;
-
-  my $index = 0;
-  foreach my $palette_color (@palette) {
-    $palette_color = $palette_color;
-
-    my $palette_rgb = new Color::Rgb(rgb_txt=>'/usr/share/X11/rgb.txt');
-    my $pcolor_rgb = $palette_rgb->hex2rgb($palette_color, ',');
-
-    my ($base_color_r, $base_color_g, $base_color_b)= split(',', $pcolor_rgb);
-
-    push(@differenceArray, sqrt(
-    ($color_r - $base_color_r) * ($color_r - $base_color_r) +
-    ($color_g - $base_color_g) * ($color_g - $base_color_g) +
-    ($color_b - $base_color_b) * ($color_b - $base_color_b)
-    ));
-    $index++;
-  }
-
-  my $lowest = min(@differenceArray);
-
-  my $idx = 0;
-  foreach my $palette_color (@differenceArray) {
-    if ($palette_color eq $lowest) {
-      last;
+    my $color = shift;
+    my @paleta = @_;
+    
+    if ($color !~ /ˆ#/) {
+	$color = '#'.$color;
     }
-    $idx++;
-  }
-
-  return $palette[$idx-1];
+    
+    my $rgb = new Color::Rgb(rgb_txt=>'Chapix/Xaa/tmpl/rgb.txt') or die 'error '.$!;
+    my $color_rgb = $rgb->hex2rgb($color, ',');
+    
+    my ($color_r, $color_g, $color_b)= split(',', $color_rgb);
+    
+    my @differenceArray = [];
+    
+    my @palette = @paleta;
+    
+    my $index = 0;
+    foreach my $palette_color (@palette) {
+	$palette_color = $palette_color;
+	
+	my $palette_rgb = new Color::Rgb(rgb_txt=>'Chapix/Xaa/tmpl/rgb.txt');
+	my $pcolor_rgb = $palette_rgb->hex2rgb($palette_color, ',');
+	
+	my ($base_color_r, $base_color_g, $base_color_b)= split(',', $pcolor_rgb);
+	
+	push(@differenceArray, sqrt(
+		 ($color_r - $base_color_r) * ($color_r - $base_color_r) +
+		 ($color_g - $base_color_g) * ($color_g - $base_color_g) +
+		 ($color_b - $base_color_b) * ($color_b - $base_color_b)
+	     ));
+	$index++;
+    }
+    
+    my $lowest = min(@differenceArray);
+    
+    my $idx = 0;
+    foreach my $palette_color (@differenceArray) {
+	if ($palette_color eq $lowest) {
+	    last;
+	}
+	$idx++;
+    }
+    
+    return $palette[$idx-1];
 }
 
 1;
