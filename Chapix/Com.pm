@@ -236,8 +236,12 @@ sub selectbox_data {
 
 sub load_domain_info {
     $conf->{Domain} = $dbh->selectrow_hashref(
-	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone, subscription FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
 	$_REQUEST->{Domain});
+    if(!($conf->{Domain}->{subscription})){
+	$conf->{Domain}->{demo_left_days} = $dbh->selectrow_array("SELECT DATEDIFF(DATE_ADD(added_on, INTERVAL 15 DAY), DATE(NOW())) FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE domain_id = ? ",{},
+								  $conf->{Domain}->{domain_id}) || 0;
+    }
 }
 
 sub admin_log {
