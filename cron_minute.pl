@@ -10,7 +10,7 @@ use Chapix::Conf;
 use Chapix::Com;
 use Chapix::Crontab;
 
-my $DEBUG = 1;
+my $DEBUG = 0;
 Chapix::Crontab::run_minute($DEBUG);
 Chapix::Com::app_end();
 exit;
