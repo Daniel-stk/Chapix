@@ -1,0 +1,107 @@
+>> 220 smtp.marketero.com.mx ESMTP Postfix
+<< EHLO ip-10-4-0-179.us-west-2.compute.internal
+>> 250-smtp.marketero.com.mx
+>> 250-PIPELINING
+>> 250-SIZE 10240000
+>> 250-VRFY
+>> 250-ETRN
+>> 250-ENHANCEDSTATUSCODES
+>> 250-8BITMIME
+>> 250 DSN
+<< MAIL FROM:<eme_marketero@marketero.com.mx>
+>> 250 2.1.0 Ok
+<< RCPT TO:<cesarrodriguez@xaandia.com>
+>> 250 2.1.5 Ok
+<< DATA
+>> 354 End data with <CR><LF>.<CR><LF>
+<< To: CÈsar Rodriguez <cesarrodriguez@xaandia.com>
+<< From: Marketero <marketero@marketero.com.mx>
+<< Reply-To: Marketero <marketero@marketero.com.mx>
+<< Subject: Prueba 5
+<< Date: Tue, 22 Mar 2016 21:32:46 -0400
+<< Message-ID: <20160323_013246_029012.eme_marketero@marketero.com.mx>
+<< List-Unsubscribe: http://app.marketero.com.mx/marketero/Public/Unsuscribe?k=8da1825c4c&e=cesarrodriguez@xaandia.com&a=10.250
+<< MIME-Version: 1.0
+<< Content-Type: multipart/mixed;
+<< 	boundary="Message-Boundary-by-Mail-Sender-1458696766"
+<< 
+<< This message is in MIME format. Since your mail reader does not understand
+<< this format, some or all of this message may not be legible.
+<< 
+<< --Message-Boundary-by-Mail-Sender-1458696766
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1458696766_2"
+<< 
+<< 
+<< --Part-Message-Boundary-by-Mail-Sender-1458696766_2
+<< Content-Type: text/plain
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< CLIC AQUI Marketero Lazaro de Baigorii #619, 
+<< Tel: +526144133781 Si no puedes ver correctamente este mensaje, da clic aquÌ .
+<< Si no deseas seguir recibiendo estos mensajes, puedes cancelar tu suscripci√≥n en cualquier momento.
+<< --Part-Message-Boundary-by-Mail-Sender-1458696766_2
+<< Content-Type: text/html
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< <html><div><table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="padding:10px 0px;"><div><a target="_blank" href="http:///marketero/EmailMkt/TrackingUrl?a=250.1&k=7cb99ad3&e=1" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(0, 0, 0); text-decoration: none; font-family: normal; background-color: rgb(0, 229, 255);">CLIC AQUI</a></div></td></tr></tbody></table>
+<< </div><div><table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center"><tbody><tr><td><table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="center"><div><a target="_blank" href="http:///marketero/EmailMkt/TrackingUrl?a=250.2&k=68277916&e=1"><img src="http://app.marketero.com.mx/data/marketero/img/mkt_images/logo-gris.png" style="width: 491px; height: 140px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; top: auto; left: auto; max-width: 100%;" class=""></a></div></td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </div><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f1f0f0" style="background:#f1f0f0;width:100%!important;padding: 5px 15px;">
+<<   <tr>
+<<     <td>
+<<       <center>
+<<         <br />
+<<         <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;">
+<<           <tr>
+<<             <td>
+<<               <div style="font-size:small;">
+<<                 <span style="color:#4e4e4e;">
+<<                   <font color="#4e4e4e">
+<<                     <strong>Marketero</strong><br/>
+<<                     Lazaro de Baigorii #619, <br />
+<<                     Tel: +526144133781<br /><br />
+<<                   </font>
+<<                 </span>
+<<               </div>
+<<               <br />
+<<             </td>
+<<             <td align="right">
+<<               <div style="text-align:right; padding: 10px 30px;">
+<<                 <a href="https://marketero.com.mx"><img src="https://marketero.com.mx/images/LOGO-GRIS.png" border="0"></a>
+<<               </div>
+<<             </td>
+<<           </tr>
+<<         </table>
+<< 
+<<       </center>
+<<     </td>
+<<   </tr>
+<< </table>
+<< 
+<< <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;background:#f1f0f0;font-size:10px;padding:5px 15px;">
+<<   <tbody>
+<<     <tr>
+<<       <td style="width:50%;padding:7px;text-align:left;">
+<<         <span style="color:#888888">Si no puedes ver correctamente este mensaje, da <br/>
+<<           <a href="http://app.marketero.com.mx/marketero/Public/EmailMktViewOnline?k=8da1825c4c&e=cesarrodriguez@xaandia.com&m=250" target="_blank">clic aqu&iacute;</a>.
+<<         </span>
+<<       </td>
+<<       <td style="width:50%;padding:7px;text-align:right;">
+<<         <span style="color:#888888;">
+<<           Si no deseas seguir recibiendo estos mensajes, puedes <a href="http://app.marketero.com.mx/marketero/Public/Unsuscribe?k=8da1825c4c&e=cesarrodriguez@xaandia.com&a=10.250" target="_blank">cancelar tu suscripci√≥n</a> en cualquier momento.
+<<         </span>
+<<       </td>
+<<     </tr>
+<<   </tbody>
+<< </table>
+<< 
+<< <img src="http://app.marketero.com.mx/marketero/Public/TrackImg?k=8da1825c4c&e=cesarrodriguez@xaandia.com&a=250.1" width="1" height="1" border="0" alt=""></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1458696766_2--
+<< 
+<< --Message-Boundary-by-Mail-Sender-1458696766--
+<< 
+<< .
+>> 250 2.0.0 Ok: queued as 4E24E186612A
+<< QUIT
+>> 221 2.0.0 Bye
