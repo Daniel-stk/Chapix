@@ -10,6 +10,7 @@ use CGI::FormBuilder;
 use Digest::SHA qw(sha384_hex);
 use JSON::XS;
 use List::Util qw(min max);
+use Business::PayPal::IPN;
 
 use Chapix::Conf;
 use Chapix::Com;
@@ -638,6 +639,165 @@ sub getClosestColor {
     }
     
     return $palette[$idx-1];
+}
+
+sub process_paypal_ipn {
+    my $HTML ;
+    open (DEBUG, ">>data/PayPal-IPN.txt") or die "Can't open PayPal.txt file. $!";
+
+    my $error  = '';
+    my $status = '';
+    my $txn_type    = $_REQUEST->{'txn_type'} || '';
+    my $subscr_id   = $_REQUEST->{'subscr_id'} || '';
+    my $verify_sign = $_REQUEST->{'verify_sign'} || '';
+    my $item_number = $_REQUEST->{'item_number'} || '';
+    my $domain_id   = $_REQUEST->{'custom'} || '';
+
+    print DEBUG "$txn_type  -- $subscr_id  --  $verify_sign  --  $item_number  -- $domain_id\n";
+
+    my $IPN = new Business::PayPal::IPN() or $error = Business::PayPal::IPN->error();
+    eval { $status = $IPN->status();  };
+    print DEBUG "Err -- $error \n";
+    print DEBUG "Status -- $status \n";
+    if ( !$error ) {
+	print DEBUG "IPN completed\n";
+	print DEBUG "TXTType  -- $txn_type \n";
+	if($txn_type eq 'subscr_cancel'){
+	    # Cancelar Subscripción
+	    print DEBUG "Cancelando 1 \n";
+	    
+	    # Get the domain to update
+	    my $domain = $dbh->selectrow_hashref("SELECT * FROM xaa.xaa_domains WHERE service_key=?",{},$subscr_id);
+	    if(!$domain->{domain_id}){
+		print CGI::header(-type=>'text/plain', -status=> '200 OK');
+		exit 0;
+	    }
+	    $dbh->do("USE $domain->{database}");
+	    print DEBUG "Cancelando 2 \n";
+	    
+	    # Balance
+	    my $Balance = WSAdm::Balance->new($domain->{domain_id});
+	    $Balance->charge(0, 'Cancelar Suscripción',$verify_sign);
+	    print DEBUG "Cancelando 3 \n";
+	    
+	    # Master account options
+	    $dbh->do(
+		"UPDATE xaa.xaa_domains ".
+                "SET eme_emails_limit=500, eme_send_limit=20000, is_free_account=1, license_type='', " .
+		"next_bill_on=NULL, service_id=0, service_cycle='', service_price=0, service_payment_method_id=0  ".
+		"WHERE domain_id=?",{},$domain->{domain_id});
+	    print DEBUG "Cancelando 4 \n";
+	    
+	    # Domain options
+	    WSAdm::Com::conf_set('EME', 'SendLimit', '20000');
+	    WSAdm::Com::conf_set('EME', 'EmailsLimit', '500');
+	    WSAdm::Com::conf_set('Site', 'IsFreeAccount', '1');
+	    WSAdm::Com::conf_set('Site', 'Unbranded', '0');
+	    WSAdm::Com::conf_set('Site', 'Service', '');
+	    print DEBUG "Cancelando 1 \n";
+	    $dbh->commit();
+	}
+	
+	if($txn_type eq 'subscr_signup'){
+	    # Activar Subscripción
+	    print DEBUG "Activando subscripcion\n";
+	    
+	    # Get the domain to update
+	    my $domain = $dbh->selectrow_hashref("SELECT * FROM xaa.xaa_domains WHERE domain_id=?",{},$domain_id);
+	    if($domain->{domain_id}){
+		$dbh->do("USE $domain->{database}");
+		my $service = $dbh->selectrow_hashref("SELECT * FROM xaa.xaa_services WHERE code=?",{},$item_number);
+	    
+		print DEBUG "Activando subscripcion 2 \n";
+		# Balance
+		my $Balance = Chapix::Xaa::Balance->new($domain->{domain_id});
+		$Balance->charge($service->{montly_price}, 'Suscripción '.$service->{service_name},$verify_sign);
+		print DEBUG "Activando subscripcion 3 \n";        
+		# Master account options
+		$dbh->do(
+		    "UPDATE xaa.xaa_domains ".
+		    "SET payment_method_id=1, subscription=1, subscription_date=NOW(), subscription_cancel_date=NULL  ".
+		    "WHERE domain_id=?",{},
+		    $subscr_id, $domain->{domain_id});
+
+		# Service data
+		$dbh->do("INSERT INTO xaa_domains_services (domain_id, service_id, app_name, next_bill_on, service_cycle, price) VALUES(?,?,?,DATE_ADD(NOW(), INTERVAL 1 MONTH),?,?) ",
+			 $domain->{domain_id}, $service->{service_id}, $service->{service_name}, 'MONTHLY',$service->{montly_price});
+		
+
+		print DEBUG "Activando subscripcion 4 \n";
+		# Domain options
+
+		print DEBUG "Activando subscripcion 5 \n";
+		$dbh->commit();
+	    }
+	}
+	
+	if($txn_type eq 'subscr_payment'){
+	    # Pago de Subscripción
+	    print DEBUG "Registrando pago 1 \n";
+	    # Get the domain to update
+	    my $domain = $dbh->selectrow_hashref("SELECT * FROM xaa.xaa_domains WHERE service_key=?",{},$subscr_id);
+	    if(!$domain->{domain_id}){
+		print CGI::header();
+		# print CGI::header(-type=>'text/plain', -status=> '200 OK');
+		# exit 0;
+	    }
+	    $dbh->do("USE $domain->{database}");
+	    
+	    print DEBUG "Registrando pago 2 \n";
+	    # Balance
+	    my $Balance = WSAdm::Balance->new($domain->{domain_id});
+	    $Balance->payment($domain->{service_price}, 'Pago Paypal',$verify_sign);
+	    
+	    print DEBUG "Registrando pago 3 \n";
+	    
+	    # Master account options
+	    if($domain->{next_bill_on}){
+		print DEBUG "Registrando pago 4 \n";
+		
+		$dbh->do(
+		    "UPDATE xaa.xaa_domains ".
+		    "SET next_bill_on=DATE_ADD(next_bill_on,INTERVAL 1 MONTH) WHERE domain_id=?",{},$domain->{domain_id});
+	    }else{
+		print DEBUG "Registrando pago 5 \n";
+		
+		$dbh->do(
+		    "UPDATE xaa.xaa_domains ".
+		    "SET next_bill_on=DATE_ADD(NOW(), INTERVAL 1 MONTH) WHERE domain_id=?",{},$domain->{domain_id});
+	    }
+	    $dbh->commit();
+	    print DEBUG "Registrando pago 6 \n";
+	    
+	}
+    }   
+    
+    
+    
+    
+    print DEBUG "Error\n=========================================\n$error\n";
+    $HTML .= "Error<br>======================================<br>$error<br>\n";
+    print DEBUG "\n\n\nVARS\n=========================================\n";
+    $HTML .= "<br><br><br>VARS<br>======================================<br>\n";
+#    foreach my $key (keys %vars){
+#	print DEBUG "$key = ".param($key) . "\n";
+#	$HTML .= "$key = ".param($key) . "<br>\n";
+#    }
+
+    print DEBUG "\n\nENV\n=========================================\n";
+    $HTML .= "<br><br>ENV<br>======================================<br>\n";
+    foreach my $key (keys %ENV){
+	print DEBUG "$key = ".$ENV{key} . "\n";
+	$HTML .= "$key = ".$ENV{$key} . "<br>\n";
+    }
+
+    print DEBUG "\n=========================================\n\n\n\n\n";
+    close DEBUG;
+
+    #print WSAdm::Layout::print($HTML);
+
+    print CGI::header(-type=>'text/plain', -status=> '200 OK');
+    exit 0;
 }
 
 1;

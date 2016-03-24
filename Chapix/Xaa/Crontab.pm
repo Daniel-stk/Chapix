@@ -28,7 +28,12 @@ sub _init {
     $self->{main_db} = $conf->{Xaa}->{DB};
 }
 
-sub run {
+sub run_minute {
+    my $self = shift;
+
+}
+
+sub run_daily {
     my $self = shift;
     my $date = $dbh->selectrow_array("SELECT DATE(DATE_SUB(NOW(), INTERVAL 1 DAY))");
     print time() . " Running Xaa \n" if ($self->{DEBUG});

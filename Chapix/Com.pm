@@ -48,6 +48,51 @@ foreach my $key (keys %{$Q->Vars()}){
 my $URL = $ENV{SCRIPT_URL};
 my $BaseURL = $conf->{ENV}->{BaseURL};
 
+# DataBase
+$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database.";
+$dbh->do("SET CHARACTER SET 'utf8'");
+$dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
+#$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
+
+# Session
+my $session_id;
+if (defined $ENV{'HTTP_COOKIE'}){
+    my %cookies = map {$_ =~ /\s*(.+)=(.+)/g} ( split( /;/, $ENV{'HTTP_COOKIE'} ) );
+    $session_id = $cookies{$conf->{SESSION}->{name}};
+}
+
+eval {
+    tie %sess, 'Apache::Session::MySQL', $session_id, {
+	Handle     => $dbh,
+	LockHandle => $dbh,
+	TableName  => $conf->{Xaa}->{DB} . '.sessions',
+    };
+};
+
+if ($@) {
+    eval {
+	$session_id = '';
+	tie %sess, 'Apache::Session::MySQL' , $session_id,{
+	    Handle     => $dbh,
+	    LockHandle => $dbh,
+	    TableName  => $conf->{Xaa}->{DB} . '.sessions',
+	};
+    };
+    die "Can't create session data $@" if($@);
+}
+
+defined $sess{user_id}    or $sess{user_id} = '';
+defined $sess{user_name}  or $sess{user_name} = '';
+defined $sess{user_email} or $sess{user_email} = '';
+
+$cookie = cookie(-name    => $conf->{SESSION}->{name},
+		 -value   => $sess{_session_id},
+		 -path    => $conf->{SESSION}->{path},
+		 -expires => $conf->{SESSION}->{life},
+    );
+#Session END
+
+
 $URL =~ s/^$BaseURL//g;
 ($_REQUEST->{Domain}, $_REQUEST->{Controller}, $_REQUEST->{View}) = split(/\//, $URL);
 $_REQUEST->{Domain}     =~ s/\W//g;
@@ -55,18 +100,30 @@ $_REQUEST->{Controller} =~ s/\W//g;
 $_REQUEST->{View}       =~ s/\W//g;
 $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 
+
+
 if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
-  $_REQUEST->{Domain}     = 'Home';
-  $_REQUEST->{Controller} = '';
-  $_REQUEST->{View}       = '';
+    if($sess{user_id}){
+	# if we have a session lets redirect to home folder
+	my $folder_path = $dbh->selectrow_array("SELECT d.folder FROM xaa.xaa_domains d INNER JOIN xaa.xaa_users_domains ud ON d.domain_id=ud.domain_id " .
+						"WHERE ud.user_id=? AND ud.active=1 AND ud.default_domain=1 LIMIT 1",{},$sess{user_id}) || '';
+	if($folder_path){
+	    http_redirect('/'.$folder_path);
+	}else{
+	    $sess{user_id}        = "";
+	    $sess{user_name}      = "";
+	    $sess{user_email}     = "";
+	    $sess{user_time_zone} = "";
+	    $sess{user_language}  = "";
+	    http_redirect('/'.$folder_path);
+	}
+    }else{
+	$_REQUEST->{Domain}     = 'Home';
+	$_REQUEST->{Controller} = '';
+	$_REQUEST->{View}       = '';
+    }
 }
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
-
-# DataBase
-$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database.";
-$dbh->do("SET CHARACTER SET 'utf8'");
-$dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
-#$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
 
 # Change to domain database
 if($_REQUEST->{Domain} eq 'Xaa'){
@@ -85,44 +142,6 @@ if($_REQUEST->{Domain} eq 'Xaa'){
 	http_redirect('/');
     }
 }
-
-# Session
-my $session_id;
-if (defined $ENV{'HTTP_COOKIE'}){
-  my %cookies = map {$_ =~ /\s*(.+)=(.+)/g} ( split( /;/, $ENV{'HTTP_COOKIE'} ) );
-  $session_id = $cookies{$conf->{SESSION}->{name}};
-}
-
-eval {
-  tie %sess, 'Apache::Session::MySQL', $session_id, {
-    Handle     => $dbh,
-    LockHandle => $dbh,
-    TableName  => $conf->{Xaa}->{DB} . '.sessions',
-  };
-};
-
-if ($@) {
-  eval {
-    $session_id = '';
-    tie %sess, 'Apache::Session::MySQL' , $session_id,{
-      Handle     => $dbh,
-      LockHandle => $dbh,
-      TableName  => $conf->{Xaa}->{DB} . '.sessions',
-    };
-  };
-  die "Can't create session data $@" if($@);
-}
-
-defined $sess{user_id}    or $sess{user_id} = '';
-defined $sess{user_name}  or $sess{user_name} = '';
-defined $sess{user_email} or $sess{user_email} = '';
-
-$cookie = cookie(-name    => $conf->{SESSION}->{name},
--value   => $sess{_session_id},
--path    => $conf->{SESSION}->{path},
--expires => $conf->{SESSION}->{life},
-);
-#Session END
 
 # Load basic config
 conf_load('Website');
@@ -235,8 +254,12 @@ sub selectbox_data {
 
 sub load_domain_info {
     $conf->{Domain} = $dbh->selectrow_hashref(
-	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
+	"SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone, address, phone, subscription FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE folder = ?",{},
 	$_REQUEST->{Domain});
+    if(!($conf->{Domain}->{subscription})){
+	$conf->{Domain}->{demo_left_days} = $dbh->selectrow_array("SELECT DATEDIFF(DATE_ADD(added_on, INTERVAL 15 DAY), DATE(NOW())) FROM $conf->{Xaa}->{DB}.xaa_domains d WHERE domain_id = ? ",{},
+								  $conf->{Domain}->{domain_id}) || 0;
+    }
 }
 
 sub admin_log {

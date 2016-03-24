@@ -40,27 +40,23 @@ sub new {
 # Initialize ENV
 sub _init {
     my $self = shift;
-    $self->{main_db} = $conf->{Xaa}->{DB};
-    $conf->{Domain} = $dbh->selectrow_hashref(
-        "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.time_zone, d.language " .
-	"FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},$_REQUEST->{Domain});
 }
 
 
 # API
 sub api {
     my $JSON = {
-      error   => '',
-      success => '',
-      msg     => ''
+	error   => '',
+	success => '',
+	msg     => ''
     };
      
     if($_REQUEST->{mode} eq 'get_all_countries'){
-      $JSON = Chapix::Xaa::API::get_all_countries();
+	$JSON = Chapix::Xaa::API::get_all_countries();
     }else{
-      $JSON->{error} = 'Not implemented';
+	$JSON->{error} = 'Not implemented';
     }
-
+    
     $JSON->{redirect} = '';
     $JSON->{msg} = msg_get();
     print Chapix::Com::header_out('application/json');
@@ -74,7 +70,10 @@ sub actions {
     my $self = shift;
     my $results = {};
 
-    if(defined $_REQUEST->{_submitted_login}){
+    if($_REQUEST->{View} eq 'PaypalIPN'){
+	Chapix::Xaa::Actions::process_paypal_ipn();
+	return;
+    }elsif(defined $_REQUEST->{_submitted_login}){
         $results = Chapix::Xaa::Actions::login();
         process_results($results);
         return;
@@ -156,6 +155,8 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_settings() );
         }elsif($_REQUEST->{View} eq 'DomainSettings'){
             print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
+        }elsif($_REQUEST->{View} eq 'Subscription'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_subscription_details() );
         }elsif($_REQUEST->{View} eq 'EditLogo'){
            print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
         }else{

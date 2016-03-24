@@ -39,7 +39,7 @@ sub display_home {
     my $template = Template->new();
     $conf->{Page}->{ShowSettings} = '1';
     set_toolbar(
-        ['','Contratar Marketero','black-text','favorite'],
+        #['Xaa/Subscription','Contratar Marketero','grey-text','favorite'],
 	);
     
     my $vars = {
@@ -47,16 +47,40 @@ sub display_home {
         Domain  => $conf->{Domain},
         conf => $conf,
         sess => \%sess,
-     	  msg  => msg_print(),
+	msg  => msg_print(),
         loc => \&loc,
     };
     $template->process("Chapix/Xaa/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
     return $HTML;
 }
 
+sub display_subscription_details {
+    if($conf->{Domain}->{subscription}){
+
+    }else{
+	my $HTML = "";
+
+	my $services = $dbh->selectall_arrayref("SELECT * FROM xaa.xaa_services ORDER BY service_id",{Slice=>{}});
+
+	my $template = Template->new();
+	my $vars = {
+	    REQUEST => $_REQUEST,
+	    Domain  => $conf->{Domain},
+	    conf => $conf,
+	    sess => \%sess,
+	    msg  => msg_print(),
+	    loc => \&loc,
+	    services => $services,
+	};
+
+	$template->process("Chapix/Xaa/tmpl/subscription-create.html", $vars,\$HTML) or $HTML = $template->error();
+	return $HTML;
+    }
+}
+
 sub set_toolbar {
     my @actions = @_;
-    my $HTML = '<ul>';
+    my $HTML = '';
     
     foreach my $action (@actions){
 	my $btn = '<li>';
@@ -87,6 +111,9 @@ sub set_toolbar {
 	$btn .= '</a>';
 	$btn .= '</li>';
 	$HTML .= $btn;
+    }
+    if($HTML){
+	$HTML = '<ul>' . $HTML . '</ul>';
     }
     $conf->{Page}->{Toolbar} .= $HTML;
 }
@@ -490,13 +517,13 @@ sub display_register {
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
     $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
-		 jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
-    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 jsmessage => loc('Please enter your name'), type=>"text", icon=>'account_circle');
+    $form->field(name => 'email', label=> loc('Email'), type=>'email', icon=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
-    $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
+    $form->field(name => 'phone', label=> loc('Phone'), type=>'text', icon=>'phone',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your full phone number'),
          validate=>'/[\d\s\-]{10,15}/');
-    $form->field(name => 'password', label=> loc('Password'), comment=>'<i class="icon-lock"></i>', type=>'password',
+    $form->field(name => 'password', label=> loc('Password'), type=>'password', icon=>'lock',
 		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
          validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
     $form->stylesheet('1');
