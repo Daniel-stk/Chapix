@@ -157,6 +157,8 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_domain_settings() );
         }elsif($_REQUEST->{View} eq 'Subscription'){
             print Chapix::Layout::print( Chapix::Xaa::View::display_subscription_details() );
+        }elsif($_REQUEST->{View} eq 'BillingHistory'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_billing_history() );
         }elsif($_REQUEST->{View} eq 'EditLogo'){
            print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
         }else{

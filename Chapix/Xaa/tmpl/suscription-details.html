@@ -1,0 +1,47 @@
+<section>
+  <div class="container">
+    <div class="section"></div>
+    <div class="row">
+      <div class="col s12 m10 l10 col-center">
+	<div class="card hoverable">
+	  <div class="card-content">
+	    <span class="card-title activator grey-text text-darken-4">Tu Suscripción:<i class="material-icons right">favorite</i></span>
+	    [% msg %]
+	    <p>
+	      <ul class="collection with-header">
+		<li class="collection-header">
+		  <h4>[% suscription.service_name %]</h4>
+		  <a href="BillingHistory" class="btn">Cambiar</a>
+		  <a href="BillingHistory" class="btn">Historial</a>
+		</li>
+	      </ul>
+	      <div class="row">
+		<div class="col m6">
+		  <ul class="collection with-header">
+		    <li class="collection-item"><h5>Caracteristicas</h5></li>
+		    <li class="collection-item">Hasta [% suscription.metric_a %] contactos</li>
+		    <li class="collection-item">[% suscription.metric_b %] [% IF suscription.metric_b > 1 %] usuarios[% ELSE %] usuario[% END %]</li>
+		    <li class="collection-item">[% IF suscription.service_id == 1 %]Hasta 5,000 envíos.[% ELSE %]Envíos ilimitados[% END %]</li>
+		    <li class="collection-item">Soporte técnico via chat y correo</li>
+		    <li class="collection-item">[% IF suscription.service_id == 1 %]&nbsp;&nbsp;[% ELSE %]Soporte técnico por teléfono[% END %]</li>
+		  </ul>
+		</div>
+		<div class="col m6">
+		  <ul class="collection with-header">
+		    <li class="collection-item"><h5>Pago</h5></li>
+		    <li class="collection-item">Ciclo: [% IF suscription.service_cycle == 'MONTHLY'%]Mensual[% END %][% IF suscription.service_cycle == 'YEARLY'%]Anual[% END %]</li>
+		    <li class="collection-item">Importe: $ [% suscription.price %] USD</li>
+		    <li class="collection-item">Forma de pago: [% suscription.payment_method %]</li>
+		    <li class="collection-item">Próximo pago: [% suscription.next_bill_on %]</li>
+		    <li class="collection-item">&nbsp;</li>
+		  </ul>
+		</div>
+	      </div>
+	    </p>
+	  </div>
+	</div>
+      </div>
+    </div>
+
+  </div>
+</section>

@@ -55,13 +55,33 @@ sub display_home {
 }
 
 sub display_subscription_details {
+    set_back_btn('Xaa/Settings',loc('Settings'));
     if($conf->{Domain}->{subscription}){
+	my $HTML = "";
+	my $suscription = $dbh->selectrow_hashref(
+	    "SELECT ds.service_id, ds.app_name, s.code, s.service_name, s.metric_a, s.metric_b, DATE(ds.next_bill_on) AS next_bill_on, ds.service_cycle, ds.price " .
+	    "FROM xaa.xaa_domains_services ds " .
+	    "INNER JOIN xaa.xaa_services s ON ds.service_id=s.service_id " .
+	    "WHERE ds.domain_id=? ORDER BY ds.service_id",{},$conf->{Domain}->{domain_id});
+	$suscription->{payment_method} = $dbh->selectrow_array(
+	    "SELECT pm.payment_method FROM xaa.xaa_domains d ".
+	    "INNER JOIN xaa.xaa_payment_methods pm ON d.payment_method_id=pm.payment_method_id " .
+	    "WHERE d.domain_id=?",{},$conf->{Domain}->{domain_id}) || '';
+	my $template = Template->new();
+	my $vars = {
+	    Domain  => $conf->{Domain},
+	    conf => $conf,
+	    sess => \%sess,
+	    msg  => msg_print(),
+	    loc => \&loc,
+	    suscription => $suscription,
+	};
 
+	$template->process("Chapix/Xaa/tmpl/suscription-details.html", $vars,\$HTML) or $HTML = $template->error();
+	return $HTML;
     }else{
 	my $HTML = "";
-
 	my $services = $dbh->selectall_arrayref("SELECT * FROM xaa.xaa_services ORDER BY service_id",{Slice=>{}});
-
 	my $template = Template->new();
 	my $vars = {
 	    REQUEST => $_REQUEST,
@@ -77,6 +97,48 @@ sub display_subscription_details {
 	return $HTML;
     }
 }
+
+sub display_billing_history {
+    set_back_btn('Xaa/Subscription',loc('Suscripción'));
+
+    my $list = Chapix::List->new(
+        dbh => $dbh,
+        pagination => 0,
+	auto_order => 0,
+        sql => {
+            select => "db.date AS date, db.charge, db.payment, db.balance, db.comments ",
+            from =>"xaa.xaa_domains_balance db ",
+	    order_by => "balance_id DESC",
+	    limit => 50,
+            where => "db.domain_id=?",
+            params => [$conf->{Domain}->{domain_id}],
+        },
+        link => {
+
+        },
+    );
+
+    $list->set_label('date',loc('Fecha'));
+    $list->set_label('charge',loc('Cargo'));
+    $list->set_label('payment',loc('Abono'));
+    $list->set_label('balance',loc('Saldo'));
+    $list->set_label('comments',loc('Comentarios'));
+
+    my $HTML = "";
+    my $template = Template->new();
+    my $vars = {
+	Domain  => $conf->{Domain},
+	conf => $conf,
+	sess => \%sess,
+	msg  => msg_print(),
+	loc => \&loc,
+	list => $list->print(),
+    };
+    
+    $template->process("Chapix/Xaa/tmpl/billing-history.html", $vars,\$HTML) or $HTML = $template->error();
+    return $HTML;
+}
+
 
 sub set_toolbar {
     my @actions = @_;
