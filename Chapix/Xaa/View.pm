@@ -566,7 +566,7 @@ sub display_user_form {
 }
 
 sub display_register {
-    my @submit = (loc("Register"));
+    my @submit = "Crea tu cuenta";
 
     my $form = CGI::FormBuilder->new(
         name     => 'register',
