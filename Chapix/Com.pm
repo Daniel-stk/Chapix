@@ -103,26 +103,27 @@ $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 
 
 if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
-    if($sess{user_id}){
-	# if we have a session lets redirect to home folder
-	my $folder_path = $dbh->selectrow_array("SELECT d.folder FROM xaa.xaa_domains d INNER JOIN xaa.xaa_users_domains ud ON d.domain_id=ud.domain_id " .
+  if($sess{user_id}){
+	 # if we have a session lets redirect to home folder
+	 my $folder_path = $dbh->selectrow_array("SELECT d.folder FROM xaa.xaa_domains d INNER JOIN xaa.xaa_users_domains ud ON d.domain_id=ud.domain_id " .
 						"WHERE ud.user_id=? AND ud.active=1 AND ud.default_domain=1 LIMIT 1",{},$sess{user_id}) || '';
-	if($folder_path){
-	    http_redirect('/'.$folder_path);
-	}else{
+	 if($folder_path){
+	   http_redirect('/'.$folder_path);
+	 }else{
 	    $sess{user_id}        = "";
 	    $sess{user_name}      = "";
 	    $sess{user_email}     = "";
 	    $sess{user_time_zone} = "";
 	    $sess{user_language}  = "";
 	    http_redirect('/'.$folder_path);
-	}
-    }else{
-	$_REQUEST->{Domain}     = 'Home';
-	$_REQUEST->{Controller} = '';
-	$_REQUEST->{View}       = '';
-    }
+	 }
+  }else{
+	   $_REQUEST->{Domain}     = 'Home';
+	   $_REQUEST->{Controller} = '';
+	   $_REQUEST->{View}       = '';
+  }
 }
+
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
 # Change to domain database
@@ -135,11 +136,11 @@ if($_REQUEST->{Domain} eq 'Xaa'){
     $_REQUEST->{Controller} = 'Pages';
 }else{
     eval {
-	$dbh->do("USE " . $conf->{Xaa}->{DB} . "_".$_REQUEST->{Domain});
+	     $dbh->do("USE " . $conf->{Xaa}->{DB}."_".$_REQUEST->{Domain} );
     };
     if($@){
-	msg_add('danger','Data not found.');
-	http_redirect('/');
+    	msg_add('danger','Data not found.');
+    	http_redirect('/');
     }
 }
 
@@ -152,7 +153,7 @@ load_domain_info();
 
 # Default template
 $Template = Template->new(
-INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
+  INCLUDE_PATH => 'templates/'.$conf->{Template}->{TemplateID}.'/',
 );
 
 #################################################################################

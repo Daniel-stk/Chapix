@@ -1,13 +1,12 @@
 <section class="section">
+[% msg %]
   <div class="container">
-
     <div class="row">
       <div class="col s12 m10 l8 z-depth-1 card col-center hoverable" id="card-[% form.name %]">
         [% tabs %]
         [% form.jshead %]
         [% form.start %]
         <div class="card-content">
-          [% msg %]
           [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
           <div class="row">
             [% FOREACH field = form.fields %]
