@@ -1,0 +1,45 @@
+<section>
+  <div class="container">
+    <div class="section"></div>
+    <div class="row">
+      <div class="col s12 m10 l10 col-center">
+	<div class="card hoverable">
+	  <div class="card-content">
+	    <span class="card-title activator grey-text text-darken-4">Elige el tipo de subscripción<i class="material-icons right">favorite</i></span>
+	    [% msg %]
+	    <p>	      
+	      <div class="row">
+		[% FOREACH service = services %]
+		<div class="col s12 m4 l4">
+		  <div class="card">
+		    <div class="card-content">
+		      <span class="card-title activator grey-text text-darken-4">[% service.service_name %]</span>
+		      <p>
+			<ul class="collection">
+			  <li class="collection-item">Hasta [% service.metric_a %] contactos</li>
+			  <li class="collection-item">[% service.metric_b %] [% IF service.metric_b > 1 %] usuarios[% ELSE %] usuario[% END %]</li>
+			  <li class="collection-item">[% IF service.service_id == 1 %]Hasta 5,000 envíos.[% ELSE %]Envíos ilimitados[% END %]</li>
+			  <li class="collection-item">Soporte técnico via chat y correo</li>
+			  <li class="collection-item">[% IF service.service_id == 1 %]&nbsp;&nbsp;[% ELSE %]Soporte técnico por teléfono[% END %]</li>
+			</ul>
+		      </p>
+		      <div class="center">
+			<div class="chip blue-grey white-text">$ [% service.montly_price %] USD</div>
+		      </div>
+		      <div class="sep">&nbsp;</div>
+		      <div class="center">
+			[% service.paypal_subscription_btn %]
+		      </div>
+		    </div>
+		  </div>
+		</div>
+		[% END %]
+	      </div>
+	    </p>
+	  </div>
+	</div>
+      </div>
+    </div>
+
+  </div>
+</section>

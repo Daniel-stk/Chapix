@@ -28,7 +28,12 @@ sub _init {
     $self->{main_db} = $conf->{Xaa}->{DB};
 }
 
-sub run {
+sub run_minute {
+    my $self = shift;
+
+}
+
+sub run_daily {
     my $self = shift;
     my $date = $dbh->selectrow_array("SELECT DATE(DATE_SUB(NOW(), INTERVAL 1 DAY))");
     print time() . " Running Xaa \n" if ($self->{DEBUG});
@@ -42,7 +47,7 @@ sub run {
         my $previous = $dbh->selectrow_hashref("SELECT * FROM xaa.date_metrics dm WHERE dm.date = DATE_SUB(?,INTERVAL 1 DAY) ",{},$date);
         my $users_total  = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_users") || 0;
         my $users_new    = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_users WHERE created_on BETWEEN ? AND ?",{},
-                                                "$date 00:00:00","$date 23:59:59") || 0;
+						 "$date 00:00:00","$date 23:59:59") || 0;
         my $users_active = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_users WHERE last_login_on > DATE_SUB(NOW(), INTERVAL 30 DAY)") || 0;
 
         my $domains_total  = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_domains") || 0;

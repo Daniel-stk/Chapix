@@ -1,4 +1,4 @@
-package Chapix::Admin::Crontab;
+package Chapix::Pages::Crontab;
 
 use lib('cpan/');
 use warnings;
@@ -30,12 +30,10 @@ sub _init {
 
 sub run_minute {
     my $self = shift;
-    print time() . " Running Admin \n" if ($self->{DEBUG});
 }
 
 sub run_daily {
     my $self = shift;
-    print time() . " Running Admin \n" if ($self->{DEBUG});
 }
 
 1;

@@ -37,44 +37,145 @@ sub set_path_route {
 sub display_home {
     my $HTML = "";
     my $template = Template->new();
-
     $conf->{Page}->{ShowSettings} = '1';
-
+    set_toolbar(
+        #['Xaa/Subscription','Contratar Marketero','grey-text','favorite'],
+	);
+    
     my $vars = {
         REQUEST => $_REQUEST,
         Domain  => $conf->{Domain},
         conf => $conf,
         sess => \%sess,
-     	  msg  => msg_print(),
+	msg  => msg_print(),
         loc => \&loc,
     };
     $template->process("Chapix/Xaa/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
     return $HTML;
 }
 
+sub display_subscription_details {
+    set_back_btn('Xaa/Settings',loc('Settings'));
+    if($conf->{Domain}->{subscription}){
+	my $HTML = "";
+	my $suscription = $dbh->selectrow_hashref(
+	    "SELECT ds.service_id, ds.app_name, s.code, s.service_name, s.metric_a, s.metric_b, DATE(ds.next_bill_on) AS next_bill_on, ds.service_cycle, ds.price " .
+	    "FROM xaa.xaa_domains_services ds " .
+	    "INNER JOIN xaa.xaa_services s ON ds.service_id=s.service_id " .
+	    "WHERE ds.domain_id=? ORDER BY ds.service_id",{},$conf->{Domain}->{domain_id});
+	$suscription->{payment_method} = $dbh->selectrow_array(
+	    "SELECT pm.payment_method FROM xaa.xaa_domains d ".
+	    "INNER JOIN xaa.xaa_payment_methods pm ON d.payment_method_id=pm.payment_method_id " .
+	    "WHERE d.domain_id=?",{},$conf->{Domain}->{domain_id}) || '';
+	my $template = Template->new();
+	my $vars = {
+	    Domain  => $conf->{Domain},
+	    conf => $conf,
+	    sess => \%sess,
+	    msg  => msg_print(),
+	    loc => \&loc,
+	    suscription => $suscription,
+	};
+
+	$template->process("Chapix/Xaa/tmpl/suscription-details.html", $vars,\$HTML) or $HTML = $template->error();
+	return $HTML;
+    }else{
+	my $HTML = "";
+	my $services = $dbh->selectall_arrayref("SELECT * FROM xaa.xaa_services ORDER BY service_id",{Slice=>{}});
+	my $template = Template->new();
+	my $vars = {
+	    REQUEST => $_REQUEST,
+	    Domain  => $conf->{Domain},
+	    conf => $conf,
+	    sess => \%sess,
+	    msg  => msg_print(),
+	    loc => \&loc,
+	    services => $services,
+	};
+
+	$template->process("Chapix/Xaa/tmpl/subscription-create.html", $vars,\$HTML) or $HTML = $template->error();
+	return $HTML;
+    }
+}
+
+sub display_billing_history {
+    set_back_btn('Xaa/Subscription',loc('Suscripción'));
+
+    my $list = Chapix::List->new(
+        dbh => $dbh,
+        pagination => 0,
+	auto_order => 0,
+        sql => {
+            select => "db.date AS date, db.charge, db.payment, db.balance, db.comments ",
+            from =>"xaa.xaa_domains_balance db ",
+	    order_by => "balance_id DESC",
+	    limit => 50,
+            where => "db.domain_id=?",
+            params => [$conf->{Domain}->{domain_id}],
+        },
+        link => {
+
+        },
+    );
+
+    $list->set_label('date',loc('Fecha'));
+    $list->set_label('charge',loc('Cargo'));
+    $list->set_label('payment',loc('Abono'));
+    $list->set_label('balance',loc('Saldo'));
+    $list->set_label('comments',loc('Comentarios'));
+
+    my $HTML = "";
+    my $template = Template->new();
+    my $vars = {
+	Domain  => $conf->{Domain},
+	conf => $conf,
+	sess => \%sess,
+	msg  => msg_print(),
+	loc => \&loc,
+	list => $list->print(),
+    };
+    
+    $template->process("Chapix/Xaa/tmpl/billing-history.html", $vars,\$HTML) or $HTML = $template->error();
+    return $HTML;
+}
+
+
 sub set_toolbar {
     my @actions = @_;
     my $HTML = '';
-
+    
     foreach my $action (@actions){
-        my $btn = '';
-     	my ($script, $label, $alt, $icon, $class, $type) = @$action;
-        if($script !~ /^\//){
-            $script = '/'.$_REQUEST->{Domain}.'/' . $script;
-        }
-        $class = 'waves-effect waves-light ' if(!$class);
-     	if($script eq 'index.pl'){
-     	    $alt = 'Go back';
-            #$label = 'Go back';
-     	    $icon  = 'arrow_back';
-     	}
-     	$btn .= ' <a href="'.$script.'" class="'.$class.'" alt="'.$alt.'" title="'.$alt.'" >';
-     	if($icon){
-     	    $btn .= '<i class="material-icons">'.$icon.'</i> ';
-     	}
-     	$btn .= $label;
-        $btn .= '</a>';
-        $HTML .= $btn;
+	my $btn = '<li>';
+	my ($script, $label, $class, $icon) = @$action;
+	
+	if($script !~ /^\//){
+	    $script = '/'.$_REQUEST->{Domain}.'/' . $script;
+	}
+	
+	$class = 'waves-effect waves-light ' if(!$class);
+	my $id = '';
+
+	if ($label) {
+	    $class .= ' tooltipped ';
+	    
+	    $id = loc($label);
+	    $id =~ s/\s/_/g;
+	    $id = lc($id).'_action';
+	}
+	
+	$btn .= ' <a id="'.$id.'" href="'.$script.'" class="'.$class.'" data-position="bottom" data-delay="50" data-tooltip="'.$label.'">';
+	
+	if($icon){
+	    $btn .= '<i class="material-icons">'.$icon.'</i> ';
+	}
+	
+	# $btn .= $label;
+	$btn .= '</a>';
+	$btn .= '</li>';
+	$HTML .= $btn;
+    }
+    if($HTML){
+	$HTML = '<ul>' . $HTML . '</ul>';
     }
     $conf->{Page}->{Toolbar} .= $HTML;
 }
@@ -203,6 +304,9 @@ sub display_password_reset {
 sub display_your_account {
     my $HTML = "";
     my $template = Template->new();
+    set_back_btn('','Inicio');
+    $conf->{Page}->{ShowSettings} = 'true';
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,
@@ -217,6 +321,9 @@ sub display_your_account {
 sub display_settings {
     my $HTML = "";
     my $template = Template->new();
+    set_back_btn('','Inicio');
+    $conf->{Page}->{ShowSettings} = 'true';
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,
@@ -281,6 +388,8 @@ sub display_password_form {
     $conf->{Page}->{Title} = loc('Change your password');
     set_back_btn('Xaa/YourAccount',loc('Your account'));
 
+  $conf->{Page}->{ShowSettings} = 'true';
+
     my @submit = (loc('Save'));
     my $params = {};
     my $form = CGI::FormBuilder->new(
@@ -314,22 +423,24 @@ sub display_domain_settings {
     $conf->{Page}->{Title} = loc('Business Settigs');
     set_back_btn('Xaa/Settings',loc('Settings'));
 
+  $conf->{Page}->{ShowSettings} = '1';
+
     my @submit = (loc('Save'));
     my $params = $conf->{Domain};
     my $form = CGI::FormBuilder->new(
         name     => 'domain_settings',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/DomainSettings',
         method   => 'post',
-        fields   => [qw/name language/],
+        fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
         materialize => 1,
     );
 
     $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
-    #my %time_zones = Chapix::Com::selectbox_data(
-    #    "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
-    #$form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data(
+        "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' ORDER BY tzn.Name");# WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
+    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
 
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
@@ -357,7 +468,7 @@ sub display_edit_account_form {
 
     my $params = {
         name => $sess{user_name},
-        # time_zone => $sess{user_time_zone},
+        time_zone => $sess{user_time_zone},
         language  => $sess{user_language},
     };
 
@@ -365,7 +476,7 @@ sub display_edit_account_form {
         name     => 'edit_account',
         action   => '/'.$_REQUEST->{Domain} . '/Xaa/EditAccount',
         method   => 'post',
-        fields   => [qw/name language/],
+        fields   => [qw/name time_zone language/],
         submit   => \@submit,
         values   => $params,
         materialize => 1,
@@ -373,8 +484,9 @@ sub display_edit_account_form {
 
     $form->field(name => 'name', required=>1, label=>loc('Name'));
 
-    #my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
-    #$form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
+
+    $form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
 
     $form->field(name => 'language', required=>1, label=> loc('Language'), options=>['es_MX','en_US'], type=>'select',
 		 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
@@ -401,7 +513,7 @@ sub display_user_form {
 
     if($_REQUEST->{user_id}){
         $params = $dbh->selectrow_hashref(
-            "SELECT u.user_id, u.name, u.email, u.language, ud.active " .
+            "SELECT u.user_id, u.name, u.email, u.time_zone, u.language, ud.active " .
                 "FROM $conf->{Xaa}->{DB}.xaa_users u " .
                     "INNER JOIN $conf->{Xaa}->{DB}.xaa_users_domains ud ON u.user_id=ud.user_id " .
                         "WHERE ud.user_id=? AND ud.domain_id=?",{},$_REQUEST->{user_id}, $conf->{Domain}->{domain_id});
@@ -414,7 +526,7 @@ sub display_user_form {
     my $form = CGI::FormBuilder->new(
         name     => 'user',
         method   => 'post',
-        fields   => [qw/user_id name email language active/],
+        fields   => [qw/user_id name email time_zone language active/],
 	action   => '/'.$_REQUEST->{Domain} . '/Xaa/User',
         submit   => \@submit,
         values   => $params,
@@ -431,8 +543,8 @@ sub display_user_form {
                      class=> "span12", jsmessage => loc('Please enter your email'), validate=>'EMAIL');
         $form->field(name => 'active', type=>'hidden');
     }
-    #my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
-    #$form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
+    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
     $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
 
@@ -454,7 +566,7 @@ sub display_user_form {
 }
 
 sub display_register {
-    my @submit = (loc("Register"));
+    my @submit = "Crea tu cuenta";
 
     my $form = CGI::FormBuilder->new(
         name     => 'register',
@@ -467,13 +579,13 @@ sub display_register {
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
     $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
-		 jsmessage => loc('Please enter your name'), type=>"text", comment=>'<i class="icon-lock"></i>');
-    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 jsmessage => loc('Please enter your name'), type=>"text", icon=>'account_circle');
+    $form->field(name => 'email', label=> loc('Email'), type=>'email', icon=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
-    $form->field(name => 'phone', label=> loc('Phone'), comment=>'<i class="icon-envelope"></i>', type=>'text',
+    $form->field(name => 'phone', label=> loc('Phone'), type=>'text', icon=>'phone',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your full phone number'),
          validate=>'/[\d\s\-]{10,15}/');
-    $form->field(name => 'password', label=> loc('Password'), comment=>'<i class="icon-lock"></i>', type=>'password',
+    $form->field(name => 'password', label=> loc('Password'), type=>'password', icon=>'lock',
 		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
          validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
     $form->stylesheet('1');
@@ -496,6 +608,8 @@ sub display_register {
 
 sub display_logo_form {
     $conf->{Page}->{Title} = loc('Upload logo');
+    $conf->{Page}->{ShowSettings} = '1';
+    
     set_back_btn('Xaa/Settings',loc('Your account'));
 
     my @submit = (loc('Save'));

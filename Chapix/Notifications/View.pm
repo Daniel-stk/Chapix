@@ -120,6 +120,8 @@ sub display_home {
     my $HTML = "";
     my $template = Template->new();
     
+    $conf->{Page}->{ShowSettings} = '1';
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,

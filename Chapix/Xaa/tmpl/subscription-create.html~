@@ -5,7 +5,7 @@
       <div class="col s12 m8 l8 col-center">
 	<div class="card hoverable">
 	  <div class="card-content">
-	    <span class="card-title activator grey-text text-darken-4">[% loc('Settings') %]<i class="material-icons right">settings</i></span>
+	    <span class="card-title activator grey-text text-darken-4">Elige el tipo de subscripción<i class="material-icons right">favorite</i></span>
 	    [% msg %]
 	    <p>	      
 	      <ul class="collection">

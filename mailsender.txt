@@ -1,0 +1,147 @@
+>> 220 smtp.marketero.com.mx ESMTP Postfix
+<< EHLO ip-10-4-0-179.us-west-2.compute.internal
+>> 250-smtp.marketero.com.mx
+>> 250-PIPELINING
+>> 250-SIZE 10240000
+>> 250-VRFY
+>> 250-ETRN
+>> 250-ENHANCEDSTATUSCODES
+>> 250-8BITMIME
+>> 250 DSN
+<< MAIL FROM:<eme_marketero@marketero.com.mx>
+>> 250 2.1.0 Ok
+<< RCPT TO:<cesarrodriguez@xaandia.com>
+>> 250 2.1.5 Ok
+<< DATA
+>> 354 End data with <CR><LF>.<CR><LF>
+<< To: C�sar Rodriguez <cesarrodriguez@xaandia.com>
+<< From: Marketero <marketero@marketero.com.mx>
+<< Reply-To: Marketero <marketero@marketero.com.mx>
+<< Subject: Newsteller
+<< Date: Tue, 22 Mar 2016 22:13:19 -0400
+<< Message-ID: <20160323_021319_046483.eme_marketero@marketero.com.mx>
+<< List-Unsubscribe: http://app.marketero.com.mx/marketero/Public/Unsuscribe?k=4c476d21ea&e=cesarrodriguez@xaandia.com&a=10.176
+<< MIME-Version: 1.0
+<< Content-Type: multipart/mixed;
+<< 	boundary="Message-Boundary-by-Mail-Sender-1458699199"
+<< 
+<< This message is in MIME format. Since your mail reader does not understand
+<< this format, some or all of this message may not be legible.
+<< 
+<< --Message-Boundary-by-Mail-Sender-1458699199
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1458699199_2"
+<< 
+<< 
+<< --Part-Message-Boundary-by-Mail-Sender-1458699199_2
+<< Content-Type: text/plain
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< � ¡Hola Alejandro! � Marketero te saluda con gusto y te deja los artículos más leídos de nuestro�blog: TEST: ¿Qué es lo que realmente vendes? �
+<< Contesta el siguiente test y descubre que es lo que te compran tus clientes.
+<< VER MÁS 
+<< � ¿Cómo te ayuda la tecnología en tu negocios?� 
+<< Contesta el siguiente test y descubre que es lo que compran tus clientes, 
+<< VER MÁS 
+<< � IR AL BLOG � � � www.marketero.com.mx Marketero Lazaro de Baigorii #619, 
+<< Tel: +526144133781 Si no puedes ver correctamente este mensaje, da clic aqu� .
+<< Si no deseas seguir recibiendo estos mensajes, puedes cancelar tu suscripción en cualquier momento.
+<< --Part-Message-Boundary-by-Mail-Sender-1458699199_2
+<< Content-Type: text/html
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< <html>  <div> <table style="width:100%;text-align:center;padding:5px 15px" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF"> <tbody> <tr> <td> <table style="width:100%" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td align="center"> <div><a target="_blank" href="http:///marketero/EmailMkt/TrackingUrl?a=176.7&k=a70f13d0&e=1"><img src="/data/marketero/img/site/14549576268610295.png" style="margin: 0px; resize: none; position: relative; zoom: 1; display: block; max-width: 100%; top: auto; left: auto; width: 66px; height: 67px;" class=""></a></div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:8px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td style="max-width:600px;overflow:hidden;word-break:break-word" valign="center"> <div> <h5 style="text-align:justify">¡Hola Alejandro!</h5> <div>&nbsp;</div> <div>Marketero te saluda con gusto y te deja los artículos más leídos de nuestro&nbsp;blog:</div> </div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center"> <div> <table style="width:100%;min-height:30px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center" width="50%"> <div> <div block-type="img"> <div>  <div> <table style="width:100%;text-align:center;padding:5px 15px" width="100%" border="0" cellpadding="0" cellspacing="0" align="center"> <tbody> <tr> <td> <table style="width:100%" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td align="center"> <div><img src="/data/marketero/img/mkt_images/14537451881361124.png" style="width: 158px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 171px; max-width: 100%; top: auto; left: auto;" class=""></div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div> </div> </div> </div> </td> <td valign="center" width="50%"> <div> <div block-type="txt"> <div>  <div> <table style="width:100%!important;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td style="max-width:600px;overflow:hidden;word-break:break-word" valign="center"> <div> <p style="overflow:hidden;word-break:break-word"><span style="font-size:18px"><strong>TEST: ¿Qué es lo que realmente vendes?</strong></span>&nbsp;</p> <p style="overflow:hidden;word-break:break-word">Contesta el siguiente test y descubre que es lo que te compran tus clientes.</p> <p style="text-align:right;overflow:hidden;word-break:break-word"> <a href="http:///marketero/EmailMkt/TrackingUrl?a=176.2&k=f255b01d&e=1" style="color:#3D5AFE"> VER MÁS </a> </p> </div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div> </div> </div> </div> </td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:8px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%;text-align:center;padding:5px 15px" width="100%" border="0" cellpadding="0" cellspacing="0" align="center"> <tbody> <tr> <td> <table style="width:100%" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td align="center"> <div><img src="/data/marketero/img/mkt_images/14537454397173107.png" style="width: 821px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 236px; max-width: 100%; top: auto; left: auto;" class=""></div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td> <table style="width:100%" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td style="max-width:600px;overflow:hidden;word-break:break-word" valign="center"> <div> <p style="overflow:hidden;word-break:break-word"><span style="font-size:18px"><strong>¿Cómo te ayuda la tecnología en tu negocios?&nbsp;</strong></span></p> <p style="overflow:hidden;word-break:break-word"><span style="font-size:14px">Contesta el siguiente test y descubre que es lo que compran tus clientes,</span></p> <p style="overflow:hidden;word-break:break-word"> <a href="http:///marketero/EmailMkt/TrackingUrl?a=176.1&k=c7fa72bf&e=1" style="color:#3D5AFE"> VER MÁS </a> </p> </div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:8px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td style="padding:10px 0"> <div> <a target="_blank" href="http:///marketero/EmailMkt/TrackingUrl?a=176.6&k=c0d65ce1&e=1" style="display:inline-block;padding:10px 40px;border-radius:10px;font-size:25px;color:#FFFFFF;text-decoration:none;background-color:#3D5AFE">IR AL BLOG</a> </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:8px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:0 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#1976D2"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:7px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#2196F3"> <tbody> <tr> <td valign="center"> <div> <table style="width:85%;margin:8px auto" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td valign="center">&nbsp;</td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;text-align:center;padding:5px 15px" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#2196F3"> <tbody> <tr> <td> <div> <table width="100%" style="text-align:center;width:100%!important" class="social_tabla" border="0" cellpadding="0" cellspacing="0" align="center"> <tbody> <tr> <td align="center" valign="top"> <table border="0" cellpadding="0" cellspacing="0" style="text-align:center" align="center"> <tbody> <tr> <td valign="top"> <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"> <tbody> <tr> <td align="center" valign="top" style="padding-right:10px;padding-bottom:5px"> <a href="http:///marketero/EmailMkt/TrackingUrl?a=176.5&k=611f047e&e=1" target="_blank"><img src="/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="50" style="width:50px;max-width:50px;display:block"></a> </td> </tr> </tbody> </table>
+<<  <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"> <tbody> <tr> <td align="center" valign="top" style="padding-right:10px;padding-bottom:5px"> <a href="http:///marketero/EmailMkt/TrackingUrl?a=176.3&k=b617792f&e=1" target="_blank"><img src="/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="50" style="width:50px;max-width:50px;display:block"></a> </td> </tr> </tbody> </table>
+<<  <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"> <tbody> <tr> <td align="center" valign="top" style="padding-right:10px;padding-bottom:5px"> <a href="http:///marketero/EmailMkt/TrackingUrl?a=176.4&k=c937dce5&e=1" target="_blank"><img src="/assets/img/mkt_social_icons/google-plus.png" alt="Google" width="50" style="width:50px;max-width:50px;display:block"></a> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div> </td> </tr> </tbody> </table>
+<<  </div>   <div> <table style="width:100%!important;padding:5px 15px" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#2196F3"> <tbody> <tr> <td> <table style="width:100%" width="600" align="center" border="0" cellpadding="0" cellspacing="0"> <tbody> <tr> <td style="max-width:600px;overflow:hidden;word-break:break-word" valign="center"> <div> <p style="text-align:center;overflow:hidden;word-break:break-word"> <strong> <a style="color:#FFFFFF" href="http:///marketero/EmailMkt/TrackingUrl?a=176.7&k=a70f13d0&e=1">www.marketero.com.mx</a> </strong> </p> </div> </td> </tr> </tbody> </table>
+<<  </td> </tr> </tbody> </table>
+<<  </div> <table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f1f0f0" style="background:#f1f0f0;width:100%!important;padding: 5px 15px;">
+<<   <tr>
+<<     <td>
+<<       <center>
+<<         <br />
+<<         <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;">
+<<           <tr>
+<<             <td>
+<<               <div style="font-size:small;">
+<<                 <span style="color:#4e4e4e;">
+<<                   <font color="#4e4e4e">
+<<                     <strong>Marketero</strong><br/>
+<<                     Lazaro de Baigorii #619, <br />
+<<                     Tel: +526144133781<br /><br />
+<<                   </font>
+<<                 </span>
+<<               </div>
+<<               <br />
+<<             </td>
+<<             <td align="right">
+<<               <div style="text-align:right; padding: 10px 30px;">
+<<                 <a href="https://marketero.com.mx"><img src="https://marketero.com.mx/images/LOGO-GRIS.png" border="0"></a>
+<<               </div>
+<<             </td>
+<<           </tr>
+<<         </table>
+<< 
+<<       </center>
+<<     </td>
+<<   </tr>
+<< </table>
+<< 
+<< <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;background:#f1f0f0;font-size:10px;padding:5px 15px;">
+<<   <tbody>
+<<     <tr>
+<<       <td style="width:50%;padding:7px;text-align:left;">
+<<         <span style="color:#888888">Si no puedes ver correctamente este mensaje, da <br/>
+<<           <a href="http://app.marketero.com.mx/marketero/Public/EmailMktViewOnline?k=4c476d21ea&e=cesarrodriguez@xaandia.com&m=176" target="_blank">clic aqu&iacute;</a>.
+<<         </span>
+<<       </td>
+<<       <td style="width:50%;padding:7px;text-align:right;">
+<<         <span style="color:#888888;">
+<<           Si no deseas seguir recibiendo estos mensajes, puedes <a href="http://app.marketero.com.mx/marketero/Public/Unsuscribe?k=4c476d21ea&e=cesarrodriguez@xaandia.com&a=10.176" target="_blank">cancelar tu suscripción</a> en cualquier momento.
+<<         </span>
+<<       </td>
+<<     </tr>
+<<   </tbody>
+<< </table>
+<< 
+<< <img src="http://app.marketero.com.mx/marketero/Public/TrackImg?k=4c476d21ea&e=cesarrodriguez@xaandia.com&a=176.1" width="1" height="1" border="0" alt=""></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1458699199_2--
+<< 
+<< --Message-Boundary-by-Mail-Sender-1458699199--
+<< 
+<< .
+>> 250 2.0.0 Ok: queued as CEAAB186612A
+<< QUIT
+>> 221 2.0.0 Bye
