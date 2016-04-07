@@ -23,7 +23,7 @@ BEGIN {
         &msg_print
         &msg_get
         &upload_file
-	      &upload_usr_file
+        &upload_usr_file
         &http_redirect
         $_REQUEST
         $Template
@@ -43,7 +43,7 @@ use vars @EXPORT;
 my $Q = CGI->new;
 
 foreach my $key (keys %{$Q->Vars()}){
-  $_REQUEST->{$key} = $Q->param($key);
+    $_REQUEST->{$key} = $Q->param($key);
 }
 
 my $URL = $ENV{SCRIPT_URL};
@@ -57,14 +57,14 @@ $_REQUEST->{View}       =~ s/\W//g;
 $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 
 if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
-  $_REQUEST->{Domain}     = 'Home';
-  $_REQUEST->{Controller} = '';
-  $_REQUEST->{View}       = '';
+    $_REQUEST->{Domain}     = 'Home';
+    $_REQUEST->{Controller} = '';
+    $_REQUEST->{View}       = '';
 }
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
 # DataBase
-$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database.";
+$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database." . $!;
 $dbh->do("SET CHARACTER SET 'utf8'");
 $dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
 #$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
@@ -282,7 +282,6 @@ sub set_toolbar {
 
   $conf->{Page}->{Toolbar} = $HTML;
 }
-
 
 sub upload_file {
   my $cgi_param = shift || "";

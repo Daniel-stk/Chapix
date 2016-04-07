@@ -41,7 +41,6 @@ $(function() {
         }
     });
 
-
 });
 
 function xaaTooggleSearch () {
@@ -51,7 +50,12 @@ function xaaTooggleSearch () {
 }
 
 function xaaDisplayMsg (msg) {
-    for(var i = 0; i < msg.length; i++) {
-	Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+    if( Object.prototype.toString.call( msg ) === '[object Array]' ) {
+	for(var i = 0; i < msg.length; i++) {
+	    Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+	}
+    }else{
+	Materialize.toast(msg, 3000, '');
     }
+
 }
