@@ -23,7 +23,7 @@ BEGIN {
         &msg_print
         &msg_get
         &upload_file
-	      &upload_usr_file
+        &upload_usr_file
         &http_redirect
         $_REQUEST
         $Template
@@ -42,7 +42,7 @@ use vars @EXPORT;
 my $Q = CGI->new;
 
 foreach my $key (keys %{$Q->Vars()}){
-  $_REQUEST->{$key} = $Q->param($key);
+    $_REQUEST->{$key} = $Q->param($key);
 }
 
 my $URL = $ENV{SCRIPT_URL};
@@ -103,7 +103,7 @@ $_REQUEST->{View}       = '' if(!$_REQUEST->{View});
 
 
 if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View})) {
-  if($sess{user_id}){
+    if($sess{user_id}){
 	 # if we have a session lets redirect to home folder
 	 my $folder_path = $dbh->selectrow_array("SELECT d.folder FROM xaa.xaa_domains d INNER JOIN xaa.xaa_users_domains ud ON d.domain_id=ud.domain_id " .
 						"WHERE ud.user_id=? AND ud.active=1 AND ud.default_domain=1 LIMIT 1",{},$sess{user_id}) || '';
@@ -117,12 +117,18 @@ if (!($_REQUEST->{Domain}) and !($_REQUEST->{Controller}) and !($_REQUEST->{View
 	    $sess{user_language}  = "";
 	    http_redirect('/'.$folder_path);
 	 }
-  }else{
+    }else{
 	   $_REQUEST->{Domain}     = 'Home';
 	   $_REQUEST->{Controller} = '';
 	   $_REQUEST->{View}       = '';
-  }
+    }
 }
+
+# DataBase
+$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database." . $!;
+$dbh->do("SET CHARACTER SET 'utf8'");
+$dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
+#$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
 
 $_REQUEST->{Domain} = 'Xaa' if (! ($_REQUEST->{Domain}) );
 
@@ -304,7 +310,6 @@ sub set_toolbar {
 
   $conf->{Page}->{Toolbar} = $HTML;
 }
-
 
 sub upload_file {
   my $cgi_param = shift || "";

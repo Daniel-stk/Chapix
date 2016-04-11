@@ -10,10 +10,11 @@ use Chapix::Com;
 use Chapix::View;
 
 sub handler {
+    #msg_add('danger'," -- $_REQUEST->{Controller} -- $_REQUEST->{View}  -- ");	
     if($_REQUEST->{Controller}){
         my $module = $_REQUEST->{Controller};
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
-
+	
     	if(!$is_installed){
             msg_add('danger',"The module $module is not installed.");
             view();
