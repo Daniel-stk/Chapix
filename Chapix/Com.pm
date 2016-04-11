@@ -453,8 +453,8 @@ sub upload_usr_file {
   my $mime = '';
   my $save_as = shift || "";
 
-  if(!(-e "data/$conf->{Domain}->{folder}/$dir/")){
-    mkdir ("data/$conf->{Domain}->{folder}/$dir/");
+  if(!(-e "data/$conf->{Domain}->{folder}/$dir")){
+    mkdir ("data/$conf->{Domain}->{folder}/$dir");
   }
 
   if($filename){

@@ -57,7 +57,9 @@ function xaaTooggleSearch () {
 }
 
 function xaaDisplayMsg (msg) {
-    for(var i = 0; i < msg.length; i++) {
-	Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+    if (msg){
+        for(var i = 0; i < msg.length; i++) {
+            Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+        }
     }
 }
