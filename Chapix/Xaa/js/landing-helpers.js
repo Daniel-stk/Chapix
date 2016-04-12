@@ -9,8 +9,6 @@ $(function(){
            		innerHtml += '<option value="'+val.country_id+'">'+val.country+'</option>'
            });
            $('#mkt_country').html(innerHtml);
-           $('#mkt_country').removeClass('browser-default');
-           $('#mkt_country').material_select();
     }); 
             
     $(document).on('change', '#mkt_country', function(){
@@ -25,14 +23,13 @@ $(function(){
 	           		innerHtml += '<option value="'+val.state_id+'">'+val.state+'</option>'
 	           	});
 	           	$('#mkt_state').html(innerHtml);
-	           	$('#mkt_state').removeClass('browser-default');
-	           	$('#mkt_state').material_select();
 			}); 
     	}
     });
 
-    $('#mkt_gender').removeClass('browser-default');
-    $('#mkt_gender').material_select();
+
+
+    $('select').material_select();
            
 	// $("#mkt_country").jeoCountrySelect({
  //        callback: function () {

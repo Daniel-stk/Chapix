@@ -47,6 +47,19 @@ $(function() {
         }
     });
 
+
+    $(window).scroll(function(e){ 
+        if ($('.sticky-container').length){
+            var $el = $('.sticky-container'); 
+            if ($(this).scrollTop() >= $el.offset().top ){ 
+                $('.sticky-container').children().addClass('sticky');
+            }else{
+                $('.sticky-container').children().removeClass('sticky');
+            }
+        }
+    });
+
+
 });
 
 function xaaTooggleSearch () {
@@ -56,14 +69,9 @@ function xaaTooggleSearch () {
 }
 
 function xaaDisplayMsg (msg) {
-    if( Object.prototype.toString.call( msg ) === '[object Array]' ) {
-	for(var i = 0; i < msg.length; i++) {
-	    Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
-	}
-    }else{
-       if (msg){
-	   Materialize.toast(msg, 3000, '');
-       }
+    if (msg){
+        for(var i = 0; i < msg.length; i++) {
+            Materialize.toast(msg[i][1], 3000, 'msg-'+msg[i][0]);
+        }
     }
-
 }
