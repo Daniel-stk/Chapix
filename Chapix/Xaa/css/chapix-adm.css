@@ -28,10 +28,11 @@
 
 .contacts-home-card {
     padding: 10px;
+    width: 91%;
 }
 
 .contact-flex-center {
-    font-size: 25px;
+    // font-size: 25px;
     display: inline-flex;
     align-items: center;
     margin: 0;
