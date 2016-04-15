@@ -32,6 +32,7 @@
 
 .contacts-listy {
     display: table;
+    padding: 10px;
 }
 
 .listy-item {
@@ -45,7 +46,7 @@
 }
 
 .listy-item:first-child {
-    width: 65%;
+    width: 77%;
 }
 
 .help-block {

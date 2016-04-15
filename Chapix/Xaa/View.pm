@@ -55,7 +55,8 @@ sub display_home {
 }
 
 sub display_subscription_details {
-    set_back_btn('Xaa/Settings',loc('Settings'));
+    set_back_btn('Xaa/Settings',loc('Ajustes'));
+
     if($conf->{Domain}->{subscription}){
 	my $HTML = "";
 	my $suscription = $dbh->selectrow_hashref(
@@ -182,7 +183,7 @@ sub set_toolbar {
 
 sub set_add_btn {
     my $script  = shift;
-    my $label   = shift || loc('Add');
+    my $label   = shift || loc('Agregar');
     my @actions = @_;
     my $HTML = '';
 
@@ -199,21 +200,26 @@ sub set_add_btn {
 
 
 sub set_back_btn {
-    my $script  = shift;
-    my $label   = shift || loc('Go back');
-    my @actions = @_;
-    my $HTML = '';
+  my $script  = shift;
+  my $label   = shift || loc('Go back');
+  my @actions = @_;
+  my $HTML = '';
 
-    if($script !~ /^\//){
-        $script = '/'.$_REQUEST->{Domain}.'/' . $script;
-    }
-    my $class = 'waves-effect waves-light ';
-    my $icon  = 'keyboard_backspace';
+  if($script !~ /^\//){
+    $script = '/'.$_REQUEST->{Domain}.'/' . $script;
+  }
 
-    my $btn = ' <a href="'.$script.'" class="'.$class.'" alt="'.$label.'" title="'.$label.'" >';
-    $btn   .= '<i class="material-icons">'.$icon.'</i>';
-    $btn   .= '</a>';
-    $conf->{Page}->{BackBtn} = $btn;
+  my $class = 'waves-effect waves-light ';
+  my $icon  = 'keyboard_backspace';
+
+  if ($label){
+    $class .= ' tooltipped ';
+  }
+
+  my $btn = ' <a href="'.$script.'" class="'.$class.'"  data-position="bottom" data-delay="50" data-tooltip="'.$label.'">';
+  $btn   .= '<i class="material-icons">'.$icon.'</i>';
+  $btn   .= '</a>';
+  $conf->{Page}->{BackBtn} = $btn;
 }
 
 sub set_search_action {
@@ -235,7 +241,7 @@ sub set_search_action {
 
 
 sub display_login {
-    my @submit = (loc("Login"));
+    my @submit = (loc("Iniciar sesión"));
 
     my $form = CGI::FormBuilder->new(
         name     => 'login',
@@ -246,11 +252,11 @@ sub display_login {
         materialize => '1',
     );
 
-    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
-		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'));
+    $form->field(name => 'email', label=> loc('Correo Electrónico'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Escribe tu correo electrónico'));
 
-    $form->field(name => 'password', label=> loc('Password'), class=>"",maxlength=>"100", required=>"1",value=>"",
-		 override=>1,jsmessage => loc('Please enter your password'), type=>"password", comment=>'<i class="icon-lock"></i>');
+    $form->field(name => 'password', label=> loc('Contraseña'), class=>"",maxlength=>"100", required=>"1",value=>"",
+		 override=>1,jsmessage => loc('Escribe tu contraseña'), type=>"password", comment=>'<i class="icon-lock"></i>');
 
     $form->stylesheet('1');
 
@@ -271,7 +277,7 @@ sub display_login {
 }
 
 sub display_password_reset {
-    my @submit = (loc("Next"));
+    my @submit = (loc("Siguiente"));
 
     my $form = CGI::FormBuilder->new(
         name     => 'password_reset',
@@ -461,10 +467,11 @@ sub display_domain_settings {
 
 
 sub display_edit_account_form {
-    $conf->{Page}->{Title} = loc('Edit your settings');
-    set_back_btn('Xaa/YourAccount',loc('Your account'));
+    $conf->{Page}->{Title} = loc('Cambia tus ajustes');
 
-    my @submit = (loc('Save'));
+    set_back_btn('Xaa/YourAccount',loc('Tu cuenta'));
+
+    my @submit = (loc('Guardar'));
 
     my $params = {
         name => $sess{user_name},
@@ -506,7 +513,8 @@ sub display_edit_account_form {
 }
 
 sub display_user_form {
-    my @submit = (loc("Save"),loc('Resset Password'), loc('Delete'));
+    my @submit = (loc("Guardar"), loc('Restablecer Contraseña'), loc('Eliminar'));
+
     my $params = {};
     $conf->{Page}->{Title} = loc('User');
     set_back_btn('Xaa/Users',loc('Users'));

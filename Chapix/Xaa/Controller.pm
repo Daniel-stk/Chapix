@@ -105,12 +105,12 @@ sub actions {
         process_results($results);
         return;
     }elsif(defined $_REQUEST->{_submitted_user}){
-        if($_REQUEST->{_submit} eq loc('Resset Password')){
+        if($_REQUEST->{_submit} eq loc('Restablecer Contraseña')){
             # Reset user password
             $results = Chapix::Xaa::Actions::reset_user_password();
             process_results($results);
         return;
-        }elsif($_REQUEST->{_submit} eq loc('Delete')){
+        }elsif($_REQUEST->{_submit} eq loc('Eliminar')){
             # Delete user
             $results = Chapix::Xaa::Actions::delete_user();
             process_results($results);

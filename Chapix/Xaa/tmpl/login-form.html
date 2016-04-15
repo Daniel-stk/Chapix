@@ -2,7 +2,7 @@
   <div class="section"></div>
   <div class="container">
     <div class="center black-text">
-      <h4>Inicia sesión</h4>
+      <h4>[% loc('Inicia sesión') %] </h4>
     </div>
     <div class="row">
       <div class="col s10 m8 l6 z-depth-4 card col-center">
@@ -10,7 +10,7 @@
 	[% form.start %]
 	<div class="card-content">
 	  <div class="card-title text-black">[% conf.App.Name %]</div>
-	  <p>[% loc('Log into your account') %]</p>
+	  <p>[% loc('Entra en tu cuenta') %]</p>
 	  [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
 	  [% msg %]
 	  [% field = form.field.email %]

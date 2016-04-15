@@ -92,6 +92,20 @@ section h4{
 	font-size: 10px;
 }
 
+.idx-detail {
+	padding: 0px 55px;
+}
+
+.idx-mkt h6 {
+    font-size: 19px;
+}
+
+.idx-capacitadores h6 {
+    font-size: 17px;
+    padding: 0px 10px;
+}
+
+
 .pricing-table {
 	text-transform: uppercase;
 	margin: 0 auto;
