@@ -50,7 +50,7 @@ sub login {
             $results->{success} = 1;
             return $results;
         }else{
-        	msg_add('warning',loc('Your account is not linked to any business account.'));
+        	msg_add('warning',loc('Tu cuenta no está ligada a ninguna empresa.'));
         	$results->{error} = 1;            
         }
         $results->{redirect} = '/Xaa/Login';
@@ -165,7 +165,7 @@ sub save_account_settings {
         $results->{error} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/YourAccount';         
     }else{
-        msg_add('success',loc('Account successfully updated'));
+        msg_add('success',loc('Datos actualizados correctamente'));
         $results->{success} = 1;
          $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/YourAccount';
     }

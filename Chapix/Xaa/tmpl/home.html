@@ -10,13 +10,18 @@
 		<div class="row no-margin center">
 			<div class="col s12 m12 l12">
 				<div class="main-contacts hoverable z-depth-1">
-					<div class="contacts-listy">
+					<div class="contacts-listy blue">
 						<div class="listy-item">
 							<a  class="black-text" href="/[% conf.Domain.folder %]/CRM/Contacts">
-								<h5>[% loc('Tus contactos') %] </h5>
+								<h6 class="white-text uppercase left">Tu Lista de contactos</h6>
 							</a>							
 						</div>
-						<div class="listy-item green">
+						<div class="listy-item blue">
+							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/Contacts" data-position="top" data-delay="50" data-tooltip="[% loc('Lista de Contactos') %]"> 
+								<i class="material-icons small">list</i> 
+							</a>							
+						</div>
+						<div class="listy-item blue">
 							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/ContactEdit" data-position="top" data-delay="50" data-tooltip="[% loc('Agregar un contacto') %]"> 
 								<i class="material-icons small">face</i> 
 							</a>							
@@ -26,8 +31,8 @@
 								<i class="material-icons small">group_add</i>
 							</a>							
 						</div>
-						<div class="listy-item red">
-							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/GroupForm" data-position="top" data-delay="50" data-tooltip="[% loc('Agregar grupo') %]">
+						<div class="listy-item blue">
+							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/GroupForm" data-position="top" data-delay="50" data-tooltip="[% loc('Crea grupo') %]">
 								<i class="material-icons small">group</i>	
 							</a>						
 						</div>
@@ -67,9 +72,9 @@
 								<div class="card custom-card force-center hoverable">
 									<h6 class="uppercase black-text">Cierra Ventas</h6>
 									<div class="card-content white-text">
-										<i class="large material-icons lime-text text-darken-1">contact_mail</i>
-										<h5 class="uppercasse lime-text text-darken-1 small-line-height"><span class="small-text">DA</span><br/>SEGUIMIENTO</h5>
-										<p class="uppercase lime-text text-darken-1 card-txt">a tus prospectos.</p>
+										<i class="large material-icons light-green-text text-darken-1">contact_mail</i>
+										<h5 class="uppercasse light-green-text text-darken-1 small-line-height"><span class="small-text">DA</span><br/>SEGUIMIENTO</h5>
+										<p class="uppercase light-green-text text-darken-1 card-txt">a tus prospectos.</p>
 									</div>
 								</div>
 							</a>
