@@ -36,10 +36,10 @@ sub set_path_route {
 
 sub display_home {
     my $HTML = "";
+    $conf->{Page}->{MenuKey} = 'Index';
     my $template = Template->new();
     $conf->{Page}->{ShowSettings} = '1';
     set_toolbar(
-        #['Xaa/Subscription','Contratar Marketero','grey-text','favorite'],
 	);
     
     my $vars = {
