@@ -26,16 +26,26 @@
 	padding: 0px;
 }
 
-.contacts-home-card {
-    padding: 10px;
-    width: 91%;
+.main-contacts {
+    margin: 0 35px;
 }
 
-.contact-flex-center {
-    // font-size: 25px;
-    display: inline-flex;
-    align-items: center;
-    margin: 0;
+.contacts-listy {
+    display: table;
+}
+
+.listy-item {
+    display: table-cell;
+    vertical-align: middle;
+    width: 200px;
+}
+
+.listy-item a {
+    display: block;
+}
+
+.listy-item:first-child {
+    width: 65%;
 }
 
 .help-block {
@@ -138,8 +148,16 @@ nav a {
     top: 0px;
     left: 0px;
     z-index: 100;
+    max-width: none;
 }
 
 .sticky-container {
     width: 100%;
+}
+
+
+.your-contactos {
+    display: block;
+    width: 90%;
+    margin: 0 auto;
 }

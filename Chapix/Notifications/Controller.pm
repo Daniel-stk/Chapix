@@ -8,8 +8,12 @@ use Digest::SHA qw(sha384_hex);
 
 use Chapix::Conf;
 use Chapix::Com;
-use Chapix::Notifications::View;
+
 use Chapix::Mail::Controller;
+
+use Chapix::Notifications::API;
+use Chapix::Notifications::Actions;
+use Chapix::Notifications::View;
 
 # Language
 use Chapix::Notifications::L10N;
@@ -38,9 +42,48 @@ sub new {
 sub _init {
     my $self = shift;
     $self->{main_db} = $conf->{Xaa}->{DB};
-    $conf->{Domain} = $dbh->selectrow_hashref(
-        "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},
-        $_REQUEST->{Domain});
+    # $conf->{Domain} = $dbh->selectrow_hashref(
+    #     "SELECT d.domain_id, d.name, d.folder, d.database, d.country_id, d.language, d.time_zone FROM $self->{main_db}.xaa_domains d WHERE folder = ?",{},
+    #     $_REQUEST->{Domain});
+}
+
+
+# API
+sub api {
+        my $JSON = {
+        error   => '',
+        success => '',
+        msg     => ''
+    };
+
+    if ($_REQUEST->{_submitted}){
+        $JSON = Chapix::Notifications::API::get_notification();
+    }else{
+        $JSON->{error} = 'Not implemented';
+        $JSON->{redirect} = '';
+        $JSON->{msg} = msg_get();
+    }
+
+    print Chapix::Com::header_out('application/json');
+    print JSON::XS->new->encode($JSON);
+}
+
+# Admin actions.
+# Each action is detected by the "_submitted" param prefix
+sub actions {
+    my $self = shift;
+    my $results = {};
+    
+    if($_REQUEST->{_view} eq 'Notification'){
+       $results = Chapix::Notifications::Actions::set_view_and_redirect();
+       process_results($results);
+       return;
+    }
+}
+
+sub process_results {
+    my $results = shift;
+    http_redirect($results->{redirect}) if($results->{redirect});
 }
 
 # Main display function, this function prints the required view.
@@ -57,67 +100,5 @@ sub view {
     }
 }
 
-# Admin actions.
-# Each action is detected by the "_submitted" param prefix
-sub actions {
-    my $self = shift;
-    
-    if($_REQUEST->{_view} eq 'Notification'){
-	$self->set_view_and_redirect();
-    }
-}
-
-sub add {
-    my $self = shift;
-    my $user_id = shift || $sess{user_id};
-    my $title = shift || '';
-    my $url = shift || '';
-    
-    if(!$title){
-	return '';
-    }
-    
-    if(!$url){
-	return '';
-    }
-    
-    $dbh->do("INSERT INTO $self->{main_db}.notifications (user_id, title, expiration, url, readed) VALUES (?,?, DATE_ADD(CURRENT_TIMESTAMP, INTERVAL 5 DAY) ,?,0)",{},$user_id, $title, $url);        
-    my $id = $dbh->last_insert_id("","","$self->{main_db}.notifications","notification_id");
-    
-    return $id;
-}
-
-
-sub delete {
-    my $self = shift;
-    my $notification_id = shift;
-    my $t = 0;
-    
-    $t = int($dbh->do("DELETE FROM $self->{main_db}.notifications WHERE notification_id=? AND user_id=?",{},$notification_id, $sess{user_id}));
-    
-    return $t;
-}
-
-sub set_view {
-    my $self = shift;
-    my $notification_id = shift;
-    my $t = 0;
-
-    $t = int($dbh->do("UPDATE $self->{main_db}.notifications SET readed=1 WHERE notification_id=? AND user_id=?".{}.$notification_id, $sess{user_id}));
-    
-    return $t;
-}
-
-
-sub set_view_and_redirect {
-    my $self = shift;
-    my $notification_id = shift || $_REQUEST->{notification_id};
-    
-    $dbh->do("UPDATE $self->{main_db}.notifications SET readed=1 WHERE notification_id=? AND user_id=?",{},$notification_id, $sess{user_id});
-    
-    my $url = $dbh->selectrow_array("SELECT url FROM $self->{main_db}.notifications WHERE notification_id=? AND user_id=?",{},$notification_id, $sess{user_id});
-    
-    http_redirect($url);
-}
 
 1;

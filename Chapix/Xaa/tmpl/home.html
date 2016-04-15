@@ -9,25 +9,37 @@
 
 		<div class="row no-margin center">
 			<div class="col s12 m12 l12">
-				<div class="card-panel contacts-home-card hoverable force-center blue">
-					<div class="right">
-						<a class='dropdown-button white-text small' href='#!' data-activates='contacts-options' data-constrainwidth="false" data-beloworigin="true"> <i class="material-icons">more_vert</i> </a>
-						  <ul id='contacts-options' class='dropdown-content'>
-						    <li><a href="/[% conf.Domain.folder %]/CRM/ContactEdit">[% loc('Agregar un contacto') %] </a></li>
-						    <li><a href="/[% conf.Domain.folder %]/CRM/AddContacts">[% loc('Agregar contactos') %] </a></li>
-						    <li><a href="/[% conf.Domain.folder %]/CRM/GroupForm ">[% loc('Agregar grupo') %] </a></li>
-						  </ul>
+				<div class="main-contacts hoverable z-depth-1">
+					<div class="contacts-listy">
+						<div class="listy-item">
+							<a  class="black-text" href="/[% conf.Domain.folder %]/CRM/Contacts">
+								<h5>[% loc('Tus contactos') %] </h5>
+							</a>							
+						</div>
+						<div class="listy-item green">
+							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/ContactEdit" data-position="top" data-delay="50" data-tooltip="[% loc('Agregar un contacto') %]"> 
+								<i class="material-icons small">face</i> 
+							</a>							
+						</div>
+						<div class="listy-item blue">
+							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/AddContacts" data-position="top" data-delay="50" data-tooltip="[% loc('Subir contactos') %]">
+								<i class="material-icons small">group_add</i>
+							</a>							
+						</div>
+						<div class="listy-item red">
+							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/GroupForm" data-position="top" data-delay="50" data-tooltip="[% loc('Agregar grupo') %]">
+								<i class="material-icons small">group</i>	
+							</a>						
+						</div>
+
 					</div>
-					<a href="/[% conf.Domain.folder %]/CRM/Contacts">
-						<p class="contact-flex-center uppercase white-text"> <i class="material-icons small ">face</i>&nbsp;[% loc('Tus Contactos') %] </p>
-					</a>
 				</div>
-			</div>
 		</div>
 
 		<div class="row">
 			<div class="col s12 m12 l12">
-				<div class="row center">
+				<div class="row center">				
+
 					<div class="col s12 m4 l4">
 						<div class="section"></div>
 						<div class="card-wrapper">	      
@@ -42,7 +54,7 @@
 								</div>
 							</a>
 							<div class="card-floating-action">
-								<a class="btn btn-floating btn-large waves-effect waves-light hoverable tooltipped" href="/[% Domain.folder %]/Forms/NewForm" data-position="right" data-delay="50" data-tooltip="Crea formulario"><i class="material-icons">add</i></a>
+								<a class="btn btn-floating btn-large waves-effect waves-light hoverable tooltipped" href="/[% conf.Domain.folder %]/Forms/NewForm" data-position="right" data-delay="50" data-tooltip="Crea formulario"><i class="material-icons">add</i></a>
 							</div>
 						</div>
 					</div>
@@ -55,14 +67,14 @@
 								<div class="card custom-card force-center hoverable">
 									<h6 class="uppercase black-text">Cierra Ventas</h6>
 									<div class="card-content white-text">
-										<i class="large material-icons lime-text">contact_mail</i>
-										<h5 class="uppercasse lime-text small-line-height"><span class="small-text">DA</span><br/>SEGUIMIENTO</h5>
-										<p class="uppercase lime-text card-txt">a tus prospectos.</p>
+										<i class="large material-icons lime-text text-darken-1">contact_mail</i>
+										<h5 class="uppercasse lime-text text-darken-1 small-line-height"><span class="small-text">DA</span><br/>SEGUIMIENTO</h5>
+										<p class="uppercase lime-text text-darken-1 card-txt">a tus prospectos.</p>
 									</div>
 								</div>
 							</a>
 							<div class="card-floating-action">
-								<a class="btn-floating btn-large waves-effect waves-light hoverable tooltipped" data-position="right" data-delay="50" data-tooltip="Agrega prospecto"><i class="material-icons">add</i></a>
+								<a class="btn-floating btn-large waves-effect waves-light hoverable tooltipped" href="/[% conf.Domain.folder %]/CRM/ContactEdit" data-position="right" data-delay="50" data-tooltip="Agrega prospecto"><i class="material-icons">add</i></a>
 							</div>
 						</div>
 					</div>
@@ -74,9 +86,9 @@
 								<div class="card custom-card force-center hoverable">
 									<h6 class="uppercase black-text">Enamora Clientes</h6>
 									<div class="card-content white-text">
-										<i class="large material-icons pink-text">mail</i>
-										<h5 class="pink-text uppercase small-line-height"><span class="small-text">Tus</span><br/>Mensajes</h5>
-										<p class="uppercase pink-text card-txt">de correo masivo.</p>
+										<i class="large material-icons pink-text text-darken-1">mail</i>
+										<h5 class="pink-text text-darken-1 uppercase small-line-height"><span class="small-text">Tus</span><br/>Mensajes</h5>
+										<p class="uppercase pink-text text-darken-1 card-txt">de correo masivo.</p>
 									</div>
 								</div>
 							</a>
