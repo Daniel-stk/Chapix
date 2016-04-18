@@ -31,6 +31,7 @@ sub sender {
                 fake_from   => $conf->{Mail}->{From},
                     TLS_allowed => $conf->{Mail}->{Secure},
                         on_errors => 'die',
+                            debug => 'data/mailsender.txt',
     };
 }
 
