@@ -100,7 +100,7 @@ sub save_new_password {
 
     # Old password match?
     if($current_password ne sha384_hex($conf->{Security}->{key} . $_REQUEST->{current_password})){
-        msg_add('warning',loc('Current password does not match'));
+        msg_add('warning',loc('El password actual es incorrecto.'));
         $results->{error} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/ChangePassword';
         return $results;
@@ -108,7 +108,7 @@ sub save_new_password {
 
     # new passwords match?
     if($_REQUEST->{new_password} ne $_REQUEST->{new_password_repeat}){
-        msg_add('warning', loc('The "New password" and "Repeat new password" fields must match'));
+        msg_add('warning', loc('Las contraseñas deben de coincidir'));
         $results->{error} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/ChangePassword';
         return $results;
@@ -123,7 +123,7 @@ sub save_new_password {
         $results->{error} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/ChangePassword';    
     }else{
-        msg_add('success',loc('Password successfully updated'));
+        msg_add('success',loc('Contraseña actualizada satisfactoriamente'));
         $results->{success} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/YourAccount';
     }
@@ -142,7 +142,7 @@ sub save_domain_settings {
         $results->{error} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/Settings';
     }else{
-        msg_add('success',loc('Business account updated'));
+        msg_add('success',loc('Ajustes actualizados'));
         $results->{success} = 1;
         $results->{redirect} = '/'.$conf->{Domain}->{folder}.'/Xaa/Settings';
     }
@@ -265,6 +265,16 @@ sub create_account {
     my $domain_id = $dbh->last_insert_id('','',"$conf->{Xaa}->{DB}.xaa_domains",'domain_id');
 
     $dbh->do("INSERT IGNORE INTO $conf->{Xaa}->{DB}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
+
+    #add contact to marketero pipeline
+    my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
+    if ($exist){
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 3 MONTH))",{},$exist);
+    }else{
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts (email, name, added_on, updated_on) VALUES (?, ?, NOW(), NOW())",{}, $_REQUEST->{email}, $_REQUEST->{name});
+        my $contact_id = $dbh->last_insert_id('', '', 'xaa_marketero.contacts', 'contact_id');
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 3 MONTH))",{},$contact_id);
+    }
 
     # Database init
     my $DB = 'xaa_' . $domain_to_use;

@@ -36,10 +36,10 @@ sub set_path_route {
 
 sub display_home {
     my $HTML = "";
-    $conf->{Page}->{MenuKey} = 'Index';
     my $template = Template->new();
     $conf->{Page}->{ShowSettings} = '1';
     set_toolbar(
+        #['Xaa/Subscription','Contratar Marketero','grey-text','favorite'],
 	);
     
     my $vars = {
@@ -205,6 +205,10 @@ sub set_back_btn {
   my @actions = @_;
   my $HTML = '';
 
+  if ($ENV{HTTP_REFERER} =~ /^http(?:s)?:\/\/[$conf->{App}->{URL}][^\/]+(\/.*)$/gm) {
+      $script = $1;
+  }
+
   if($script !~ /^\//){
     $script = '/'.$_REQUEST->{Domain}.'/' . $script;
   }
@@ -288,8 +292,8 @@ sub display_password_reset {
         materialize => '1',
     );
 
-    $form->field(name => 'email', label=> loc('Email'), comment=>'<i class="icon-envelope"></i>', type=>'email',
-		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Please enter your email'));
+    $form->field(name => 'email', label=> loc('Correo electrónico'), comment=>'<i class="icon-envelope"></i>', type=>'email',
+		 maxlength=>"100", required=>"1", class=>"", jsmessage => loc('Ingresa tu email'));
     $form->stylesheet('1');
 
     my $HTML = $form->render(
@@ -342,11 +346,15 @@ sub display_settings {
 }
 
 sub display_users_list {
-    $conf->{Page}->{Title} = loc('Users');
-    set_back_btn('Xaa/Settings',loc('Settings'));
-    set_add_btn('Xaa/User',loc('Add user'));
+    $conf->{Page}->{Title} = loc('Usuarios');
+
+    set_back_btn('Xaa/Settings',loc('Ajustes'));
+
+    set_add_btn('Xaa/User',loc('Agregar usuario'));
+    
     set_search_action();
-    set_toolbar(['Xaa/User','',loc('Add user'),'add','waves-effect waves-light add']);
+    
+    set_toolbar(['Xaa/User','',loc('Agregar usuario'),'add','waves-effect waves-light add']);
 
     my $where = "ud.domain_id=? AND ud.active=1 ";
     my @params;
@@ -374,10 +382,10 @@ sub display_users_list {
         },
     );
 
-    $list->set_label('name',loc('Name'));
-    $list->set_label('email',loc('Correo'));
-    $list->set_label('added_on',loc('Added on'));
-    $list->set_label('active',loc('Active'));
+    $list->set_label('name',loc('Nombre'));
+    $list->set_label('email',loc('Correo electrónico'));
+    $list->set_label('added_on',loc('Agregado el'));
+    $list->set_label('active',loc('Activo'));
 
     my $HTML = "";
     my $vars = {
@@ -391,12 +399,12 @@ sub display_users_list {
 }
 
 sub display_password_form {
-    $conf->{Page}->{Title} = loc('Change your password');
-    set_back_btn('Xaa/YourAccount',loc('Your account'));
+    $conf->{Page}->{Title} = loc('Cambiar Contraseña');
+    set_back_btn('Xaa/YourAccount',loc('Tu cuenta'));
 
   $conf->{Page}->{ShowSettings} = 'true';
 
-    my @submit = (loc('Save'));
+    my @submit = (loc('Guardar'));
     my $params = {};
     my $form = CGI::FormBuilder->new(
         name     => 'change_password',
@@ -407,9 +415,9 @@ sub display_password_form {
         values   => $params,
         materialize => 1,
     );
-    $form->field(name => 'current_password', label=> loc("Current password"), maxlength=>"45", required=>1, type=>'password', group=>loc('Current'));
-    $form->field(name => 'new_password', label=> loc("New password"), maxlength=>"45", required=>1, type=>'password', group=> loc('New'));
-    $form->field(name => 'new_password_repeat', label=> loc("Repeat new password"), maxlength=>"45", required=>1, type=>'password');
+    $form->field(name => 'current_password', label=> loc("Contraseña actual"), maxlength=>"45", required=>1, type=>'password', group=>loc('Actual'));
+    $form->field(name => 'new_password', label=> loc("Nueva contraseña"), maxlength=>"45", required=>1, type=>'password', group=> loc('Nueva'));
+    $form->field(name => 'new_password_repeat', label=> loc("Repite la nueva contraseña"), maxlength=>"45", required=>1, type=>'password');
 
     return $form->render(
         template => {
@@ -426,12 +434,14 @@ sub display_password_form {
 }
 
 sub display_domain_settings {
-    $conf->{Page}->{Title} = loc('Business Settigs');
-    set_back_btn('Xaa/Settings',loc('Settings'));
+    $conf->{Page}->{Title} = loc('Ajustes generales');
+
+    set_back_btn('Xaa/Settings',loc('Ajustes'));
 
   $conf->{Page}->{ShowSettings} = '1';
 
-    my @submit = (loc('Save'));
+    my @submit = (loc('Guardar'));
+
     my $params = $conf->{Domain};
     my $form = CGI::FormBuilder->new(
         name     => 'domain_settings',
@@ -443,12 +453,12 @@ sub display_domain_settings {
         materialize => 1,
     );
 
-    $form->field(name => 'name', label=>loc('Name'), required=>1, validate=>'/[a-zA-Z]{5,}/');
+    $form->field(name => 'name', label=>loc('Nombre'), required=>1, validate=>'/[a-zA-Z]{5,}/');
     my %time_zones = Chapix::Com::selectbox_data(
         "SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%' ORDER BY tzn.Name");# WHERE tzn.Name LIKE 'posix%' AND tzn.Name LIKE '%America%'");
-    $form->field(name => 'time_zone', required=>1, label=>loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    $form->field(name => 'time_zone', required=>1, label=>loc('Zona horaria'), options=>$time_zones{values}, type=>'select');
 
-    $form->field(name => 'language', required=>1, label=>loc('Language'), options=>['es_MX','en_US'], type=>'select',
+    $form->field(name => 'language', required=>1, label=>loc('Lenguaje'), options=>['es_MX','en_US'], type=>'select',
                  labels => {'es_MX'=>'Español', 'en_US'=>'English'});
 
     return $form->render(
@@ -489,13 +499,13 @@ sub display_edit_account_form {
         materialize => 1,
     );
 
-    $form->field(name => 'name', required=>1, label=>loc('Name'));
+    $form->field(name => 'name', required=>1, label=>loc('Nombre'));
 
     my %time_zones = Chapix::Com::selectbox_data("SELECT SUBSTR(Name,7) AS id, SUBSTR(Name,7) AS name FROM mysql.time_zone_name tzn WHERE tzn.Name LIKE 'posix%'");
 
-    $form->field(name => 'time_zone', required=>1, label=> loc('Time zone'), options=>$time_zones{values}, type=>'select');
+    $form->field(name => 'time_zone', required=>1, label=> loc('Zona horaria'), options=>$time_zones{values}, type=>'select');
 
-    $form->field(name => 'language', required=>1, label=> loc('Language'), options=>['es_MX','en_US'], type=>'select',
+    $form->field(name => 'language', required=>1, label=> loc('Languaje'), options=>['es_MX','en_US'], type=>'select',
 		 labels => {'es_MX'=>'Español', 'en_US'=>'English'});
 
     return $form->render(
@@ -586,15 +596,15 @@ sub display_register {
 	);
 
     $form->field(name => 'controller', type=>'hidden', label=>'');
-    $form->field(name => 'name', label=> loc('Name'), class=>"", maxlength=>"100", required=>"1",value=>"",
-		 jsmessage => loc('Please enter your name'), type=>"text", icon=>'account_circle');
-    $form->field(name => 'email', label=> loc('Email'), type=>'email', icon=>'email',
-		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your email'));
-    $form->field(name => 'phone', label=> loc('Phone'), type=>'text', icon=>'phone',
-		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Please enter your full phone number'),
+    $form->field(name => 'name', label=> loc('Nombre'), class=>"", maxlength=>"100", required=>"1",value=>"",
+		 jsmessage => loc('Escribe tu nombre'), type=>"text", icon=>'account_circle');
+    $form->field(name => 'email', label=> loc('Correo electrónico'), type=>'email', icon=>'email',
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Escribe tu correo electrónico'));
+    $form->field(name => 'phone', label=> loc('Teléfono'), type=>'text', icon=>'phone',
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Ingresa tu número telefónico'),
          validate=>'/[\d\s\-]{10,15}/');
-    $form->field(name => 'password', label=> loc('Password'), type=>'password', icon=>'lock',
-		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Please use a more complex password. Use numbers, upper and lower case.'),
+    $form->field(name => 'password', label=> loc('Contraseña'), type=>'password', icon=>'lock',
+		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Usa porfavor una contraseña mas compleja. Agrega números, mayusculas y minúsculas.'),
          validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
     $form->stylesheet('1');
 
@@ -615,12 +625,12 @@ sub display_register {
 
 
 sub display_logo_form {
-    $conf->{Page}->{Title} = loc('Upload logo');
+    $conf->{Page}->{Title} = loc('Sube tu logo');
     $conf->{Page}->{ShowSettings} = '1';
     
-    set_back_btn('Xaa/Settings',loc('Your account'));
+    set_back_btn('Xaa/Settings',loc('Tu cuenta'));
 
-    my @submit = (loc('Save'));
+    my @submit = (loc('Guardar'));
 
     Chapix::Com::conf_load("Xaa");
 
