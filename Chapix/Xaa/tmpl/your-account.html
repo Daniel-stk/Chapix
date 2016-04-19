@@ -7,20 +7,20 @@
             <p>
                 [% msg %]
                 <div class="valign-wrapper">
-                  <h4>[% loc('Your account') %]</h4>
+                  <h4>[% loc('Tu cuenta') %]</h4>
                 </div>
                 <ul>
                     <li>Nombre: [% sess.user_name %]</li>
                     <li>Correo: [% sess.user_email %]</li>
-                    <li>[% loc('Language') %]: [% sess.user_language %]</li>
+                    <li>[% loc('Languaje') %]: [% sess.user_language %]</li>
                 </ul>
             </p>
           </div>
           <div class="card-action">
-            <a href="/[% REQUEST.Domain %]/Xaa/EditAccount" class="waves-effect waves-light">[% loc('Edit your settings') %]</a>
+            <a href="/[% REQUEST.Domain %]/Xaa/EditAccount" class="waves-effect waves-light">[% loc('Editar ajustes') %]</a>
           </div>
           <div class="card-action">
-            <a href="/[% REQUEST.Domain %]/Xaa/ChangePassword" class="waves-effect waves-light">[% loc('Change your password') %]</a>
+            <a href="/[% REQUEST.Domain %]/Xaa/ChangePassword" class="waves-effect waves-light">[% loc('Cambiar contraseña') %]</a>
           </div>
         </div>
       </div>

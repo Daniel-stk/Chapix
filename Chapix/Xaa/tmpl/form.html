@@ -54,7 +54,17 @@
 [% includes %]
 [% up_data %]
 [% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
-[% bottom_data %]
+<section class="section">
+  <div class="container">
+    <div class="row">
+    <div class="col s12 m12 l12">
+      [% bottom_data %]      
+    </div>
+  </div>
+  </div>
+</section>
+
+
 [% IF js %]
 [% jsFile = 'tmpl/' _ js %]
 <script type="text/javascript">

@@ -103,7 +103,7 @@
 }
 
 .home-box .title {
-    font-size: 1.0em;
+    font-size: 0.9em;
     font-weight: normal;
 }
 
@@ -165,5 +165,5 @@ nav a {
 
 
 .userlike {
-   z-index : initial !important;
+    z-index: initial !important;
 }
