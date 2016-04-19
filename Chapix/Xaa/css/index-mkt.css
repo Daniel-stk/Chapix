@@ -305,3 +305,8 @@ nav ul li:last-child:hover, nav ul li:last-child.active {
     height: 22px !important;
     padding: 2px !important;
 }
+
+
+.userlike {
+  z-index : initial !important;
+}
