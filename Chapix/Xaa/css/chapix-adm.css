@@ -98,6 +98,10 @@
     font-size: 25px !important;
 }
 
+.page-title small {
+    font-size: 15px;
+}
+
 .home-box {
     color: #949697;
 }

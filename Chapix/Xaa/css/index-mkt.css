@@ -305,3 +305,31 @@ nav ul li:last-child:hover, nav ul li:last-child.active {
     height: 22px !important;
     padding: 2px !important;
 }
+
+
+.card-header {
+	top: 0px;
+    right: 0px;
+    width: 100%;
+    position: absolute;
+    padding: 10px;
+}
+
+.support-channels {
+	margin-top: 100px;
+	margin-left: 100px;
+	margin-bottom: 100px;
+}
+
+.support-channels p, .support-channels p a {
+	padding : 6px 0;
+	display: flex;
+	align-items: center;
+}
+
+.mark-support {
+	position : absolute;
+	right: 160px;
+	bottom: -7px;
+	max-width: 215px;
+}
