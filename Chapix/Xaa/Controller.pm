@@ -175,6 +175,7 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_login() );
             return;
         }elsif($_REQUEST->{View} eq 'Register'){
+	    #Chapix::Com::http_redirect('/Register');
             print Chapix::Com::header_out();
             print Chapix::Layout::print( Chapix::Xaa::View::display_register() );
             return;

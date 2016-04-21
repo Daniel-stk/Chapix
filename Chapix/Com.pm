@@ -318,6 +318,15 @@ sub upload_file {
   my $mime = '';
   my $save_as = shift || "";
 
+
+  if(!(-e "data/$conf->{Domain}->{folder}")){
+    mkdir ("data/$conf->{Domain}->{folder}");
+  }
+  
+  if(!(-e "data/$conf->{Domain}->{folder}/img")){
+    mkdir ("data/$conf->{Domain}->{folder}/img");
+  }  
+  
   if(!(-e "data/$conf->{Domain}->{folder}/img/$dir/")){
     mkdir ("data/$conf->{Domain}->{folder}/img/$dir/");
   }
@@ -458,6 +467,15 @@ sub upload_usr_file {
   my $mime = '';
   my $save_as = shift || "";
 
+
+  if(!(-e "data/$conf->{Domain}->{folder}")){
+    mkdir ("data/$conf->{Domain}->{folder}");
+  }
+
+  if(!(-e "data/$conf->{Domain}->{folder}/img")){
+      mkdir ("data/$conf->{Domain}->{folder}/img");
+  }
+  
   if(!(-e "data/$conf->{Domain}->{folder}/$dir")){
     mkdir ("data/$conf->{Domain}->{folder}/$dir");
   }

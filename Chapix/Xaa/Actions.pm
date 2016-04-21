@@ -240,17 +240,21 @@ sub create_account {
     # Check folder and db
     my $exist_folder_on_db = $dbh->selectrow_array("SELECT COUNT(*) FROM $conf->{Xaa}->{DB}.xaa_domains WHERE folder=?",{},$domain_to_use) || 0;
     my $exist_folder_on_fs = (-e('data/'.$domain_to_use));
-    my $exist_db = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$domain_to_use) || 0;
-
-    if($exist_folder_on_db or $exist_folder_on_fs or $exist_db){
+    my $exist_db           = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$domain_to_use) || 0;
+    my $exist_alias        = $dbh->selectrow_array("SELECT 1 FROM xaa.virtual_aliases va WHERE va.source=?",{},($domain_to_use . '@marketero.com.mx')) || 0;
+    my $exist_mailbox      = $dbh->selectrow_array("SELECT 1 FROM xaa.virtual_users vu WHERE vu.email=?",{},('eme_'.$domain_to_use . '@marketero.com.mx')) || 0;
+    
+    if($exist_folder_on_db or $exist_folder_on_fs or $exist_db or $exist_alias or $exist_mailbox){
     	foreach my $it(1 .. 9999999){
     	    my $current_domain_to_use = $domain_to_use . $it;
     	    $exist_folder_on_db = $dbh->selectrow_array("SELECT COUNT(*) FROM $conf->{Xaa}->{DB}.xaa_domains WHERE folder=?",{},$current_domain_to_use) || 0;
     	    $exist_folder_on_fs = (-e('data/'.$current_domain_to_use));
-    	    $exist_db = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$current_domain_to_use) || 0;
-    	    if(!$exist_folder_on_db and !$exist_folder_on_fs and !$exist_db){
-        		$domain_to_use = $current_domain_to_use;
-        		last;
+    	    $exist_db           = $dbh->selectrow_array("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = ?",{},'xaa_'.$current_domain_to_use) || 0;
+            $exist_alias        = $dbh->selectrow_array("SELECT 1 FROM xaa.virtual_aliases va WHERE va.source=?",{},($current_domain_to_use . '@marketero.com.mx')) || 0;
+            $exist_mailbox      = $dbh->selectrow_array("SELECT 1 FROM xaa.virtual_users vu WHERE vu.email=?",{},('eme_'.$current_domain_to_use . '@marketero.com.mx')) || 0;
+    	    if(!$exist_folder_on_db and !$exist_folder_on_fs and !$exist_db and !$exist_alias and !$exist_mailbox){
+                $domain_to_use = $current_domain_to_use;
+                last;
     	    }
     	}
     }
@@ -266,6 +270,10 @@ sub create_account {
 
     $dbh->do("INSERT IGNORE INTO $conf->{Xaa}->{DB}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
 
+    # Email
+    $dbh->do("INSERT INTO xaa.virtual_aliases(domain_id, source, destination) VALUES(1,?,?) ",{},$domain_to_use . '@marketero.com.mx', $_REQUEST->{email});
+    $dbh->do("INSERT INTO xaa.virtual_users(domain_id, password, email) VALUES(1,'',?)",{},('eme_'.$domain_to_use . '@marketero.com.mx'));
+    
     #add contact to marketero pipeline
     my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
     if ($exist){
@@ -525,6 +533,7 @@ sub password_reset {
         my $Mail = Chapix::Mail::Controller->new();
         my $enviado = $Mail->html_template({
             to       => $user->{'email'},
+            bcc      => 'cesarrodriguez@xaandia.com', 
             subject  => loc('Restablece tu contraseña de ') . $conf->{App}->{Name},
             template => {
                 file => 'Chapix/Xaa/tmpl/password-reset-email.html',
@@ -693,7 +702,7 @@ sub process_paypal_ipn {
 	    # Master account options
 	    $dbh->do(
 		"UPDATE xaa.xaa_domains ".
-                "SET eme_emails_limit=500, eme_send_limit=20000, is_free_account=1, license_type='', " .
+                "SET is_free_account=1, license_type='', " .
 		"next_bill_on=NULL, service_id=0, service_cycle='', service_price=0, service_payment_method_id=0  ".
 		"WHERE domain_id=?",{},$domain->{domain_id});
 	    print DEBUG "Cancelando 4 \n";
