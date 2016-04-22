@@ -265,7 +265,7 @@ sub create_account {
 	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
     my $user_id = $dbh->last_insert_id('','',"$conf->{Xaa}->{DB}.xaa_users",'user_id');
 
-    $dbh->do("INSERT INTO $conf->{Xaa}->{DB}.xaa_domains (`name`, `folder`, `database`) VALUES (?,?,?)",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
+    $dbh->do("INSERT INTO $conf->{Xaa}->{DB}.xaa_domains (`name`, `folder`, `database`, added_on) VALUES (?,?,?, NOW())",{}, ucfirst($domain_to_use), $domain_to_use, 'xaa_'.$domain_to_use);
     my $domain_id = $dbh->last_insert_id('','',"$conf->{Xaa}->{DB}.xaa_domains",'domain_id');
 
     $dbh->do("INSERT IGNORE INTO $conf->{Xaa}->{DB}.xaa_users_domains (user_id, domain_id, added_by, added_on, active, default_domain) VALUES (?,?,1,NOW(),1,1)",{},$user_id, $domain_id);
@@ -274,14 +274,14 @@ sub create_account {
     $dbh->do("INSERT INTO xaa.virtual_aliases(domain_id, source, destination) VALUES(1,?,?) ",{},$domain_to_use . '@marketero.com.mx', $_REQUEST->{email});
     $dbh->do("INSERT INTO xaa.virtual_users(domain_id, password, email) VALUES(1,'',?)",{},('eme_'.$domain_to_use . '@marketero.com.mx'));
     
-    #add contact to marketero pipeline
+    # Add contact to marketero pipeline
     my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
     if ($exist){
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 3 MONTH))",{},$exist);
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$exist);
     }else{
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts (email, name, added_on, updated_on) VALUES (?, ?, NOW(), NOW())",{}, $_REQUEST->{email}, $_REQUEST->{name});
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts (email, name, phone, added_on, updated_on) VALUES (?, ?, ?, NOW(), NOW())",{}, $_REQUEST->{email}, $_REQUEST->{name}, $_REQUEST->{phone});
         my $contact_id = $dbh->last_insert_id('', '', 'xaa_marketero.contacts', 'contact_id');
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 3 MONTH))",{},$contact_id);
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$contact_id);
     }
 
     # Database init

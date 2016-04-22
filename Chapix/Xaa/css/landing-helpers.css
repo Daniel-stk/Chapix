@@ -27,3 +27,9 @@
 .dft-pnk {
   padding: 10px;
 }
+
+
+form {
+    display: inline-block;
+    padding-bottom: 5px;
+}

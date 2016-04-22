@@ -59,17 +59,17 @@ sub run_daily {
             "INNER JOIN xaa.xaa_users_domains ud ON u.user_id=ud.user_id " .
             "WHERE u.last_login_on > DATE_SUB(NOW(), INTERVAL 30 DAY)") || 0;
         
-        my $customers_total  = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_domains WHERE subscription=1") || 0;
+        my $customers_total  = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_domains WHERE subscription=1 AND payment_method_id <> 3") || 0;
         my $customers_new    = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_domains WHERE subscription_date BETWEEN ? AND ?",{},
-                                                "$date 00:00:00","$date 23:59:59") || 0;
+                                                     "$date 00:00:00","$date 23:59:59") || 0;
         my $customers_active = $dbh->selectrow_array(
             "SELECT COUNT(DISTINCT ud.domain_id) " .
             "FROM xaa.xaa_users u " .
             "INNER JOIN xaa.xaa_users_domains ud ON u.user_id=ud.user_id " .
             "INNER JOIN xaa.xaa_domains d ON d.domain_id=ud.domain_id " .
-            "WHERE u.last_login_on > DATE_SUB(NOW(), INTERVAL 30 DAY) AND d.subscription=1") || 0;
+            "WHERE u.last_login_on > DATE_SUB(NOW(), INTERVAL 30 DAY) AND d.subscription=1 AND payment_method_id <> 3 ") || 0;
         my $customers_churned = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.xaa_domains WHERE subscription_cancel_date BETWEEN ? AND ? AND subscription=1",{},
-                                                "$date 00:00:00","$date 23:59:59") || 0;
+                                                      "$date 00:00:00","$date 23:59:59") || 0;
 
         my $revenue = $dbh->selectrow_array("SELECT SUM(payment) FROM xaa.xaa_domains_balance xdb WHERE xdb.date BETWEEN ? AND ? ",{},
                                             "$date 00:00:00","$date 23:59:59") || 0;        

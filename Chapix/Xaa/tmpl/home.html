@@ -1,33 +1,33 @@
 [% msg %]
 <section>
-	<div class="container">
-		<div class="row no-margin">
-			<div class="col m12">
-				<h4 class="stylish">¡Hola [% sess.user_name %]!</h4>
-			</div>
-		</div>
-
-		<div class="row no-margin center">
-			<div class="col s12 m12 l12">
-				<div class="main-contacts hoverable z-depth-1">
-					<div class="contacts-listy blue">
-						<div class="listy-item">
-							<a  class="black-text" href="/[% conf.Domain.folder %]/CRM/Contacts">
-								<h6 class="white-text uppercase left">Tu Lista de contactos</h6>
-							</a>							
-						</div>
-						<div class="listy-item blue">
-							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/Contacts" data-position="top" data-delay="50" data-tooltip="[% loc('Ve tu lista de contactos') %]"> 
-								<i class="material-icons small">list</i> 
-							</a>							
-						</div>
-						<div class="listy-item blue">
-							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/ContactEdit" data-position="top" data-delay="50" data-tooltip="[% loc('Agrega un contacto') %]"> 
-								<i class="material-icons small">face</i> 
-							</a>							
-						</div>
-						<div class="listy-item blue">
-							<a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/AddContacts" data-position="top" data-delay="50" data-tooltip="[% loc('Sube tus contactos') %]">
+  <div class="container">
+    <div class="row no-margin">
+      <div class="col m12">
+	<h4 class="stylish">¡Hola [% sess.user_name %]!</h4>
+      </div>
+    </div>
+    
+    <div class="row no-margin center">
+      <div class="col s12 m12 l12">
+	<div class="main-contacts">
+	  <div class="contacts-listy blue">
+	    <div class="listy-item">
+	      <a  class="black-text" href="/[% conf.Domain.folder %]/CRM/Contacts">
+		<h6 class="white-text uppercase left">Tu Lista de contactos</h6>
+	      </a>							
+	    </div>
+	    <div class="listy-item blue">
+	      <a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/Contacts" data-position="top" data-delay="50" data-tooltip="[% loc('Ve tu lista de contactos') %]"> 
+		<i class="material-icons small">list</i> 
+	      </a>							
+	    </div>
+	    <div class="listy-item blue">
+	      <a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/ContactEdit" data-position="top" data-delay="50" data-tooltip="[% loc('Agrega un contacto') %]"> 
+		<i class="material-icons small">face</i> 
+	      </a>							
+	    </div>
+	    <div class="listy-item blue">
+	      <a class="white-text tooltipped" href="/[% conf.Domain.folder %]/CRM/AddContacts" data-position="top" data-delay="50" data-tooltip="[% loc('Sube tus contactos') %]">
 								<i class="material-icons small">group_add</i>
 							</a>							
 						</div>
