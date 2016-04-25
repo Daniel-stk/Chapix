@@ -23,7 +23,6 @@ my $lh = Chapix::Xaa::L10N->get_handle($sess{user_language}) || die "Language?";
 sub loc (@) { return ( $lh->maketext(@_)) }
 
 
-
 sub login {
     my $results = {};
 
@@ -191,7 +190,7 @@ sub create_account {
     	$_REQUEST->{email});
 
     if($exist){
-    	msg_add("warning", loc("This email already exist"));
+    	msg_add("warning", loc("El correo electrónico ya esta registrado"));
     	$results->{error} = 1;
     	$results->{redirect} = '/Xaa/Register';
     	return $results;
@@ -260,7 +259,8 @@ sub create_account {
     }
 
     # User creation
-    my $password = $_REQUEST->{password};
+    my $password = 'M'.substr(sha384_hex(time().$_REQUEST->{email}), 0, 8).'!';
+
     $dbh->do("INSERT INTO $conf->{Xaa}->{DB}.xaa_users (name, email, time_zone, language, password, last_login_on) VALUES(?,?,?,?,?,NOW())",{},
 	     $_REQUEST->{name}, $_REQUEST->{email}, $conf->{App}->{TimeZone}, $conf->{App}->{Language}, sha384_hex($conf->{Security}->{key} . $password) );
     my $user_id = $dbh->last_insert_id('','',"$conf->{Xaa}->{DB}.xaa_users",'user_id');
@@ -275,14 +275,7 @@ sub create_account {
     $dbh->do("INSERT INTO xaa.virtual_users(domain_id, password, email) VALUES(1,'',?)",{},('eme_'.$domain_to_use . '@marketero.com.mx'));
     
     # Add contact to marketero pipeline
-    my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
-    if ($exist){
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$exist);
-    }else{
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts (email, name, phone, added_on, updated_on) VALUES (?, ?, ?, NOW(), NOW())",{}, $_REQUEST->{email}, $_REQUEST->{name}, $_REQUEST->{phone});
-        my $contact_id = $dbh->last_insert_id('', '', 'xaa_marketero.contacts', 'contact_id');
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$contact_id);
-    }
+    add_new_customer_to_pipeline();
 
     # Database init
     my $DB = 'xaa_' . $domain_to_use;
@@ -302,17 +295,19 @@ sub create_account {
     my $Mail = Chapix::Mail::Controller->new();
     my $enviado = $Mail->html_template({
         to       => $_REQUEST->{'email'},
-        subject  => $conf->{App}->{Name} . ': '. loc('Your new account is ready'),
+        subject  => $conf->{App}->{Name} . ': '. loc('Tu cuenta esta lista'),
         template => {
             file => 'Chapix/Xaa/tmpl/account-creation-letter.html',
             vars => {
-                name     => $_REQUEST->{'name'},
+                name     => format_short_name($_REQUEST->{'name'}),
                 email    => $_REQUEST->{email},
                 password => $password,
                 loc => \&loc,
             }
         }
     });
+
+    send_welcome_email($_REQUEST->{'name'}, $_REQUEST->{email});
 
     # Welcome msg
     msg_add('success','Tu cuenta fue creada con éxito.');
@@ -322,6 +317,27 @@ sub create_account {
     $results->{redirect} = '/'.$domain_to_use;
     return $results;
     #http_redirect("/$domain_to_use/");
+}
+
+
+sub send_welcome_email {
+    my $name = shift;
+    my $email = shift;
+
+    my $Mail = Chapix::Mail::Controller->new();
+    my $enviado = $Mail->html_template({
+        to       => $email,
+        bcc      => 'ventas@xaandia.com', 
+        subject  => '¡Bienvenido(a), los primeros catorce días corren por nuestra cuenta!',
+        template => {
+            file => 'Chapix/Xaa/tmpl/account-welcome-letter.html',
+            vars => {
+                name => format_short_name($name),
+                loc => \&loc,
+            }
+        }
+    });
+
 }
 
 sub database_init {
@@ -346,6 +362,86 @@ sub database_init {
         $dbh->do("$sql") if($sql);
     }
     $dbh->do("SET foreign_key_checks = 1");
+}
+
+
+sub add_new_customer_to_pipeline {
+
+    my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
+    
+    if ($exist){
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
+            $exist);
+
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'call', 'Llamar al cliente', 'Llamar al cliente para ponerse a la orden', CURDATE(), CURTIME())",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar primer email', 'Enviar un correo electrónico personalizado al prospecto, incluir ebook y mencionar el blog de marketero.', DATE_ADD(CURDATE(), INTERVAL 2 DAY), CURTIME())",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de plataforma', 'Enviar un correo electrónico del uso general de la plataforma', DATE_ADD(CURDATE(), INTERVAL 4 DAY), CURTIME())",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de LP', 'Enviar un correo electrónico del uso de los formularios', DATE_ADD(CURDATE(), INTERVAL 6 DAY), CURTIME())",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de CRM', 'Enviar un correo electrónico del uso de el CRM', DATE_ADD(CURDATE(), INTERVAL 8 DAY), CURTIME())",{},
+            $exist);
+        
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de Email', 'Enviar un correo electrónico del uso de el email masivo', DATE_ADD(CURDATE(), INTERVAL 10 DAY), CURTIME())",{},
+            $exist);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email solicitud sugerencias', 'Enviar un correo electrónico solicitando sugerencias y notificando el final de la version demo.', DATE_ADD(CURDATE(), INTERVAL 13 DAY), CURTIME())",{},
+            $exist);
+
+    }else{
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts (email, name, phone, added_on, updated_on) VALUES (?, ?, ?, NOW(), NOW())",{}, $_REQUEST->{email}, $_REQUEST->{name}, $_REQUEST->{phone});
+
+        my $contact_id = $dbh->last_insert_id('', '', 'xaa_marketero.contacts', 'contact_id');
+
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'call', 'Llamar al cliente', 'Llamar al cliente para ponerse a la orden', CURDATE(), CURTIME())",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar primer email', 'Enviar un correo electrónico personalizado al prospecto, incluir ebook y mencionar el blog de marketero.', DATE_ADD(CURDATE(), INTERVAL 2 DAY), CURTIME())",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de plataforma', 'Enviar un correo electrónico del uso general de la plataforma', DATE_ADD(CURDATE(), INTERVAL 4 DAY), CURTIME())",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de LP', 'Enviar un correo electrónico del uso de los formularios', DATE_ADD(CURDATE(), INTERVAL 6 DAY), CURTIME())",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de CRM', 'Enviar un correo electrónico del uso de el CRM', DATE_ADD(CURDATE(), INTERVAL 8 DAY), CURTIME())",{},
+            $contact_id);
+        
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email uso de Email', 'Enviar un correo electrónico del uso de el email masivo', DATE_ADD(CURDATE(), INTERVAL 10 DAY), CURTIME())",{},
+            $contact_id);
+
+        $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
+                ."VALUES (?, 'email', 'Enviar email solicitud sugerencias', 'Enviar un correo electrónico solicitando sugerencias y notificando el final de la version demo.', DATE_ADD(CURDATE(), INTERVAL 13 DAY), CURTIME())",{},
+            $contact_id);
+
+    }
+
 }
 
 sub save_logo {

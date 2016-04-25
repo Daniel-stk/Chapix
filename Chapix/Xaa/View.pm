@@ -205,9 +205,9 @@ sub set_back_btn {
   my @actions = @_;
   my $HTML = '';
 
-  if ($ENV{HTTP_REFERER} =~ /^http(?:s)?:\/\/[$conf->{App}->{URL}][^\/]+(\/.*)$/gm) {
-      $script = $1;
-  }
+  # if ($ENV{HTTP_REFERER} =~ /^http(?:s)?:\/\/[$conf->{App}->{URL}][^\/]+(\/.*)$/gm) {
+  #     $script = $1;
+  # }
 
   if($script !~ /^\//){
     $script = '/'.$_REQUEST->{Domain}.'/' . $script;
@@ -589,7 +589,7 @@ sub display_register {
     my $form = CGI::FormBuilder->new(
         name     => 'register',
         method   => 'post',
-        fields   => [qw/controller name phone email password/],
+        fields   => [qw/controller name email phone/],
     	action   => '/Xaa/Register',
         submit   => \@submit,
         materialize => '1'
@@ -603,10 +603,11 @@ sub display_register {
     $form->field(name => 'phone', label=> loc('Teléfono'), type=>'text', icon=>'phone',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Ingresa tu número telefónico'),
          validate=>'/[\d\s\-]{10,15}/');
-    $form->field(name => 'password', label=> loc('Contraseña'), type=>'password', icon=>'lock',
-		 maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Usa porfavor una contraseña mas compleja. Agrega números, mayusculas y minúsculas.'),
-         validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
-    $form->stylesheet('1');
+
+   #  $form->field(name => 'password', label=> loc('Contraseña'), type=>'password', icon=>'lock',
+		 # maxlength=>"30", required=>"1", class=> "", jsmessage => loc('Usa porfavor una contraseña mas compleja. Agrega números, mayusculas y minúsculas.'),
+   #       validate=>'/^(?:(?=.*[a-z])(?:(?=.*[A-Z])(?=.*[\d\W])|(?=.*\W)(?=.*\d))|(?=.*\W)(?=.*[A-Z])(?=.*\d)).{6,}$/');
+   #  $form->stylesheet('1');
 
     my $HTML = $form->render(
 	template => {

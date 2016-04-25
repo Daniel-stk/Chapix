@@ -122,88 +122,22 @@ sub display_home {
     
     $conf->{Page}->{ShowSettings} = '1';
 
+    my $notifications = $dbh->selectall_arrayref("SELECT n.notification_id, n.title, n.created_on, n.url, n.readed FROM $conf->{Xaa}->{DB}.notifications n WHERE user_id=? ORDER BY n.created_on DESC",{Slice=>{}},
+        $sess{user_id});
+
+    foreach my $notification (@$notifications) {
+        $notification->{url} = '/'.$conf->{Domain}->{folder}.'/Notifications/ViewNotification?notification_id='.$notification->{notification_id};
+    }
+
     my $vars = {
         REQUEST => $_REQUEST,
         conf => $conf,
         sess => \%sess,
      	msg  => msg_print(),
         loc => \&loc,
-        list => display_notification_list(),
+        notifications => $notifications,
     };
     $template->process("Chapix/Notifications/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();
-    return $HTML;
-}
-
-# Notification
-sub display_notification_list {
-    $conf->{Page}->{Title} = loc('Notifications');
-    
-    set_back_btn('',loc('Dashboard'));
-    set_search_action();
-    
-    my $where = "";
-    my @params;
-    if($_REQUEST->{q}){
-        $where .=' n.title LIKE ? ';
-        push(@params,'%'.$_REQUEST->{q}.'%');
-    }
-
-    my $list = Chapix::List->new(
-        dbh => $dbh,
-        pagination => 0,
-        sql => {
-            select => "n.notification_id, n.title, n.readed, n.url, '' AS actions ",
-            from => "$conf->{Xaa}->{DB}.notifications n",
-            order_by => "created_on DESC",
-            where => $where,
-            params => \@params,
-        },
-        link => {
-            key => "notification_id",
-            hidde_key_col => 1,
-            # location => "/".$_REQUEST->{Domain}."/Notifications/Notification",
-            transit_params => {'q' => $_REQUEST->{q}},
-        },
-	);
-    
-    $list->set_label('title',loc('Title'));
-    $list->set_label('description',loc('Description'));
-    $list->set_label('readed',loc('Readed'));
-    $list->set_label('actions',' ');
-    
-    $list->hidde_column('url');
-
-    $list->get_data();
-    
-    foreach my $row (@{$list->{rs}}) {
-	$row->{actions} = '<div class="fixed-btn-wrapper">
-          <div class="fixed-action-btn horizontal">
-            <a class="btn-floating btn-large red">
-              <i class="large material-icons">mode_edit</i>
-            </a>
-            <ul>
-              <li><a onclick="deleteNotification('.$row->{notification_id}.');" href="javascript:void(0);" class="btn-floating red"><i class="material-icons">delete</i></a></li>
-              <li><a href="/'.$_REQUEST->{Domain}.'/Notifications?_view=Notification&notification_id='.$row->{notification_id}.'" class="btn-floating green"><i class="material-icons">launch</i></a></li>
-            </ul>
-          </div>
-        </div>';
-	
-	if($row->{readed}) {
-	    $row->{readed} = loc('Yes');
-	}else{
-	    $row->{readed} = loc('No');
-	}	    
-    }
-
-    my $HTML = "";
-    my $vars = {
-    	list => $list->print(),
-        conf => $conf,
-    	msg  => msg_print(),
-    };
-
-    my $Template = Template->new();
-    $Template->process("Chapix/Xaa/tmpl/list.html", $vars,\$HTML) or $HTML = $Template->error();
     return $HTML;
 }
 

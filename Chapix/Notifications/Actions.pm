@@ -69,14 +69,17 @@ sub set_view {
 
 
 sub set_view_and_redirect {
-    my $self = shift;
+    my $results;
     my $notification_id = shift || $_REQUEST->{notification_id};
     
     $dbh->do("UPDATE $conf->{Xaa}->{DB}.notifications SET readed=1 WHERE notification_id=? AND user_id=?",{},$notification_id, $sess{user_id});
     
     my $url = $dbh->selectrow_array("SELECT url FROM $conf->{Xaa}->{DB}.notifications WHERE notification_id=? AND user_id=?",{},$notification_id, $sess{user_id});
     
-    http_redirect($url);
+    $results->{success} = 1;
+    $results->{redirect} = $url;
+
+    return $results;
 }
 
 

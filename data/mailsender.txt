@@ -1,6 +1,6 @@
->> 220 smtp.marketero.com.mx ESMTP Postfix
-<< EHLO localhost
->> 250-smtp.marketero.com.mx
+>> 220 dev.marketero.com.mx ESMTP Postfix
+<< EHLO localhost.localdomain
+>> 250-dev.marketero.com.mx
 >> 250-PIPELINING
 >> 250-SIZE 10240000
 >> 250-VRFY
@@ -8,161 +8,73 @@
 >> 250-ENHANCEDSTATUSCODES
 >> 250-8BITMIME
 >> 250 DSN
-<< MAIL FROM:<eme_prensampio@marketero.com.mx>
+<< MAIL FROM:<eme_marketero@marketero.com.mx>
 >> 250 2.1.0 Ok
-<< RCPT TO:<lobonoticieros@gmail.com>
+<< RCPT TO:<cesarrodriguez@xaandia.com>
+>> 250 2.1.5 Ok
+<< RCPT TO:<cesarrodriguez@xaandia.com>
 >> 250 2.1.5 Ok
 << DATA
 >> 354 End data with <CR><LF>.<CR><LF>
-<< To: lobonoticieros@gmail.com
-<< From: Coordinaci�n de Comunicaci�n Social, Municipi <prensampio@marketero.com.mx>
-<< Reply-To: Coordinaci�n de Comunicaci�n Social, Municipi <prensampio@marketero.com.mx>
-<< Subject: 
-<< 	 =?UTF-8?B?Q0lFTlRPUyBERSBQRVJTT05BUyBBQ1VERU4gQSBMQSBSVVRBIERFIEFSVEUgQ08=?=
-<< 	 =?UTF-8?B?TlRFTVBPUsOBTkVP?=
-<< Date: Fri, 22 Apr 2016 15:39:17 -0400
-<< Message-ID: <20160422_193917_000904.eme_prensampio@marketero.com.mx>
-<< List-Unsubscribe: http://marketero.com.mx/prensampio/Public/Unsuscribe?k=416de7db8f&e=lobonoticieros@gmail.com&a=1001.225
+<< To: cesarrodriguez@xaandia.com
+<< From: Marketero <notificaciones@marketero.com.mx>
+<< Reply-To: Marketero <notificaciones@marketero.com.mx>
+<< Subject: Mensaje enviado
+<< Date: Mon, 25 Apr 2016 13:59:51 -0400
+<< Message-ID: <20160425_175951_004696.eme_marketero@marketero.com.mx>
 << MIME-Version: 1.0
 << Content-Type: multipart/mixed;
-<< 	boundary="Message-Boundary-by-Mail-Sender-1461353957"
+<< 	boundary="Message-Boundary-by-Mail-Sender-1461607191"
 << 
 << This message is in MIME format. Since your mail reader does not understand
 << this format, some or all of this message may not be legible.
 << 
-<< --Message-Boundary-by-Mail-Sender-1461353957
-<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1461353957_2"
+<< --Message-Boundary-by-Mail-Sender-1461607191
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1461607191_2"
 << 
 << 
-<< --Part-Message-Boundary-by-Mail-Sender-1461353957_2
+<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2
 << Content-Type: text/plain
 << Content-Transfer-Encoding: 7BIT
 << 
-<< � Link para descarga de archivo fotográfico: 
-<< https://www.dropbox.com/sh/5d21qn8mpzolaon/AAAUUDtNZo1TwvjuOImVmdMTa?dl=0 
-<< �
-<< CIENTOS DE PERSONAS ACUDEN A LA RUTA DE ARTE CONTEMPORÁNEO 
-<< �
-<< Admiran de las artes plásticas en tres recintos culturales 
-<< �
-<< Cientos de personas�se dieron cita a las cuatro exposiciones de artes plásticas que presentó el Instituto de Cultura del Municipio, a través de la Ruta de Arte Contemporáneo, donde abrieron sus puertas, el Museo Casa Siglo XIX, el Centro de Desarrollo Cultural y el Teatro de la Ciudad.� 
-<< �
-<< Por su parte, el Museo Casa Siglo XIX exhibió en la Sala Puerta del Sol, la exposición “Serendipia” de María José Seañez. En su obra, ella invita a comprender las ideas de un artista a través del proceso mental. Aparte, como excelente resultado, muestra un detonante que se admira en sus diferentes creaciones de arte contemporáneo. 
-<< �
-<< Asimismo, en la Sala Guirnalda del referido lugar, sus visitantes apreciaron la magnífica exhibición que lleva como título “Atlantis Child” del Colectivo División del Norte. Ellos son especialistas en el mural y en técnicas de grafiti. 
-<< �
-<< Atlantis Child, es una muestra que consta de distintas pinturas en gran formato, donde toma el tema de la Atlántida y sus habitantes. En la obra, los artistas del colectivo crearon imágenes que representan de manera lúdica lo que podría haber sido aquella civilización. 
-<< �
-<< La Ruta de Arte Contemporáneo siguió su curso en el Centro de Desarrollo Cultural, lugar que exhibe la muestra pictórica “Akasha Moon” de Rocío Infestas. En este espacio cultural, los visitantes observaron sus creaciones pictóricas y una luna que se instaló en un cuarto obscuro, donde destacan sorprendentes iluminaciones hacia una excelente perspectiva cósmica lunar. 
-<< �
-<< Otra de las exhibiciones que se lució y se apreció en el trayecto, fue la exposición “35 mm de Quentín Tarantino”, misma que tuvo lugar en el Lobby del majestuoso Teatro de la Ciudad, donde con una técnica impecable de hiperrealismo en acrílico, la pintora Alejandra Nájera invita al público asistente, a introducirse al cine de Quentín Tarantino.� � 
-<< AYUNTAMIENTO DE CHIHUAHUA Coordinación de Comunicación Social, Municipi C. Tercera N. 607, colonia Centro., Chihuahua, Chihuahua., 
-<< Tel: 072 Si no puedes ver correctamente este mensaje, da clic aqu� .
-<< Si no deseas seguir recibiendo estos mensajes, puedes cancelar tu suscripción en cualquier momento.
-<< --Part-Message-Boundary-by-Mail-Sender-1461353957_2
+<< Tu mensaje "Probando noti 2" fue enviado a 3 direcciones de correo. El mensaje enviado es el siguiente: � Título elegante Este es un bloque de texto. Para editar el texto da clic en el ícono del lápiz que aparece al posicionar el mouse sobre este bloque.
+<< CLIC AQUI � � � �
+<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2
 << Content-Type: text/html
 << Content-Transfer-Encoding: 7BIT
 << 
-<< <html><div><table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#EEEEEE"><tbody><tr><td><table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="center"><div><img src="http://marketero.com.mx/data/prensampio/img/site/" style="max-width: 100%; height: 0px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; width: 0px; top: auto; left: auto;" class=""></div></td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#F50057"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
+<< <html><h1>Tu mensaje "Probando noti 2" fue enviado a 3 direcciones de correo.</h1><br/><br/><h2>El mensaje enviado es el siguiente:</h2><br/><br/><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
 << </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center"><div><p style="text-align: center; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Link para descarga de archivo fotográfico:</span></p>
-<< 
-<< <p style="text-align: center; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">https://www.dropbox.com/sh/5d21qn8mpzolaon/AAAUUDtNZo1TwvjuOImVmdMTa?dl=0</span></p>
-<< 
-<< <p style="text-align: center; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: center; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;"><b>CIENTOS DE PERSONAS ACUDEN A LA RUTA DE ARTE CONTEMPORÁNEO</b></span></p>
-<< 
-<< <p style="text-align: center; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: center; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;"><b>Admiran de las artes plásticas en tres recintos culturales</b></span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Cientos de personas&nbsp;se dieron cita a las cuatro exposiciones de artes plásticas que presentó el Instituto de Cultura del Municipio, a través de la Ruta de Arte Contemporáneo, donde abrieron sus puertas, el Museo Casa Siglo XIX, el Centro de Desarrollo Cultural y el Teatro de la Ciudad.&nbsp;</span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Por su parte, el Museo Casa Siglo XIX exhibió en la Sala Puerta del Sol, la exposición “Serendipia” de María José Seañez. En su obra, ella invita a comprender las ideas de un artista a través del proceso mental. Aparte, como excelente resultado, muestra un detonante que se admira en sus diferentes creaciones de arte contemporáneo.</span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Asimismo, en la Sala Guirnalda del referido lugar, sus visitantes apreciaron la magnífica exhibición que lleva como título “Atlantis Child” del Colectivo División del Norte. Ellos son especialistas en el mural y en técnicas de grafiti.</span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Atlantis Child, es una muestra que consta de distintas pinturas en gran formato, donde toma el tema de la Atlántida y sus habitantes. En la obra, los artistas del colectivo crearon imágenes que representan de manera lúdica lo que podría haber sido aquella civilización.</span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">La Ruta de Arte Contemporáneo siguió su curso en el Centro de Desarrollo Cultural, lugar que exhibe la muestra pictórica “Akasha Moon” de Rocío Infestas. En este espacio cultural, los visitantes observaron sus creaciones pictóricas y una luna que se instaló en un cuarto obscuro, donde destacan sorprendentes iluminaciones hacia una excelente perspectiva cósmica lunar.</span></p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;">&nbsp;</p>
-<< 
-<< <p style="text-align: justify; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;">Otra de las exhibiciones que se lució y se apreció en el trayecto, fue la exposición “35 mm de Quentín Tarantino”, misma que tuvo lugar en el Lobby del majestuoso Teatro de la Ciudad, donde con una técnica impecable de hiperrealismo en acrílico, la pintora Alejandra Nájera invita al público asistente, a introducirse al cine de Quentín Tarantino.&nbsp; &nbsp;</span></p>
-<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#EEEEEE"><tbody><tr><td><table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="center"><div><img src="/assets/img/mkt_previews/previa_imgl.png" style="width: 866px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 199px; max-width: 100%; top: auto; left: auto;" class=""></div></td></tr></tbody></table>
 << </td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#795548"><tbody><tr><td><table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center"><div><p style="text-align: center; overflow: hidden; word-break: break-word;"><span style="font-family:arial,helvetica,sans-serif;"><span style="font-size:18px;"><strong>AYUNTAMIENTO DE CHIHUAHUA</strong></span></span></p>
-<< </div></td></tr></tbody></table>
 << </td></tr></tbody></table>
-<< </div><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f1f0f0" style="background:#f1f0f0;width:100%!important;padding: 5px 15px;">
-<<   <tr>
-<<     <td>
-<<       <center>
-<<         <br />
-<<         <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;">
-<<           <tr>
-<<             <td>
-<<               <div style="font-size:small;">
-<<                 <span style="color:#4e4e4e;">
-<<                   <font color="#4e4e4e">
-<<                     <strong>Coordinación de Comunicación Social, Municipi</strong><br/>
-<<                     C. Tercera N. 607, colonia Centro., Chihuahua, Chihuahua., <br />
-<<                     Tel: 072<br /><br />
-<<                   </font>
-<<                 </span>
-<<               </div>
-<<               <br />
-<<             </td>
-<<             <td align="right">
-<<               <div style="text-align:right; padding: 10px 30px;">
-<<                 <a href="https://marketero.com.mx"><img src="http://marketero.com.mx/Chapix/Xaa/img/MARKETERO_GRIS.png" border="0"></a>
-<<               </div>
-<<             </td>
-<<           </tr>
-<<         </table>
+<< </div><div><table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center"><div><table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center"><hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;"></td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center" style="padding:10px 0;word-break:break-word;"><div><h1 style="font-size:30px;text-align:center;font-weight:bold;color:#BDBDBD;">Título elegante</h1> </div></td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center"><div><p style="text-align: center; color: rgb(189, 189, 189); overflow: hidden; word-break: break-word;">Este es un bloque de texto.<br> Para editar el texto da clic en el ícono del lápiz que aparece al posicionar el mouse sobre este bloque.</p> </div></td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"><tbody><tr><td style="padding:10px 0px;"><div><a target="_blank" href="https://marketero.com.mx/_blog" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(0, 0, 0); text-decoration: none; font-family: normal; background-color: rgb(255, 214, 0);">CLIC AQUI</a></div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#00E5FF"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td><div><table width="100%" style="text-align:center;width:100%!important;" class="social_tabla" border="0" cellpadding="0" cellspacing="0" align="center"><tbody><tr><td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" style="text-align:center;" align="center"><tbody><tr><td valign="top"><table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.facebook.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.twitter.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.plus.google.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/google-plus.png" alt="Google" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
+<< </div></td></tr></tbody></table>
+<< </div></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2--
 << 
-<<       </center>
-<<     </td>
-<<   </tr>
-<< </table>
-<< 
-<< <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;background:#f1f0f0;font-size:10px;padding:5px 15px;">
-<<   <tbody>
-<<     <tr>
-<<       <td style="width:50%;padding:7px;text-align:left;">
-<<         <span style="color:#888888">Si no puedes ver correctamente este mensaje, da <br/>
-<<           <a href="http://marketero.com.mx/prensampio/EmailMkt/ViewOnline?k=416de7db8f&e=lobonoticieros@gmail.com&m=225" target="_blank">clic aqu&iacute;</a>.
-<<         </span>
-<<       </td>
-<<       <td style="width:50%;padding:7px;text-align:right;">
-<<         <span style="color:#888888;">
-<<           Si no deseas seguir recibiendo estos mensajes, puedes <a href="http://marketero.com.mx/prensampio/Public/Unsuscribe?k=416de7db8f&e=lobonoticieros@gmail.com&a=1001.225" target="_blank">cancelar tu suscripción</a> en cualquier momento.
-<<         </span>
-<<       </td>
-<<     </tr>
-<<   </tbody>
-<< </table>
-<< 
-<< <img src="http://marketero.com.mx/prensampio/Public/TrackImg?k=416de7db8f&e=lobonoticieros@gmail.com&a=225.152" width="1" height="1" border="0" alt=""></html>
-<< --Part-Message-Boundary-by-Mail-Sender-1461353957_2--
-<< 
-<< --Message-Boundary-by-Mail-Sender-1461353957--
+<< --Message-Boundary-by-Mail-Sender-1461607191--
 << 
 << .
->> 250 2.0.0 Ok: queued as AEF1418EA4C9
+>> 250 2.0.0 Ok: queued as E58408928D
 << QUIT
 >> 221 2.0.0 Bye

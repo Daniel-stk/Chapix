@@ -74,7 +74,7 @@ sub actions {
     my $self = shift;
     my $results = {};
     
-    if($_REQUEST->{_view} eq 'Notification'){
+    if($_REQUEST->{View} eq 'Notification'){
        $results = Chapix::Notifications::Actions::set_view_and_redirect();
        process_results($results);
        return;

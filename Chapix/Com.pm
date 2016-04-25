@@ -27,6 +27,7 @@ BEGIN {
         &http_redirect
         $_REQUEST
         $Template
+        &format_short_name
         &format_name
         &get_display_key
         );
@@ -457,6 +458,25 @@ sub format_name {
   $str =~ s/<//g;
   $str =~ s/>//g;
   return (join " ", map {ucfirst} split " ", $str),
+}
+
+
+sub format_short_name {
+    my $str = shift;
+    $str =~ s/,//g;
+    $str =~ s/<//g;
+    $str =~ s/>//g;
+    my @words = split(" ",$str);
+    my $name = '';
+    foreach my $word (@words){
+        if($name){
+            $name .= ' '.ucfirst($word);
+            return $name;
+        }else{
+            $name = ucfirst($word);
+        }
+    }
+    return $name;
 }
 
 
