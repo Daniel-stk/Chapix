@@ -314,7 +314,8 @@ sub create_account {
 
     # Redirect to personal homepage
     $results->{success} = 1;
-    $results->{redirect} = '/'.$domain_to_use;
+    # $results->{redirect} = '/'.$domain_to_use;
+    $results->{redirect} = '/?newuser=1';
     return $results;
     #http_redirect("/$domain_to_use/");
 }

@@ -38,6 +38,7 @@ sub display_home {
     my $HTML = "";
     my $template = Template->new();
     $conf->{Page}->{ShowSettings} = '1';
+
     set_toolbar(
         #['Xaa/Subscription','Contratar Marketero','grey-text','favorite'],
 	);
@@ -47,7 +48,7 @@ sub display_home {
         Domain  => $conf->{Domain},
         conf => $conf,
         sess => \%sess,
-	msg  => msg_print(),
+	    msg  => msg_print(),
         loc => \&loc,
     };
     $template->process("Chapix/Xaa/tmpl/home.html", $vars,\$HTML) or $HTML = $template->error();

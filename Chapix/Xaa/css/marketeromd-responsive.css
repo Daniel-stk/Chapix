@@ -9,7 +9,7 @@
 @media only screen and (min-width: 601px) {
     
     .button-collapse {
-	display: block !important;
+	   display: block !important;
     }
 
     .navbar-fixed.mini {
@@ -43,6 +43,26 @@
 	display: block;
 	max-height: 30px;
     }    
+}
+
+@media only screen and (max-width: 748px) {
+
+    .mark-support {
+        right: 70px !important;
+    }
+
+}
+
+@media only screen and (max-width: 578px) {
+
+    .mark-support {
+        right: 0px !important;
+    }
+
+    .support-channels {
+        margin-left: 0px !important;
+    }
+
 }
 
 @media only screen and (min-width : 993px) {

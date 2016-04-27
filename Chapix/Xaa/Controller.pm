@@ -52,9 +52,9 @@ sub api {
     };
      
     if($_REQUEST->{mode} eq 'get_all_countries'){
-	$JSON = Chapix::Xaa::API::get_all_countries();
+	   $JSON = Chapix::Xaa::API::get_all_countries();
     }else{
-	$JSON->{error} = 'Not implemented';
+	   $JSON->{error} = 'Not implemented';
     }
     
     $JSON->{redirect} = '';
@@ -165,7 +165,7 @@ sub view {
             if($_REQUEST->{View}){
                 print Chapix::Xaa::View::default();
             }else{
-                print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
+              print Chapix::Layout::print( Chapix::Xaa::View::display_home() );
             }
         }
     }else{
@@ -201,7 +201,7 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_password_reset_success() );
             return;
         }
-        msg_add('warning',loc('To continue, log into your account.->' . " $_REQUEST->{Domain} - $_REQUEST->{Controller}  - $_REQUEST->{View} "));
+        msg_add('warning', loc('Inicia sesión en tu cuenta para continuar.'));
         Chapix::Com::http_redirect('/Xaa/Login');
     }
 }
