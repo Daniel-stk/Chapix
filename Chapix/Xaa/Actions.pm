@@ -295,6 +295,7 @@ sub create_account {
     my $Mail = Chapix::Mail::Controller->new();
     my $enviado = $Mail->html_template({
         to       => $_REQUEST->{'email'},
+        bcc      => 'ventas@xaandia.com, davidromero@xaandia.com', 
         subject  => $conf->{App}->{Name} . ': '. loc('Tu cuenta esta lista'),
         template => {
             file => 'Chapix/Xaa/tmpl/account-creation-letter.html',
@@ -306,11 +307,11 @@ sub create_account {
             }
         }
     });
-
-    send_welcome_email($_REQUEST->{'name'}, $_REQUEST->{email});
+    
 
     # Welcome msg
     msg_add('success','Tu cuenta fue creada con éxito.');
+    msg_add('success','Recibirás un correo electrónico con tus datos de acceso.');
 
     # Redirect to personal homepage
     $results->{success} = 1;
