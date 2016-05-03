@@ -1,6 +1,6 @@
->> 220 dev.marketero.com.mx ESMTP Postfix
-<< EHLO localhost.localdomain
->> 250-dev.marketero.com.mx
+>> 220 smtp.marketero.com.mx ESMTP Postfix
+<< EHLO localhost
+>> 250-smtp.marketero.com.mx
 >> 250-PIPELINING
 >> 250-SIZE 10240000
 >> 250-VRFY
@@ -8,73 +8,586 @@
 >> 250-ENHANCEDSTATUSCODES
 >> 250-8BITMIME
 >> 250 DSN
-<< MAIL FROM:<eme_marketero@marketero.com.mx>
+<< MAIL FROM:<eme_dalci@marketero.com.mx>
 >> 250 2.1.0 Ok
-<< RCPT TO:<cesarrodriguez@xaandia.com>
+<< RCPT TO:<isabelllll@empresaa-pymee.com>
 >> 250 2.1.5 Ok
 << RCPT TO:<cesarrodriguez@xaandia.com>
+>> 250 2.1.5 Ok
+<< RCPT TO:<davidromero@xaandia.com>
 >> 250 2.1.5 Ok
 << DATA
 >> 354 End data with <CR><LF>.<CR><LF>
-<< To: cesarrodriguez@xaandia.com
+<< To: isabelllll@empresaa-pymee.com
 << From: Marketero <notificaciones@marketero.com.mx>
 << Reply-To: Marketero <notificaciones@marketero.com.mx>
 << Subject: Mensaje enviado
-<< Date: Mon, 25 Apr 2016 13:59:51 -0400
-<< Message-ID: <20160425_175951_004696.eme_marketero@marketero.com.mx>
+<< Date: Thu, 28 Apr 2016 11:26:02 -0400
+<< Message-ID: <20160428_152602_073218.eme_dalci@marketero.com.mx>
 << MIME-Version: 1.0
 << Content-Type: multipart/mixed;
-<< 	boundary="Message-Boundary-by-Mail-Sender-1461607191"
+<< 	boundary="Message-Boundary-by-Mail-Sender-1461857162"
 << 
 << This message is in MIME format. Since your mail reader does not understand
 << this format, some or all of this message may not be legible.
 << 
-<< --Message-Boundary-by-Mail-Sender-1461607191
-<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1461607191_2"
+<< --Message-Boundary-by-Mail-Sender-1461857162
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1461857162_2"
 << 
 << 
-<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2
+<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2
 << Content-Type: text/plain
 << Content-Transfer-Encoding: 7BIT
 << 
-<< Tu mensaje "Probando noti 2" fue enviado a 3 direcciones de correo. El mensaje enviado es el siguiente:   TÃ­tulo elegante Este es un bloque de texto. Para editar el texto da clic en el Ã­cono del lÃ¡piz que aparece al posicionar el mouse sobre este bloque.
-<< CLIC AQUI        
-<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2
+<< Tu mensaje "Â¿CuÃ¡nto, es demasiado apego con tu hijos?" fue enviado a 344 direcciones de correo. El mensaje enviado es el siguiente: 
+<<  
+<<  
+<<  
+<< Â¡Hola!
+<< El equipo de DALCI te saluda con gusto, y te deja los artÃ­culos de la semana que no te querrÃ¡s perder.  
+<< Â¿Realmente es demasiado apego?
+<<  
+<< Fomenta la personalidad de tu Peque Descubrir mÃ¡s tips 
+<<  
+<<  
+<<  
+<<  
+<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2
 << Content-Type: text/html
 << Content-Transfer-Encoding: 7BIT
 << 
-<< <html><h1>Tu mensaje "Probando noti 2" fue enviado a 3 direcciones de correo.</h1><br/><br/><h2>El mensaje enviado es el siguiente:</h2><br/><br/><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#EEEEEE"><tbody><tr><td><table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td align="center"><div><img src="/assets/img/mkt_previews/previa_imgl.png" style="width: 866px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 199px; max-width: 100%; top: auto; left: auto;" class=""></div></td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center"><div><table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center"><hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;"></td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center" style="padding:10px 0;word-break:break-word;"><div><h1 style="font-size:30px;text-align:center;font-weight:bold;color:#BDBDBD;">TÃ­tulo elegante</h1> </div></td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td><table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center"><div><p style="text-align: center; color: rgb(189, 189, 189); overflow: hidden; word-break: break-word;">Este es un bloque de texto.<br> Para editar el texto da clic en el Ã­cono del lÃ¡piz que aparece al posicionar el mouse sobre este bloque.</p> </div></td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"><tbody><tr><td style="padding:10px 0px;"><div><a target="_blank" href="https://marketero.com.mx/_blog" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(0, 0, 0); text-decoration: none; font-family: normal; background-color: rgb(255, 214, 0);">CLIC AQUI</a></div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#ffffff"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#00E5FF"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td><div><table width="100%" style="text-align:center;width:100%!important;" class="social_tabla" border="0" cellpadding="0" cellspacing="0" align="center"><tbody><tr><td align="center" valign="top"><table border="0" cellpadding="0" cellspacing="0" style="text-align:center;" align="center"><tbody><tr><td valign="top"><table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.facebook.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
-<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.twitter.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
-<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono"><tbody><tr><td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://www.plus.google.com/" target="_blank"><img src="http://testing.marketero.com/assets/img/mkt_social_icons/google-plus.png" alt="Google" width="35" style="width:35px; max-width:50px; display:block;"></a></td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div><div><table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFC107"><tbody><tr><td valign="center"><div><table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0"><tbody><tr><td valign="center">&nbsp;</td></tr></tbody></table>
-<< </div></td></tr></tbody></table>
-<< </div></html>
-<< --Part-Message-Boundary-by-Mail-Sender-1461607191_2--
+<< <html><h1>Tu mensaje "Â¿CuÃ¡nto, es demasiado apego con tu hijos?" fue enviado a 344 direcciones de correo.</h1><br/><br/><h2>El mensaje enviado es el siguiente:</h2><br/><br/><div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><img src="http://marketero.com.mx/data/dalci/img/site/" style="max-width: 100%; height: 0px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; width: 0px; top: auto; left: auto;" class="">
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
 << 
-<< --Message-Boundary-by-Mail-Sender-1461607191--
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><img src="http://marketero.com.mx/data/dalci/img/mkt_images/logo.jpg" style="width: 77px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 139px; top: auto; left: auto; max-width: 100%;" class="">
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4dd0e1">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#303F9F">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center" style="padding:10px 0;word-break:break-word;">
+<< <div>
+<< <p style="overflow: hidden; word-break: break-word;"><strong>
+<< <span style="font-size:22px;">Â¡Hola!
+<< </span></strong></p> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
+<< <div>
+<< <p style="overflow: hidden; word-break: break-word;">
+<< <span style="font-size:18px;"><font color="#000000">El equipo de DALCI&nbsp;te saluda con gusto, y te deja los artÃ­culos de la semana que no te querrÃ¡s perder.&nbsp;</font>
+<< </span></p> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:100%;min-height:30px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center" width="50%">
+<< <div>
+<< <div block-type="img">
+<< <div>
+<< <div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><a target="_blank" href="http://www.dalci.com.mx/_blog/-Esta-muy-apegado-a-ti"><img src="http://marketero.com.mx/data/dalci/img/mkt_images/url-4.jpg" style="width: 557px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 383px; top: auto; left: auto; max-width: 100%;" class=""></a>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </div>
+<< </div>
+<< </div>
+<< </td>
+<< <td valign="center" width="50%">
+<< <div>
+<< <div block-type="txt">
+<< <div>
+<< <div>
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
+<< <div>
+<< <p style="color: rgb(189, 189, 189); overflow: hidden; word-break: break-word;">
+<< <span style="font-size:26px;"><strong>
+<< <span style="color:#000000;">Â¿Realmente es demasiado apego?
+<< </span></strong>
+<< </span>
+<< <br> &nbsp;</p> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </div>
+<< </div>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody> 
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;">
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><a target="_blank" href="http://www.dalci.com.mx/_blog/Ayuda-a-su-personalidad"><img src="http://marketero.com.mx/data/dalci/img/mkt_images/malos-modales.jpg" style="width: 496px; max-width: 100%; height: 207px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; top: auto; left: auto;" class=""></a>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
+<< <div>
+<< <p style="overflow: hidden; word-break: break-word; text-align: center;">
+<< <span style="font-size:26px;"><font color="#000000">
+<< <span style="line-height: 32px;"><b>Fomenta la personalidad de tu Peque</b>
+<< </span></font>
+<< </span></p> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;">
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <div>
+<< <table width="100%" style="text-align:center;width:100%!important;" class="social_tabla" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top">
+<< <table border="0" cellpadding="0" cellspacing="0" style="text-align:center;" align="center">
+<< <tbody>
+<< <tr>
+<< <td valign="top">
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="https://www.facebook.com/Soy-Mam%C3%A1-Dalci-284878404900101/" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="https://twitter.com/SoyMamaDalci" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td style="padding:10px 0px;">
+<< <div><a target="_blank" href="http://www.dalci.com.mx/" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(255, 255, 255); text-decoration: none; font-family: normal; background-color: rgb(198, 255, 0);">Descubrir mÃ¡s tips </a>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#303F9F">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4dd0e1">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
+<< <tbody>
+<< <tr>
+<< <td valign="center">
+<< <div>
+<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center">&nbsp;
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2--
+<< 
+<< --Message-Boundary-by-Mail-Sender-1461857162--
 << 
 << .
->> 250 2.0.0 Ok: queued as E58408928D
+>> 250 2.0.0 Ok: queued as 5CE9218D5244
 << QUIT
 >> 221 2.0.0 Bye
