@@ -29,6 +29,11 @@
 }
 
 
+.lp-row {
+  padding: 15px;
+}
+
+
 form {
     // display: inline-block;
     padding-bottom: 5px;

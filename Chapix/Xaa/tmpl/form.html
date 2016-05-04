@@ -1,6 +1,7 @@
 <section class="section">
 [% msg %]
   <div class="container">
+  [% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
     <div class="row">
       <div class="col s12 m10 l8 z-depth-1 card col-center hoverable" id="card-[% form.name %]">
         [% tabs %]
@@ -53,7 +54,7 @@
 
 [% includes %]
 [% up_data %]
-[% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
+
 <section class="section">
   <div class="container">
     <div class="row">

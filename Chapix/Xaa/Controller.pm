@@ -71,8 +71,8 @@ sub actions {
     my $results = {};
 
     if($_REQUEST->{View} eq 'PaypalIPN'){
-	Chapix::Xaa::Actions::process_paypal_ipn();
-	return;
+    	Chapix::Xaa::Actions::process_paypal_ipn();
+    	return;
     }elsif(defined $_REQUEST->{_submitted_login}){
         $results = Chapix::Xaa::Actions::login();
         process_results($results);
@@ -87,6 +87,10 @@ sub actions {
         return;
     }elsif($_REQUEST->{View} eq 'Logout'){
         $results = Chapix::Xaa::Actions::logout();
+        process_results($results);
+        return;
+    }elsif($_REQUEST->{View} eq 'OutlookImport'){
+        $results->{redirect} = '/'.$_REQUEST->{dm}.'/CRM/AddContacts?_mode=outlook'.$_REQUEST->{access_token};
         process_results($results);
         return;
     }elsif(defined $_REQUEST->{_submitted_domain_settings}){
@@ -161,6 +165,8 @@ sub view {
             print Chapix::Layout::print( Chapix::Xaa::View::display_billing_history() );
         }elsif($_REQUEST->{View} eq 'EditLogo'){
            print Chapix::Layout::print( Chapix::Xaa::View::display_logo_form() );
+        }elsif($_REQUEST->{View} eq 'Welcome'){
+            print Chapix::Layout::print( Chapix::Xaa::View::display_home() ); 
         }else{
             if($_REQUEST->{View}){
                 print Chapix::Xaa::View::default();
