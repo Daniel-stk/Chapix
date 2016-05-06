@@ -601,8 +601,8 @@ sub display_register {
 		 jsmessage => loc('Escribe tu nombre'), type=>"text", icon=>'account_circle');
     $form->field(name => 'email', label=> loc('Correo electrónico'), type=>'email', icon=>'email',
 		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Escribe tu correo electrónico'));
-    $form->field(name => 'phone', label=> loc('Teléfono'), type=>'text', icon=>'phone', comment=>'<small>'.loc('Deja tu teléfono para recibír el kit de bienvenida').'</small>', 
-		 maxlength=>"100", required=>"1", class=> "with-comment", jsmessage => loc('Ingresa tu número telefónico'),
+    $form->field(name => 'phone', label=> loc('Teléfono'), type=>'text', icon=>'phone',
+		 maxlength=>"100", required=>"1", class=> "", jsmessage => loc('Ingresa tu número telefónico'),
          validate=>'/[\d\s\-]{10,15}/');
 
    #  $form->field(name => 'password', label=> loc('Contraseña'), type=>'password', icon=>'lock',

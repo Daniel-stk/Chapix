@@ -295,7 +295,6 @@ sub create_account {
     my $Mail = Chapix::Mail::Controller->new();
     my $enviado = $Mail->html_template({
         to       => $_REQUEST->{'email'},
-        bcc      => 'ventas@xaandia.com, davidromero@xaandia.com', 
         subject  => $conf->{App}->{Name} . ': '. loc('Tu cuenta esta lista'),
         template => {
             file => 'Chapix/Xaa/tmpl/account-creation-letter.html',
@@ -307,11 +306,11 @@ sub create_account {
             }
         }
     });
-    
+
+    send_welcome_email($_REQUEST->{'name'}, $_REQUEST->{email});
 
     # Welcome msg
     msg_add('success','Tu cuenta fue creada con éxito.');
-    msg_add('success','Recibirás un correo electrónico con tus datos de acceso.');
 
     # Redirect to personal homepage
     $results->{success} = 1;
@@ -371,11 +370,7 @@ sub add_new_customer_to_pipeline {
     my $exist = $dbh->selectrow_array("SELECT contact_id FROM xaa_marketero.contacts WHERE email=?",{},$_REQUEST->{email}) || 0;
     
     if ($exist){
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
-            $exist);
-
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
-            $exist);
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, referer, dateline) VALUES (?, 30, 'NuevoRegistro', ?, DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$exist, ($sess{referrer} || '') );
 
         $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
                 ."VALUES (?, 'call', 'Llamar al cliente', 'Llamar al cliente para ponerse a la orden', CURDATE(), CURTIME())",{},
@@ -410,8 +405,7 @@ sub add_new_customer_to_pipeline {
 
         my $contact_id = $dbh->last_insert_id('', '', 'xaa_marketero.contacts', 'contact_id');
 
-        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, dateline) VALUES (?, 30, 'NuevoRegistro', DATE_ADD(NOW(), INTERVAL 15 DAY))",{},
-            $contact_id);
+        $dbh->do("INSERT IGNORE INTO xaa_marketero.contacts_stages (contact_id, stage_id, tag, referer, dateline) VALUES (?, 30, 'NuevoRegistro', ?, DATE_ADD(NOW(), INTERVAL 15 DAY))",{},$contact_id, ($sess{referrer} || '') );
 
         $dbh->do("INSERT INTO xaa_marketero.contacts_activities (contact_id, action, title, comments, action_date, action_time) "
                 ."VALUES (?, 'call', 'Llamar al cliente', 'Llamar al cliente para ponerse a la orden', CURDATE(), CURTIME())",{},

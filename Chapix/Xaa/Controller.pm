@@ -53,6 +53,8 @@ sub api {
      
     if($_REQUEST->{mode} eq 'get_all_countries'){
 	   $JSON = Chapix::Xaa::API::get_all_countries();
+    }elsif($_REQUEST->{mode} eq 'get_all_states'){
+        $JSON = Chapix::Xaa::API::get_all_states();
     }else{
 	   $JSON->{error} = 'Not implemented';
     }
