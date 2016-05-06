@@ -8,56 +8,46 @@
 >> 250-ENHANCEDSTATUSCODES
 >> 250-8BITMIME
 >> 250 DSN
-<< MAIL FROM:<eme_dalci@marketero.com.mx>
+<< MAIL FROM:<eme_gmcpp@marketero.com.mx>
 >> 250 2.1.0 Ok
-<< RCPT TO:<isabelllll@empresaa-pymee.com>
->> 250 2.1.5 Ok
-<< RCPT TO:<cesarrodriguez@xaandia.com>
->> 250 2.1.5 Ok
-<< RCPT TO:<davidromero@xaandia.com>
+<< RCPT TO:<agonzalez@novacredit.com.mx>
 >> 250 2.1.5 Ok
 << DATA
 >> 354 End data with <CR><LF>.<CR><LF>
-<< To: isabelllll@empresaa-pymee.com
-<< From: Marketero <notificaciones@marketero.com.mx>
-<< Reply-To: Marketero <notificaciones@marketero.com.mx>
-<< Subject: Mensaje enviado
-<< Date: Thu, 28 Apr 2016 11:26:02 -0400
-<< Message-ID: <20160428_152602_073218.eme_dalci@marketero.com.mx>
+<< To: agonzalez@novacredit.com.mx
+<< From: Grupo Mexicano de Consultor�a P�blica y Priva <gmcpp@marketero.com.mx>
+<< Reply-To: Grupo Mexicano de Consultor�a P�blica y Priva <gmcpp@marketero.com.mx>
+<< Subject: 
+<< 	 =?UTF-8?B?UHVibGljYWNpw7NuIGVuIERpYXJpbyBPZmljaWFsIGRlIGxhIEZlZGVyYWNpw7Nu?=
+<< Date: Fri, 6 May 2016 12:44:26 -0400
+<< Message-ID: <20160506_164426_017028.eme_gmcpp@marketero.com.mx>
+<< List-Unsubscribe: http://marketero.com.mx/gmcpp/Public/Unsuscribe?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=1011.249
 << MIME-Version: 1.0
 << Content-Type: multipart/mixed;
-<< 	boundary="Message-Boundary-by-Mail-Sender-1461857162"
+<< 	boundary="Message-Boundary-by-Mail-Sender-1462553066"
 << 
 << This message is in MIME format. Since your mail reader does not understand
 << this format, some or all of this message may not be legible.
 << 
-<< --Message-Boundary-by-Mail-Sender-1461857162
-<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1461857162_2"
+<< --Message-Boundary-by-Mail-Sender-1462553066
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1462553066_2"
 << 
 << 
-<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2
 << Content-Type: text/plain
 << Content-Transfer-Encoding: 7BIT
 << 
-<< Tu mensaje "¿Cuánto, es demasiado apego con tu hijos?" fue enviado a 344 direcciones de correo. El mensaje enviado es el siguiente: 
-<< �
-<< �
-<< �
-<< ¡Hola!
-<< El equipo de DALCI�te saluda con gusto, y te deja los artículos de la semana que no te querrás perder.� 
-<< ¿Realmente es demasiado apego?
-<< �
-<< Fomenta la personalidad de tu Peque Descubrir más tips 
-<< �
-<< �
-<< �
-<< �
-<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2
+<< Para conocer más Da Clic Aquí 
+<< En breve te enviaremos una presentación con los puntos más importantes.
+<< Grupo Mexicano de Consultoría Pública y Priva Providencia 1028 Colonia del Valle, México DF, 
+<< Tel: (55) 36266717 /18/19 Si no puedes ver correctamente este mensaje, da clic aqu� .
+<< Si no deseas seguir recibiendo estos mensajes, puedes cancelar tu suscripción en cualquier momento.
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2
 << Content-Type: text/html
 << Content-Transfer-Encoding: 7BIT
 << 
-<< <html><h1>Tu mensaje "¿Cuánto, es demasiado apego con tu hijos?" fue enviado a 344 direcciones de correo.</h1><br/><br/><h2>El mensaje enviado es el siguiente:</h2><br/><br/><div>
-<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#FFFFFF">
+<< <html><div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#26c6da">
 << <tbody>
 << <tr>
 << <td>
@@ -69,7 +59,7 @@
 << <tbody>
 << <tr>
 << <td align="center">
-<< <div><img src="http://marketero.com.mx/data/dalci/img/site/" style="max-width: 100%; height: 0px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; width: 0px; top: auto; left: auto;" class="">
+<< <div><img src="http://marketero.com.mx/data/gmcpp/img/mkt_images/dof.jpg" style="width: 600px; max-width: 100%; height: auto; margin: 0px; resize: none; position: relative; zoom: 1; display: block; top: auto; left: auto; min-height: 50px;" class="">
 << </div>
 << </td>
 << </tr>
@@ -88,51 +78,11 @@
 << 
 << </div>
 << <div>
-<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#81d4fa">
 << <tbody>
 << <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td align="center">
-<< <div><img src="http://marketero.com.mx/data/dalci/img/mkt_images/logo.jpg" style="width: 77px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 139px; top: auto; left: auto; max-width: 100%;" class="">
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4dd0e1">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
+<< <td style="padding:10px 0px;">
+<< <div><a target="_blank" href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.5&k=10681b0d&e=7687" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(255, 255, 255); text-decoration: none; font-family: normal; background-color: rgb(48, 79, 254);">Para conocer más Da Clic Aquí</a>
 << </div>
 << </td>
 << </tr>
@@ -141,76 +91,7 @@
 << 
 << </div>
 << <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#303F9F">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center" style="padding:10px 0;word-break:break-word;">
-<< <div>
-<< <p style="overflow: hidden; word-break: break-word;"><strong>
-<< <span style="font-size:22px;">¡Hola!
-<< </span></strong></p> 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4fc3f7">
 << <tbody>
 << <tr>
 << <td>
@@ -218,186 +99,13 @@
 << <tbody>
 << <tr>
 << <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
-<< <div>
-<< <p style="overflow: hidden; word-break: break-word;">
-<< <span style="font-size:18px;"><font color="#000000">El equipo de DALCI&nbsp;te saluda con gusto, y te deja los artículos de la semana que no te querrás perder.&nbsp;</font>
-<< </span></p> 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:100%;min-height:30px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center" width="50%">
-<< <div>
-<< <div block-type="img">
-<< <div>
-<< <div>
-<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td align="center">
-<< <div><a target="_blank" href="http://www.dalci.com.mx/_blog/-Esta-muy-apegado-a-ti"><img src="http://marketero.com.mx/data/dalci/img/mkt_images/url-4.jpg" style="width: 557px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; height: 383px; top: auto; left: auto; max-width: 100%;" class=""></a>
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </div>
-<< </div>
-<< </div>
-<< </td>
-<< <td valign="center" width="50%">
-<< <div>
-<< <div block-type="txt">
-<< <div>
-<< <div>
-<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
-<< <div>
-<< <p style="color: rgb(189, 189, 189); overflow: hidden; word-break: break-word;">
-<< <span style="font-size:26px;"><strong>
-<< <span style="color:#000000;">¿Realmente es demasiado apego?
-<< </span></strong>
+<< <div><h6 style="text-align: center; color: rgb(189, 189, 189);">
+<< <span style="font-size:18px;">
+<< <span style="font-family:tahoma,geneva,sans-serif;">
+<< <span style="color:#000080;">En breve te enviaremos una presentación con los puntos más importantes.
 << </span>
-<< <br> &nbsp;</p> 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </div>
-<< </div>
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody> 
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;">
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td align="center">
-<< <div><a target="_blank" href="http://www.dalci.com.mx/_blog/Ayuda-a-su-personalidad"><img src="http://marketero.com.mx/data/dalci/img/mkt_images/malos-modales.jpg" style="width: 496px; max-width: 100%; height: 207px; margin: 0px; resize: none; position: relative; zoom: 1; display: block; top: auto; left: auto;" class=""></a>
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td>
-<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
-<< <div>
-<< <p style="overflow: hidden; word-break: break-word; text-align: center;">
-<< <span style="font-size:26px;"><font color="#000000">
-<< <span style="line-height: 32px;"><b>Fomenta la personalidad de tu Peque</b>
-<< </span></font>
-<< </span></p> 
+<< </span>
+<< </span></h6> 
 << </div>
 << </td>
 << </tr>
@@ -411,30 +119,7 @@
 << 
 << </div>
 << <div>
-<< <table style="width:100%!important;text-align:center;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:8px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <hr style="height:1px;border-color:#EEEEEE;background-color:#EEEEEE;color:#EEEEEE;width:100%;min-width:300px;border:0px;">
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="">
+<< <table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#e0f7fa">
 << <tbody>
 << <tr>
 << <td>
@@ -450,7 +135,7 @@
 << <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
 << <tbody>
 << <tr>
-<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="https://www.facebook.com/Soy-Mam%C3%A1-Dalci-284878404900101/" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.4&k=b4ccb9d4&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a>
 << </td>
 << </tr>
 << </tbody>
@@ -459,52 +144,35 @@
 << <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
 << <tbody>
 << <tr>
-<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="https://twitter.com/SoyMamaDalci" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.2&k=48947866&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a>
 << </td>
 << </tr>
 << </tbody>
 << </table>
 << 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
 << <tbody>
 << <tr>
-<< <td style="padding:10px 0px;">
-<< <div><a target="_blank" href="http://www.dalci.com.mx/" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(255, 255, 255); text-decoration: none; font-family: normal; background-color: rgb(198, 255, 0);">Descubrir más tips </a>
-<< </div>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.3&k=1f3a7976&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/website.png" alt="Website" width="35" style="width:35px; max-width:50px; display:block;"></a>
 << </td>
 << </tr>
 << </tbody>
 << </table>
 << 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#303F9F">
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
 << <tbody>
 << <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.1&k=a672b0d1&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/linkedin.png" alt="Linkedin" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
 << </td>
 << </tr>
 << </tbody>
@@ -516,78 +184,61 @@
 << </tbody>
 << </table>
 << 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4dd0e1">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
+<< </div><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f1f0f0" style="background:#f1f0f0;width:100%!important;padding: 5px 15px;">
+<<   <tr>
+<<     <td>
+<<       <center>
+<<         <br />
+<<         <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;">
+<<           <tr>
+<<             <td>
+<<               <div style="font-size:small;">
+<<                 <span style="color:#4e4e4e;">
+<<                   <font color="#4e4e4e">
+<<                     <strong>Grupo Mexicano de Consultoría Pública y Priva</strong><br/>
+<<                     Providencia 1028 Colonia del Valle, México DF, <br />
+<<                     Tel: (55) 36266717 /18/19<br /><br />
+<<                   </font>
+<<                 </span>
+<<               </div>
+<<               <br />
+<<             </td>
+<<             <td align="right">
+<<               <div style="text-align:right; padding: 10px 30px;">
+<<                 <a href="https://marketero.com.mx"><img src="http://marketero.com.mx/Chapix/Xaa/img/MARKETERO_GRIS.png" border="0"></a>
+<<               </div>
+<<             </td>
+<<           </tr>
+<<         </table>
+<< 
+<<       </center>
+<<     </td>
+<<   </tr>
 << </table>
 << 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
+<< <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;background:#f1f0f0;font-size:10px;padding:5px 15px;">
+<<   <tbody>
+<<     <tr>
+<<       <td style="width:50%;padding:7px;text-align:left;">
+<<         <span style="color:#888888">Si no puedes ver correctamente este mensaje, da <br/>
+<<           <a href="http://marketero.com.mx/gmcpp/EmailMkt/ViewOnline?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&m=249" target="_blank">clic aqu&iacute;</a>.
+<<         </span>
+<<       </td>
+<<       <td style="width:50%;padding:7px;text-align:right;">
+<<         <span style="color:#888888;">
+<<           Si no deseas seguir recibiendo estos mensajes, puedes <a href="http://marketero.com.mx/gmcpp/Public/Unsuscribe?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=1011.249" target="_blank">cancelar tu suscripción</a> en cualquier momento.
+<<         </span>
+<<       </td>
+<<     </tr>
+<<   </tbody>
 << </table>
 << 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
+<< <img src="http://marketero.com.mx/gmcpp/Public/TrackImg?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=249.7687" width="1" height="1" border="0" alt=""></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2--
 << 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< <div>
-<< <table style="width:100%!important;text-align:center;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="">
-<< <tbody>
-<< <tr>
-<< <td valign="center">
-<< <div>
-<< <table style="width:85%;margin:7px auto;" height="10" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
-<< <tbody>
-<< <tr>
-<< <td valign="center">&nbsp;
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div>
-<< </td>
-<< </tr>
-<< </tbody>
-<< </table>
-<< 
-<< </div></html>
-<< --Part-Message-Boundary-by-Mail-Sender-1461857162_2--
-<< 
-<< --Message-Boundary-by-Mail-Sender-1461857162--
+<< --Message-Boundary-by-Mail-Sender-1462553066--
 << 
 << .
->> 250 2.0.0 Ok: queued as 5CE9218D5244
+>> 250 2.0.0 Ok: queued as B111318F6D1C
 << QUIT
 >> 221 2.0.0 Bye
