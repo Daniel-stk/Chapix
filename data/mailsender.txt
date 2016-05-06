@@ -1,0 +1,244 @@
+>> 220 smtp.marketero.com.mx ESMTP Postfix
+<< EHLO localhost
+>> 250-smtp.marketero.com.mx
+>> 250-PIPELINING
+>> 250-SIZE 10240000
+>> 250-VRFY
+>> 250-ETRN
+>> 250-ENHANCEDSTATUSCODES
+>> 250-8BITMIME
+>> 250 DSN
+<< MAIL FROM:<eme_gmcpp@marketero.com.mx>
+>> 250 2.1.0 Ok
+<< RCPT TO:<agonzalez@novacredit.com.mx>
+>> 250 2.1.5 Ok
+<< DATA
+>> 354 End data with <CR><LF>.<CR><LF>
+<< To: agonzalez@novacredit.com.mx
+<< From: Grupo Mexicano de Consultor�a P�blica y Priva <gmcpp@marketero.com.mx>
+<< Reply-To: Grupo Mexicano de Consultor�a P�blica y Priva <gmcpp@marketero.com.mx>
+<< Subject: 
+<< 	 =?UTF-8?B?UHVibGljYWNpw7NuIGVuIERpYXJpbyBPZmljaWFsIGRlIGxhIEZlZGVyYWNpw7Nu?=
+<< Date: Fri, 6 May 2016 12:44:26 -0400
+<< Message-ID: <20160506_164426_017028.eme_gmcpp@marketero.com.mx>
+<< List-Unsubscribe: http://marketero.com.mx/gmcpp/Public/Unsuscribe?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=1011.249
+<< MIME-Version: 1.0
+<< Content-Type: multipart/mixed;
+<< 	boundary="Message-Boundary-by-Mail-Sender-1462553066"
+<< 
+<< This message is in MIME format. Since your mail reader does not understand
+<< this format, some or all of this message may not be legible.
+<< 
+<< --Message-Boundary-by-Mail-Sender-1462553066
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1462553066_2"
+<< 
+<< 
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2
+<< Content-Type: text/plain
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< Para conocer más Da Clic Aquí 
+<< En breve te enviaremos una presentación con los puntos más importantes.
+<< Grupo Mexicano de Consultoría Pública y Priva Providencia 1028 Colonia del Valle, México DF, 
+<< Tel: (55) 36266717 /18/19 Si no puedes ver correctamente este mensaje, da clic aqu� .
+<< Si no deseas seguir recibiendo estos mensajes, puedes cancelar tu suscripción en cualquier momento.
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2
+<< Content-Type: text/html
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< <html><div>
+<< <table style="width:100%;text-align:center;padding:5px 15px;" width="100%" border="0" cellpadding="0" cellspacing="0" align="center" bgcolor="#26c6da">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" align="top" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="100%" valign="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><img src="http://marketero.com.mx/data/gmcpp/img/mkt_images/dof.jpg" style="width: 600px; max-width: 100%; height: auto; margin: 0px; resize: none; position: relative; zoom: 1; display: block; top: auto; left: auto; min-height: 50px;" class="">
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;min-height:70px;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#81d4fa">
+<< <tbody>
+<< <tr>
+<< <td style="padding:10px 0px;">
+<< <div><a target="_blank" href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.5&k=10681b0d&e=7687" style="display: inline-block; padding: 10px 40px; border-radius: 10px; font-size: 25px; color: rgb(255, 255, 255); text-decoration: none; font-family: normal; background-color: rgb(48, 79, 254);">Para conocer más Da Clic Aquí</a>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;padding:5px 15px;" width="100%" align="center" border="0" cellpadding="0" cellspacing="0" bgcolor="#4fc3f7">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table style="width:100%;" width="600" align="center" border="0" cellpadding="0" cellspacing="0">
+<< <tbody>
+<< <tr>
+<< <td style="max-width:600px;overflow:hidden;word-break:break-word;" valign="center">
+<< <div><h6 style="text-align: center; color: rgb(189, 189, 189);">
+<< <span style="font-size:18px;">
+<< <span style="font-family:tahoma,geneva,sans-serif;">
+<< <span style="color:#000080;">En breve te enviaremos una presentación con los puntos más importantes.
+<< </span>
+<< </span>
+<< </span></h6> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table style="width:100%!important;text-align:center;padding:5px 15px;" align="center" width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#e0f7fa">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <div>
+<< <table width="100%" style="text-align:center;width:100%!important;" class="social_tabla" border="0" cellpadding="0" cellspacing="0" align="center">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top">
+<< <table border="0" cellpadding="0" cellspacing="0" style="text-align:center;" align="center">
+<< <tbody>
+<< <tr>
+<< <td valign="top">
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.4&k=b4ccb9d4&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/facebook.png" alt="Facebook" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.2&k=48947866&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/twitter.png" alt="Twitter" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.3&k=1f3a7976&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/website.png" alt="Website" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< <table align="left" border="0" cellpadding="0" cellspacing="0" class="social_icono">
+<< <tbody>
+<< <tr>
+<< <td align="center" valign="top" style="padding-right:10px; padding-bottom:5px;"><a href="http://marketero.com.mx/gmcpp/EmailMkt/TrackingUrl?a=249.1&k=a672b0d1&e=7687" target="_blank"><img src="http://marketero.com.mx/assets/img/mkt_social_icons/linkedin.png" alt="Linkedin" width="35" style="width:35px; max-width:50px; display:block;"></a>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div><table width="100%" border="0" cellpadding="0" cellspacing="0" bgcolor="#f1f0f0" style="background:#f1f0f0;width:100%!important;padding: 5px 15px;">
+<<   <tr>
+<<     <td>
+<<       <center>
+<<         <br />
+<<         <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;">
+<<           <tr>
+<<             <td>
+<<               <div style="font-size:small;">
+<<                 <span style="color:#4e4e4e;">
+<<                   <font color="#4e4e4e">
+<<                     <strong>Grupo Mexicano de Consultoría Pública y Priva</strong><br/>
+<<                     Providencia 1028 Colonia del Valle, México DF, <br />
+<<                     Tel: (55) 36266717 /18/19<br /><br />
+<<                   </font>
+<<                 </span>
+<<               </div>
+<<               <br />
+<<             </td>
+<<             <td align="right">
+<<               <div style="text-align:right; padding: 10px 30px;">
+<<                 <a href="https://marketero.com.mx"><img src="http://marketero.com.mx/Chapix/Xaa/img/MARKETERO_GRIS.png" border="0"></a>
+<<               </div>
+<<             </td>
+<<           </tr>
+<<         </table>
+<< 
+<<       </center>
+<<     </td>
+<<   </tr>
+<< </table>
+<< 
+<< <table width="100%" border="0" cellpadding="0" cellspacing="0" style="width:100%!important;background:#f1f0f0;font-size:10px;padding:5px 15px;">
+<<   <tbody>
+<<     <tr>
+<<       <td style="width:50%;padding:7px;text-align:left;">
+<<         <span style="color:#888888">Si no puedes ver correctamente este mensaje, da <br/>
+<<           <a href="http://marketero.com.mx/gmcpp/EmailMkt/ViewOnline?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&m=249" target="_blank">clic aqu&iacute;</a>.
+<<         </span>
+<<       </td>
+<<       <td style="width:50%;padding:7px;text-align:right;">
+<<         <span style="color:#888888;">
+<<           Si no deseas seguir recibiendo estos mensajes, puedes <a href="http://marketero.com.mx/gmcpp/Public/Unsuscribe?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=1011.249" target="_blank">cancelar tu suscripción</a> en cualquier momento.
+<<         </span>
+<<       </td>
+<<     </tr>
+<<   </tbody>
+<< </table>
+<< 
+<< <img src="http://marketero.com.mx/gmcpp/Public/TrackImg?k=4ac2ae8cf6&e=agonzalez@novacredit.com.mx&a=249.7687" width="1" height="1" border="0" alt=""></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1462553066_2--
+<< 
+<< --Message-Boundary-by-Mail-Sender-1462553066--
+<< 
+<< .
+>> 250 2.0.0 Ok: queued as B111318F6D1C
+<< QUIT
+>> 221 2.0.0 Bye
