@@ -23,8 +23,28 @@ sub get_all_countries {
 	};
 	if ($@) {
 		$results->{error} = 1;
+		$results->{message} = $@;
 	}
 	return $results;	
+}
+
+
+sub get_all_states {
+	my $results = {};
+
+	eval {
+		my $WHERE = '';
+
+		if ($_REQUEST->{country_id}){
+			$WHERE = "WHERE country_id='$_REQUEST->{country_id}'";
+		}
+		$results->{states} = $dbh->selectall_arrayref("SELECT * FROM $conf->{Xaa}->{DB}.states $WHERE",{Slice=>{}});
+	};
+	if ($@){
+		$results->{error} = 1;
+		$results->{message} = $@;
+	}
+	return $results;
 }
 
 

@@ -8,6 +8,10 @@ use Carp;
 use Chapix::Conf;
 use Chapix::Com;
 
+use Geo::GeoNames;
+use LWP::UserAgent;
+use JSON::XS;
+
 sub new {
     my $class = shift;
     my $DEBUG = shift;
@@ -35,6 +39,11 @@ sub run_minute {
 
 sub run_daily {
     my $self = shift;
+
+
+    $self->update_countries();
+    exit;
+
     my $date = $dbh->selectrow_array("SELECT DATE(DATE_SUB(NOW(), INTERVAL 1 DAY))");
     print time() . " Running Xaa \n" if ($self->{DEBUG});
     
@@ -100,6 +109,44 @@ sub run_daily {
                 );
 
     }
+    
 }
 
+
+sub update_countries {
+    my $self = shift;
+
+    eval {
+	   my $geo  = new Geo::GeoNames(username => 'cesarrguez');	
+	   my $result = $geo->country_info();
+	
+        foreach my $country (@{$result} ){
+            print "\n $country->{geonameId} ".$country->{countryCode}." = " .$country->{countryName}  ."\n" if ($self->{DEBUG});
+
+            $dbh->do("INSERT IGNORE INTO xaa.countries (country_id, country) VALUES (?, ?)",{},$country->{countryCode}, $country->{countryName});
+
+            my $ua = LWP::UserAgent->new;
+
+            my $response = $ua->get('http://api.geonames.org/childrenJSON?geonameId='.$country->{geonameId}.'&username=cesarrguez');
+
+            if ($response->is_success){
+                my $results = decode_json($response->content);
+
+                foreach my $state (@{$results->{geonames}} ) {
+                    print "\n $state->{name} \n" if ($self->{DEBUG});
+                    my $exist = $dbh->selectrow_array("SELECT COUNT(*) FROM xaa.states WHERE country_id=? AND state=?",{},$country->{countryCode}, $state->{name}) || 0;
+                    $dbh->do("INSERT INTO xaa.states (country_id, state) VALUES (?, ?)",{},$country->{countryCode}, $state->{name}) if (!$exist);
+                }
+            }else{
+                print "\n response error" if ($self->{DEBUG});
+                next;
+            }
+        }
+    };
+    if ($@){
+        print "\n";
+        print "Error : ".$@; 
+        print "\n";
+    }
+}
 1;

@@ -10,7 +10,11 @@ use Chapix::Com;
 use Chapix::View;
 
 sub handler {
-    #msg_add('danger'," -- $_REQUEST->{Controller} -- $_REQUEST->{View}  -- ");	
+    #msg_add('danger'," -- $_REQUEST->{Controller} -- $_REQUEST->{View}  -- ");
+    if (!$sess{referrer}){
+        $sess{referrer} = $ENV{HTTP_REFERER} || '';
+    }
+
     if($_REQUEST->{Controller}){
         my $module = $_REQUEST->{Controller};
         my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);

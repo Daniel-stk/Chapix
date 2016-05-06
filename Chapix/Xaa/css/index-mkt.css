@@ -14,6 +14,12 @@ main {
 
 nav ul a {
 	color: black;
+	padding: 0 10px;
+	font-size: 0.9rem;
+}
+
+.nav-wrapper {
+	padding: 0 50px;
 }
 
 .brand-logo img {
@@ -307,7 +313,6 @@ nav ul li:last-child:hover, nav ul li:last-child.active {
 }
 
 
-
 .card-header {
 	top: 0px;
     right: 0px;
@@ -333,8 +338,4 @@ nav ul li:last-child:hover, nav ul li:last-child.active {
 	right: 160px;
 	bottom: -7px;
 	max-width: 215px;
-}
-
-.userlike {
-  z-index : initial !important;
 }
