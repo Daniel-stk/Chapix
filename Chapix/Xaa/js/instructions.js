@@ -4,43 +4,43 @@ $(function(){
 
 var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 $(window).load(function(){
-	if(typeof(Storage) !== "undefined") {
-		
-	    if ( !localStorage.FormsHome && document.location.pathname.match(/\/\w*\/Forms$/) ){ // FORMS MODULE INSTRUCTIONS	
-
-			$('body').on('chardinJs:start', function(){
-				$('.chardinjs-overlay').before('<img class="instr-lp1" src="/assets/img/mkt_others/instr-lp1.png" />');
-			});
-
-			$('body').on('chardinJs:stop', function(){
-				$('.instr-lp1').fadeOut(function(){
-					$(this).remove();
-				});
-			});
-
-			$('.addy').attr({'data-position': 'top', 'data-intro' : "Crea tu formulario"});
-			localStorage.FormsHome = 'Yes';	
-			// INIT TUTORIAL OVERLAY
-			$('body').chardinJs('start');
-	    }else if ( !localStorage.NewForm && document.location.pathname.match(/\/\w*\/Forms\/NewForm/) ){
-	    	$('.form-usage:first').attr({'data-position' : 'right', 'data-intro' : 'Selecciona una plantilla.<br/><br>Recuerda que al <a target="_blank" href="/'+Domain+'/Xaa/EditLogo">subir tu logo</a> las plantillas se adaptan a los colores.' });			
-	    	localStorage.NewForm = 'Yes';
-	    	// INIT TUTORIAL OVERLAY
-			$('body').chardinJs('start');
-	    }else if ( !localStorage.FormEditor && document.location.pathname.match(/\/\w*\/Forms\/FormEditor/) ) {
-			$('body').on('chardinJs:stop', function(){
-				$('.element-tools').removeClass('some-hover');
-			});
-
-			$('.elements-wrapper').attr({'data-position' : 'top', 'data-intro' : 'Arrastra los elementos.'});
-			$('.toolbar-actions').attr({'data-position' : 'bottom', 'data-intro' : 'Usa estas funciones cuando termines tu página.'});
-			
-			$('.row-wrapper:nth-child(2)').attr({'data-position': 'bottom', 'data-intro' : 'Edita tu contenido'}).find('.element-tools').addClass('some-hover').find('.right-tools').attr({'data-position' : 'bottom', 'data-intro' : 'Usa el lapiz para editar los elementos.' });
-			 
-			localStorage.FormEditor = 'Yes';
-
-			// INIT TUTORIAL OVERLAY
-			$('body').chardinJs('start');
+    if(typeof(Storage) !== "undefined") {
+	
+	if ( !localStorage.FormsHome && document.location.pathname.match(/\/\w*\/Forms$/) ){ // FORMS MODULE INSTRUCTIONS	
+            
+	    $('body').on('chardinJs:start', function(){
+		$('.chardinjs-overlay').before('<img class="instr-lp1" src="/assets/img/mkt_others/instr-lp1.png" />');
+	    });
+            
+	    $('body').on('chardinJs:stop', function(){
+		$('.instr-lp1').fadeOut(function(){
+		    $(this).remove();
+		});
+	    });
+            
+	    $('.addy').attr({'data-position': 'top', 'data-intro' : "Crea tu formulario"});
+	    localStorage.FormsHome = 'Yes';	
+	    // INIT TUTORIAL OVERLAY
+	    $('body').chardinJs('start');
+	}else if ( !localStorage.NewForm && document.location.pathname.match(/\/\w*\/Forms\/NewForm/) ){
+	    $('.form-usage:first').attr({'data-position' : 'right', 'data-intro' : 'Selecciona una plantilla.<br/><br>Recuerda que al <a target="_blank" href="/'+Domain+'/Xaa/EditLogo">subir tu logo</a> las plantillas se adaptan a los colores.' });			
+	    localStorage.NewForm = 'Yes';
+	    // INIT TUTORIAL OVERLAY
+	    $('body').chardinJs('start');
+	}else if ( !localStorage.FormEditor && document.location.pathname.match(/\/\w*\/Forms\/FormEditor/) ) {
+	    $('body').on('chardinJs:stop', function(){
+		$('.element-tools').removeClass('some-hover');
+	    });
+            
+	    $('.elements-wrapper').attr({'data-position' : 'top', 'data-intro' : 'Arrastra los elementos.'});
+	    $('.toolbar-actions').attr({'data-position' : 'bottom', 'data-intro' : 'Usa estas funciones cuando termines tu página.'});
+	    
+	    $('.row-wrapper:nth-child(2)').attr({'data-position': 'bottom', 'data-intro' : 'Edita tu contenido'}).find('.element-tools').addClass('some-hover').find('.right-tools').attr({'data-position' : 'bottom', 'data-intro' : 'Usa el lapiz para editar los elementos.' });
+	    
+	    localStorage.FormEditor = 'Yes';
+            
+	    // INIT TUTORIAL OVERLAY
+	    $('body').chardinJs('start');
 	    }else if ( !localStorage.FormResponseEditor && document.location.pathname.match(/\/\w*\/Forms\/FormResponseEditor/) ){
 	    	$('#bob-editor').attr({'data-position' : 'top', 'data-intro' : 'Dale las gracias a tu contacto por haberse registrado.'});
 	    	$('.toolbar-actions').attr({'data-position' : 'bottom', 'data-intro' : 'Da clic en siguiente para editar un email de respuesta.'});
@@ -100,23 +100,23 @@ $(window).load(function(){
 
 		    	// INIT TUTORIAL OVERLAY
 				$('body').chardinJs('start');
-	    	}else{
-	    		$('body').on('chardinJs:start', function(){
-					$('.chardinjs-overlay').before('<img class="instr-eme1" src="/assets/img/mkt_others/instr-eme1.png" />');
-				});
-
-				$('body').on('chardinJs:stop', function(){
-					$('.instr-eme1').fadeOut(function(){
-						$(this).remove();
-					});
-				});
-
-		    	$('#cg_table_cg_list').attr({'data-position' : 'top', 'data-intro' : 'Aquí aparecerán todos tus mensajes.'});
-		    	$('.addy').attr({'data-position': 'top', 'data-intro' : "Crea tu primer mensaje"});
-				localStorage.EmailMkt = 'Yes';
-
-		    	// INIT TUTORIAL OVERLAY
-				$('body').chardinJs('start');
+	    	}else if ( !localStorage.EmailMkt ){
+	    	    $('body').on('chardinJs:start', function(){
+			$('.chardinjs-overlay').before('<img class="instr-eme1" src="/assets/img/mkt_others/instr-eme1.png" />');
+		    });
+                    
+		    $('body').on('chardinJs:stop', function(){
+			$('.instr-eme1').fadeOut(function(){
+			    $(this).remove();
+			});
+		    });
+                    
+		    $('#cg_table_cg_list').attr({'data-position' : 'top', 'data-intro' : 'Aquí aparecerán todos tus mensajes.'});
+		    $('.addy').attr({'data-position': 'top', 'data-intro' : "Crea tu primer mensaje"});
+		    localStorage.EmailMkt = 'Yes';
+                    
+		    // INIT TUTORIAL OVERLAY
+		    $('body').chardinJs('start');
 	    	}
 	    }else if ( !localStorage.MktMessage && document.location.pathname.match(/\/\w*\/EmailMkt\/Message$/) ){
 	    	$('.custom-usage:first').attr({'data-position' : 'right', 'data-intro' : 'Selecciona una plantilla.<br/><br>Recuerda que al <a target="_blank" href="/'+Domain+'/Xaa/EditLogo">subir tu logo</a> las plantillas se adaptan a los colores.' });

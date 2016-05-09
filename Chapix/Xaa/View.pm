@@ -650,7 +650,7 @@ sub display_logo_form {
         materialize => 1,
 	);
 
-    $form->field(name => 'logo', label=> loc("Logo"), required=>1, type=>'file');
+    $form->field(name => 'logo', label=> loc("Selecciona tu logo"), required=>1, type=>'file');
 
     if($params->{logo}){
     	my $img = CGI::img({-src=>"/data/".$_REQUEST->{Domain}.'/img/site/'.$params->{logo}, -class=>'responsive-img'});
