@@ -1,0 +1,121 @@
+>> 220 smtp.marketero.com.mx ESMTP Postfix
+<< EHLO localhost
+>> 250-smtp.marketero.com.mx
+>> 250-PIPELINING
+>> 250-SIZE 10240000
+>> 250-VRFY
+>> 250-ETRN
+>> 250-ENHANCEDSTATUSCODES
+>> 250-8BITMIME
+>> 250 DSN
+<< MAIL FROM:<eme_oshamexico@marketero.com.mx>
+>> 250 2.1.0 Ok
+<< RCPT TO:<cbasanez@oshamexico.com.mx>
+>> 250 2.1.5 Ok
+<< RCPT TO:<cesarrodriguez@xaandia.com>
+>> 250 2.1.5 Ok
+<< RCPT TO:<davidromero@xaandia.com>
+>> 250 2.1.5 Ok
+<< DATA
+>> 354 End data with <CR><LF>.<CR><LF>
+<< To: cbasanez@oshamexico.com.mx
+<< From: Marketero <notificaciones@marketero.com.mx>
+<< Reply-To: Marketero <notificaciones@marketero.com.mx>
+<< Subject: Mensaje enviado
+<< Date: Mon, 9 May 2016 13:27:02 -0400
+<< Message-ID: <20160509_172702_079371.eme_oshamexico@marketero.com.mx>
+<< MIME-Version: 1.0
+<< Content-Type: multipart/mixed;
+<< 	boundary="Message-Boundary-by-Mail-Sender-1462814821"
+<< 
+<< This message is in MIME format. Since your mail reader does not understand
+<< this format, some or all of this message may not be legible.
+<< 
+<< --Message-Boundary-by-Mail-Sender-1462814821
+<< Content-Type: multipart/alternative; boundary="Part-Message-Boundary-by-Mail-Sender-1462814821_2"
+<< 
+<< 
+<< --Part-Message-Boundary-by-Mail-Sender-1462814821_2
+<< Content-Type: text/plain
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< Tu mensaje "OSHA INSCRIPCION RECORDATORIO" fue enviado a 2045 direcciones de correo. El mensaje enviado es el siguiente: 
+<< OSHA CONSTRUCCION CURSO CLIC AQUI
+<< --Part-Message-Boundary-by-Mail-Sender-1462814821_2
+<< Content-Type: text/html
+<< Content-Transfer-Encoding: 7BIT
+<< 
+<< <html><h1>Tu mensaje "OSHA INSCRIPCION RECORDATORIO" fue enviado a 2045 direcciones de correo.</h1><br/><br/><h2>El mensaje enviado es el siguiente:</h2><br/><br/><div>
+<< <table width="100%" align="center" style="padding: 5px 15px; width: 100% !important;" border="0" cellspacing="0" cellpadding="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table width="100%" align="center" style="width: 100% !important;" border="0" cellspacing="0" cellpadding="0">
+<< <tbody>
+<< <tr>
+<< <td valign="center" style="padding: 10px 0px;">
+<< <div><h1 style="text-align: center; color: rgb(189, 189, 189); font-size: 30px; font-weight: bold;">OSHA CONSTRUCCION CURSO</h1> 
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table width="100%" align="center" style="padding: 5px 15px; width: 100%; text-align: center;" border="0" cellspacing="0" cellpadding="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table width="100%" align="top" style="width: 100%;" border="0" cellspacing="0" cellpadding="0">
+<< <tbody>
+<< <tr>
+<< <td>
+<< <table width="100%" style="width: 100%;" border="0" cellspacing="0" cellpadding="0" valign="center">
+<< <tbody>
+<< <tr>
+<< <td align="center">
+<< <div><img style="left: auto; top: auto; width: 600px; height: auto; display: block; position: relative; max-width: 100%; margin: 0px; resize: none; zoom: 1; min-height: 50px;" src="http://marketero.com.mx/data/oshamexico/img/mkt_images/Global_Safety_2016_mty.jpg" class="">
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div>
+<< <div>
+<< <table width="100%" align="center" style="padding: 5px 15px; width: 100% !important; text-align: center; min-height: 70px;" border="0" cellspacing="0" cellpadding="0">
+<< <tbody>
+<< <tr>
+<< <td style="padding: 10px 0px;">
+<< <div><a style="padding: 10px 40px; border-radius: 10px; color: rgb(255, 255, 255); font-family: normal; font-size: 25px; text-decoration: none; display: inline-block; background-color: rgb(245, 0, 87);" href="http://www.oshamexico.com.mx" target="_blank">CLIC AQUI</a>
+<< </div>
+<< </td>
+<< </tr>
+<< </tbody>
+<< </table>
+<< 
+<< </div></html>
+<< --Part-Message-Boundary-by-Mail-Sender-1462814821_2--
+<< 
+<< --Message-Boundary-by-Mail-Sender-1462814821--
+<< 
+<< .
+>> 250 2.0.0 Ok: queued as 0277A18A9F79
+<< QUIT
+>> 221 2.0.0 Bye
