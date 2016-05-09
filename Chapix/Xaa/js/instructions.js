@@ -131,11 +131,11 @@ $(window).load(function(){
 			});
 
 			$('body').on('chardinJs:stop', function(){
+				$('.element-tools').removeClass('some-hover');
 				$('.instr-eme2').fadeOut(function(){
 					$(this).remove();
 				});
 			});
-
 
 			$('.overlay-contenedor:nth-child(2)').attr({'data-position': 'bottom', 'data-intro' : 'Edita tu contenido'}).find('.element-tools').addClass('some-hover').find('.right-tools').attr({'data-position' : 'bottom', 'data-intro' : 'Usa el lapiz para editar los elementos.' });
 
@@ -206,6 +206,7 @@ $(window).load(function(){
 	    	}
 	    }
 	} else {
+		console.log('no soporta web storage');
 	// Sorry! No Web Storage support..
 	}
 });
