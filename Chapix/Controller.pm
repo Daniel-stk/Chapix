@@ -10,7 +10,6 @@ use Chapix::Com;
 use Chapix::View;
 
 sub handler {
-    #msg_add('danger'," -- $_REQUEST->{Controller} -- $_REQUEST->{View}  -- ");
     if (!$sess{referrer}){
         $sess{referrer} = $ENV{HTTP_REFERER} || '';
     }

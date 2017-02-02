@@ -1,5 +1,5 @@
-package Chapix::Xaa::L10N::es_mx;
-use base qw(Chapix::Xaa::L10N);
+package Chapix::Accounts::L10N::es_mx;
+use base qw(Chapix::Accounts::L10N);
 
 %Lexicon = (
     '_AUTO' => 1,

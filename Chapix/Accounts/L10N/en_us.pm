@@ -1,5 +1,5 @@
-package Chapix::Xaa::L10N::default;
-use base qw(Chapix::Xaa::L10N);
+package Chapix::Accounts::L10N::en_us;
+use base qw(Chapix::Accounts::L10N);
 
 %Lexicon = (
     '_AUTO' => 1,
@@ -10,6 +10,7 @@ use base qw(Chapix::Xaa::L10N);
     'Log into your account' => 'Log into your account',
     'Login' => 'Login',
     'View does not exist' => 'View does not exist',
+    'Next' => 'Continuar',
 );
 
 1;
