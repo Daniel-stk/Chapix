@@ -155,14 +155,13 @@ sub msg_print {
 }
 
 sub msg_get {
-  my $HTML = "";
-  my $msgs = $dbh->selectall_arrayref("SELECT m.type, m.msg FROM $conf->{Xaa}->{DB}.sessions_msg m WHERE m.session_id=?",{},$sess{_session_id});
-#  foreach my $msg (@$msgs){
-#    my $class = '';
-#    $HTML .= '<div class="card-panel msg-'.$msg->[0].'">' . $msg->[1] . '</div>';
-#  }
-  $dbh->do("DELETE FROM $conf->{Xaa}->{DB}.sessions_msg WHERE session_id=?",{},$sess{_session_id}) if($msgs->[0]);
-  return $msgs;
+    my $msg_str = "";
+    my $msgs = $dbh->selectall_arrayref("SELECT m.type, m.msg FROM $conf->{Xaa}->{DB}.sessions_msg m WHERE m.session_id=?",{},$sess{_session_id});
+    foreach my $msg (@$msgs){
+        $msg_str .= $msg->[1];
+    }
+    $dbh->do("DELETE FROM $conf->{Xaa}->{DB}.sessions_msg WHERE session_id=?",{},$sess{_session_id}) if($msgs->[0]);
+    return $msg_str;
 }
 
 # Web browser redirect

@@ -23,7 +23,6 @@ sub handler {
             view();
             return '';
         }
-
         # Load module
         my $Module;
         eval {
@@ -32,8 +31,18 @@ sub handler {
             $Module = $module_name->new();
         };
         if($@){
-            msg_add('danger', $@);
-            Chapix::Controller::display_error();
+            if ($_REQUEST->{View} eq 'API') {
+                my $JSON = {
+                    error   => 1,
+                    success => 0,
+                    msg     => $@
+                };
+                print Chapix::Com::header_out('application/json');
+                print JSON::XS->new->encode($JSON);
+            }else{
+                msg_add('danger', $@);
+                Chapix::Controller::display_error();
+            }
             return '';
         }
 

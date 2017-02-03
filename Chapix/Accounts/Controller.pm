@@ -51,12 +51,15 @@ sub api {
      
     if($_REQUEST->{Object} eq 'Signup'){
         $JSON = Chapix::Accounts::API::signup($JSON);
+    }elsif($_REQUEST->{Object} eq 'PasswordReset'){
+        $JSON = Chapix::Accounts::API::password_reset($JSON);
+    }elsif($_REQUEST->{Object} eq 'Login'){
+        $JSON = Chapix::Accounts::API::login($JSON);
     }else{
-	   $JSON->{error} = 'Not implemented';
+        $JSON->{error} = "1";
+        $JSON->{msg} = 'Not implemented';
     }
    
-    $JSON->{redirect} = '';
-    $JSON->{msg} = msg_get();
     print Chapix::Com::header_out('application/json');
     print JSON::XS->new->encode($JSON);
 }
