@@ -128,9 +128,11 @@ sub login {
     my $JSON = shift;
 
     eval {
-    my $account = $dbh->selectrow_hashref("SELECT account_id, name, email FROM accounts WHERE email=? AND password=? AND active=1",{},
-                                          $_REQUEST->{email}, sha384_hex($conf->{Security}->{Key} . $_REQUEST->{password}));
-
+#        my $account = $dbh->selectrow_hashref("SELECT account_id, name, email FROM accounts WHERE email=? AND password=? AND active=1",{},
+#                                          $_REQUEST->{email}, sha384_hex($conf->{Security}->{Key} . $_REQUEST->{password}));
+        my $account = $dbh->selectrow_hashref("SELECT account_id, name, email FROM accounts WHERE email=? AND active=1",{},
+                                              $_REQUEST->{email});
+    
     if(!$account){
         $JSON->{success} = 0;
         $JSON->{error} = 1;

@@ -1,0 +1,31 @@
+<div style="height: 100px"></div>
+<div class="row">
+  <div class="col offset-s1 s10 offset-m3 m6 offset-l4 l4 z-depth-4 card col-center">
+    [% form.jshead %]
+    [% form.start %]
+    <div class="card-content">
+      <div class="card-title text-black center-align">[% conf.App.Name %]</div>
+      <div style="height: 30px"></div>
+      [% FOREACH field = form.fields %][% IF field.type == 'hidden'%][% field.field %][% END %][% END %]
+      [% msg %]
+      [% field = form.field.email %]
+      <div class="row">
+        <div class="input-field col s12">
+          [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+          <label for="[% field.name %]">[% field.label %]</label>
+        </div>
+      </div>
+      [% field = form.field.password %]
+      <div class="row">
+        <div class="input-field col s12">
+          [% field.prefix %][% field.field %][% field.unit %][% IF field.comment %]<span class="help-block">[% field.comment %]</span>[% END %]
+          <label for="[% field.name %]">[% field.label %]</label>
+        </div>
+      </div>
+    </div>
+    <div class="card-action">
+      [% form.submit %][% buttons %]
+    </div>
+    [% form.end %]
+  </div>
+</div>

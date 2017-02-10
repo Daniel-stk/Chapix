@@ -12,3 +12,40 @@
 .icon-block .material-icons {
 	font-size: inherit;
 }
+
+.card-action input {
+    border: none;
+    border-radius: 2px;
+    display: inline-block;
+    height: 36px;
+    line-height: 36px;
+    outline: 0;
+    padding: 0 2rem;
+    text-transform: uppercase;
+    background-color: #D50000;
+    color: #FFF;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+    color: #00C853;
+}
+
+.card .card-action a:hover:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+    color: #64DD17;
+}
+
+.msg {
+    padding: 12px;
+}
+
+.msg-danger {
+    background-color: #ff1744;
+}
+
+.msg-warning {
+    background-color: #ffea00;
+}
+
+.msg-success {
+    background-color: #64DD17;
+}

@@ -1,0 +1,17 @@
+<section class="section">
+  <div class="row">
+    <div class="col s12 m12 l12 col-center">
+     [% tabs %]
+     [% form %]
+     [% msg %]
+     [% IF help %]<p class="alert alert-info">[% help %]</p>[% END %]
+     [% list %]
+     [% IF js %]
+     [% jsFile = 'tmpl/' _ js %]
+     <script type="text/javascript">
+       [% INSERT $jsFile %]
+     </script>
+     [% END %]
+   </div>
+ </div>
+</section>

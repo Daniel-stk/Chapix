@@ -25,6 +25,7 @@ BEGIN {
         &upload_file
         &upload_usr_file
         &http_redirect
+        $language
         $_REQUEST
         $Template
         &format_short_name
@@ -82,9 +83,10 @@ if ($@) {
     die "Can't create session data $@" if($@);
 }
 
-defined $sess{user_id}    or $sess{user_id} = '';
-defined $sess{user_name}  or $sess{user_name} = '';
-defined $sess{user_email} or $sess{user_email} = '';
+defined $sess{account_id}    or $sess{account_id} = '';
+defined $sess{account_name}  or $sess{account_name} = '';
+defined $sess{account_email} or $sess{account_email} = '';
+$sess{account_language} or $sess{account_language} = detect_browser_language('en_US');
 
 $cookie = cookie(-name    => $conf->{SESSION}->{name},
 		 -value   => $sess{_session_id},
@@ -112,11 +114,6 @@ if(length($_REQUEST->{Controller}) == 3 ){
     $_REQUEST->{Object}        = '';
 }
 
-# DataBase
-$dbh = DBI->connect( $conf->{DBI}->{conection}, $conf->{DBI}->{user_name}, $conf->{DBI}->{password},{RaiseError => 1,AutoCommit=>1}) or die "Can't Connect to database." . $!;
-$dbh->do("SET CHARACTER SET 'utf8'");
-$dbh->do("SET time_zone=?",{},$conf->{DBI}->{time_zone});
-#$dbh->do("SET lc_time_names = ?",{},$conf->{DBI}->{lc_time_names});
 
 # Load basic config
 conf_load('Website');
@@ -535,7 +532,6 @@ sub upload_usr_file {
   return "";
 }
 
-
 sub clean_str {
   my $cadena = shift;
 
@@ -545,6 +541,14 @@ sub clean_str {
     $cadena =~ s/\s/_/g;
     
     return $cadena;
+}
+
+sub detect_browser_language {
+    my $detected_language = shift || 'en_US';
+    if($ENV{HTTP_ACCEPT_LANGUAGE} =~ /es/ ){
+        $detected_language = 'es_MX';
+    }
+    return $detected_language;
 }
 
 1;
