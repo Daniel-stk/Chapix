@@ -27,6 +27,7 @@ BEGIN {
         &http_redirect
         $language
         $_REQUEST
+        $_HEADERS
         $Template
         &format_short_name
         &format_name
@@ -45,6 +46,11 @@ my $Q = CGI->new;
 
 foreach my $key (keys %{$Q->Vars()}){
     $_REQUEST->{$key} = $Q->param($key);
+}
+
+my %headers = map { $_ => $Q->http($_) } $Q->http();
+for my $header ( keys %headers ) {
+    $_HEADERS->{$header} = $headers{$header};
 }
 
 my $URL = $ENV{SCRIPT_URL};
