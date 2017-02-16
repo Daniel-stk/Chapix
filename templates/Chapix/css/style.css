@@ -49,3 +49,29 @@
 .msg-success {
     background-color: #64DD17;
 }
+
+.information-content{
+    font-size: 125%;
+    padding-left: 10%;
+}
+
+.information-content .information-label{
+    font-weight: bold;
+    font-style: italic;
+}
+
+.information-content .information-data{
+    margin-left: 5%;
+}
+
+#sidenav-overlay {
+    z-index: 996;
+}
+
+.side-nav .userView {
+    overflow: hidden;
+    position: relative;
+    padding: 32px 32px 0;
+    margin-bottom: 8px;
+}
+    

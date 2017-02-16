@@ -14,12 +14,14 @@ sub print {
     my $content = shift || "";
     my $vars    = shift || {};
     my $template_file = shift || '';
+    my $menu = [];
     
     if (!$template_file) {
         if($sess{account_id}){
-            $template_file = 'layout-app.html'
+            $template_file = 'layout-app.html';
+            $menu = $dbh->selectall_arrayref("SELECT name, url FROM menus WHERE position='Admin' ORDER BY sort_order",{Slice=>{}});
         }else{
-            $template_file = 'layout.html'
+            $template_file = 'layout.html';
         }
     }
         
@@ -28,7 +30,7 @@ sub print {
     	vars    => $vars,
     	sess    => \%sess,
     	conf    => $conf,
-        Domain     => ($_REQUEST->{Domain} || ''),
+        menu    => $menu,
         Controller => ($_REQUEST->{Controller} || ''),
         View       => ($_REQUEST->{View} || 'Default'),
     	msg => msg_print(),

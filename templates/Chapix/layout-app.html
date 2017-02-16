@@ -17,12 +17,26 @@
     <nav class="red">
       <div class="container">
         <div class="nav-wrapper">
+          <a href="#" data-activates="mobile-demo" class="button-collapse show-on-large"><i class="material-icons">menu</i></a>
           <a href="#" class="brand-logo">[% conf.Page.Title %]</a>
           <ul class="right hide-on-med-and-down">
             <li><a href="/Admin">Inicio</a></li>
             <li><a href="/Admin/Admins">Admins</a></li>
           </ul>
         </div>
+        <ul class="side-nav" id="mobile-demo">
+          <li>
+            <div class="userView">
+              <img class="background" src="http://orig11.deviantart.net/20eb/f/2015/030/6/f/_minflat__dark_material_design_wallpaper__4k__by_dakoder-d8fjqzu.jpg"/>
+              <a href="#!name"><span class="white-text name">[% sess.account_name %]</span></a>
+              <a href="#!email"><span class="white-text email">[% sess.account_email %]</span></a>
+            </div>
+          </li>
+          <li><a href="/Admin">Inicio</a></li>
+          [% FOREACH mitem = menu %]
+          <li><a href="[% mitem.url %]">[% mitem.name %]</a></li>
+          [% END %]
+        </ul>
       </div>
     </nav>
   </div>

@@ -27,6 +27,7 @@ BEGIN {
         &http_redirect
         $language
         $_REQUEST
+        $_HEADERS
         $Template
         &format_short_name
         &format_name
@@ -45,6 +46,11 @@ my $Q = CGI->new;
 
 foreach my $key (keys %{$Q->Vars()}){
     $_REQUEST->{$key} = $Q->param($key);
+}
+
+my %headers = map { $_ => $Q->http($_) } $Q->http();
+for my $header ( keys %headers ) {
+    $_HEADERS->{$header} = $headers{$header};
 }
 
 my $URL = $ENV{SCRIPT_URL};
@@ -271,17 +277,8 @@ sub upload_file {
   my $mime = '';
   my $save_as = shift || "";
 
-
-  if(!(-e "data/$conf->{Domain}->{folder}")){
-    mkdir ("data/$conf->{Domain}->{folder}");
-  }
-  
-  if(!(-e "data/$conf->{Domain}->{folder}/img")){
-    mkdir ("data/$conf->{Domain}->{folder}/img");
-  }  
-  
-  if(!(-e "data/$conf->{Domain}->{folder}/img/$dir/")){
-    mkdir ("data/$conf->{Domain}->{folder}/img/$dir/");
+  if(!(-e "data/$dir/")){
+      mkdir ("data/$dir/");
   }
 
   if($filename){
@@ -337,7 +334,7 @@ sub upload_file {
       return "";
     }
     if($file){
-      open (OUTFILE,">data/$conf->{Domain}->{folder}/img/$dir/" . $file) or die "$!";
+      open (OUTFILE,">data/$dir/" . $file) or die "$!";
       binmode(OUTFILE);
       my $bytesread;
       my $buffer;
@@ -439,17 +436,8 @@ sub upload_usr_file {
   my $mime = '';
   my $save_as = shift || "";
 
-
-  if(!(-e "data/$conf->{Domain}->{folder}")){
-    mkdir ("data/$conf->{Domain}->{folder}");
-  }
-
-  if(!(-e "data/$conf->{Domain}->{folder}/img")){
-      mkdir ("data/$conf->{Domain}->{folder}/img");
-  }
-  
-  if(!(-e "data/$conf->{Domain}->{folder}/$dir")){
-    mkdir ("data/$conf->{Domain}->{folder}/$dir");
+  if(!(-e "data/$dir")){
+    mkdir ("data/$dir");
   }
 
   if($filename){
@@ -509,16 +497,16 @@ sub upload_usr_file {
     }
     if($file){
 
-      if (-e "data/$conf->{Domain}->{folder}/$dir/$file") {
+      if (-e "data/$dir/$file") {
         foreach my $it (1 .. 1000000) {
           $file = $name.'_'.$it.$extension;
-          if(!(-e "data/$conf->{Domain}->{folder}/$dir/$file")){
+          if(!(-e "data/$dir/$file")){
             last;
           }
         }
       }
 
-      open (OUTFILE,">data/$conf->{Domain}->{folder}/$dir/" . $file) or die "$!";
+      open (OUTFILE,">data/$dir/" . $file) or die "$!";
       binmode(OUTFILE);
       my $bytesread;
       my $buffer;
