@@ -68,7 +68,6 @@ sub view {
             print Chapix::Layout::print( Chapix::Admin::View::display_admins());
         }
     }else{
-        
         print Chapix::Layout::print( Chapix::Admin::View::display_home());
     }
 }
