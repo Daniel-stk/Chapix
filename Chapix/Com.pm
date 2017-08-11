@@ -28,6 +28,7 @@ BEGIN {
         $language
         $_REQUEST
         $_HEADERS
+        $_METHOD
         $Template
         &format_short_name
         &format_name
@@ -53,6 +54,7 @@ for my $header ( keys %headers ) {
     $_HEADERS->{$header} = $headers{$header};
 }
 
+my $_METHOD = $ENV{'REQUEST_METHOD'};
 my $URL = $ENV{SCRIPT_URL};
 my $BaseURL = $conf->{ENV}->{BaseURL};
 

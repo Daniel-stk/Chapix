@@ -89,7 +89,7 @@ sub set_toolbar {
 	$HTML .= $btn;
     }
     if($HTML){
-	$HTML = '<ul>' . $HTML . '</ul>';
+		$HTML = '<ul>' . $HTML . '</ul>';
     }
     $conf->{Page}->{Toolbar} .= $HTML;
 }

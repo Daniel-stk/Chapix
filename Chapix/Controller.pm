@@ -62,6 +62,49 @@ sub handler {
     }
 }
 
+sub router{
+	if (!$sess{referrer}){
+        $sess{referrer} = $ENV{HTTP_REFERER} || '';
+    }
+
+    if($_REQUEST->{Controller}){
+    	my $module = $_REQUEST->{Controller};
+        my $is_installed = $dbh->selectrow_array("SELECT module FROM modules WHERE module=? AND installed=1",{},$module);
+		
+		if(!$is_installed){
+            msg_add('danger',"The module $module is not installed.");
+            view();
+            return '';
+        }
+        my $Module;
+        eval {
+        	require "Chapix/".$module ."/Controller.pm";
+            my $module_name ='Chapix::'.$module.'::Controller';
+            $Module = $module_name->new();	
+    	};
+        if ($@) {
+        	if ($_REQUEST->{View} eq 'API') {
+                my $JSON = {
+                    error   => 1,
+                    success => 0,
+                    msg     => $@
+                };
+                print Chapix::Com::header_out('application/json');
+                print JSON::XS->new->encode($JSON);
+            }else{
+                msg_add('danger', $@);
+                Chapix::Controller::display_error();
+            }
+            return '';
+        }
+
+        print Chapix::Layout::print($Module->{$_REQUEST->{View}}->{$_METHOD}->());
+	}else{
+		Chapix::Controller::actions();
+        Chapix::Controller::view();
+	}
+}
+
 # Main view function, this function prints the required view.
 sub view {
     if($conf->{Xaa}->{MainModule}){
